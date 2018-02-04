@@ -9,16 +9,16 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="#">Fiskekartan</a>
+					<a class="nav-link" routerLink="/">Fiskekartan</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Platser</a>
+					<a class="nav-link" routerLink="/locations">Platser</a>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link" href="#">Arter</a>
+					<a class="nav-link" routerLink="/species">Arter</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Föreningar</a>
+					<a class="nav-link" routerLink="/owners">Föreningar</a>
 				</li>
 			</ul>
 			<form class="form-inline my-2 my-lg-0">
@@ -27,7 +27,7 @@
 					<button class="btn btn-success my-2 my-sm-0" type="submit">
 						<span class="oi oi-magnifying-glass"></span>
 					</button>
-					<button class="btn btn-success">
+					<button class="btn btn-success" type="button">
 						<span class="oi oi-chevron-bottom"></span>
 					</button>
 				</div>
@@ -35,6 +35,5 @@
 		</div>
 	</div>
 </nav>
-<agm-map [latitude]="65" [longitude]="22">
-	<agm-marker *ngFor="let loc of locations" [latitude]="loc.position.lat" [longitude]="loc.position.lng"></agm-marker>
-</agm-map>
+<router-outlet></router-outlet>
+<!-- <app-map></app-map> -->
