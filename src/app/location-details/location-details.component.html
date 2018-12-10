@@ -1,3 +1,42 @@
-<p>
-  location-details works!
-</p>
+<div class="container">
+	<h1>{{location?.name}}</h1>
+</div>
+
+<div id="map-panel"></div>
+
+<div class="container mt-3 mb-5">
+	<div class="card card-body">
+		<div class="row">
+			<div class="col-md-8">
+				<h5 class="card-title">Här kan du fiska:</h5>
+				<ul class="list-inline">
+					<li class="list-inline-item" *ngFor="let s of location?.species">
+						<a routerLink="/species/{{s.id}}">{{s.name}}</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<a [attr.href]="'https://maps.google.com?saddr=Current+Location&daddr=' + location?.position.latitude + ',' + location?.position.longitude"
+				 target="_blank" class="btn btn-primary float-right">
+					<span class="oi oi-map-marker"></span>&nbsp;Hitta hit</a>
+			</div>
+		</div>
+	</div>
+	<div class="card card-body mt-2">
+		<h5 class="card-title">Beskrivning</h5>
+		<p>{{location?.description}}</p>
+	</div>
+	<div class="card card-body mt-2">
+		<div class="row">
+			<div class="col-md-6">
+				<h5 class="card-title">Regler</h5>
+				<p>{{location?.rules}}</p>
+			</div>
+			<div class="col-md-6">
+				<h5 class="card-title">Information om fiskekort</h5>
+				<p>{{location?.fishingPermitInfo}}</p>
+			</div>
+		</div>
+	</div>
+	<a routerLink="/locations/{{location.id}}/edit" class="btn btn-success mt-4"><span class="oi oi-pencil"></span>&nbsp;Ändra</a>
+</div>

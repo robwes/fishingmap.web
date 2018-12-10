@@ -1,0 +1,35 @@
+<div id="map-panel"></div>
+
+<div class="container mt-3 mb-5">
+	<form (ngSubmit)="onSubmit()" #locationForm="ngForm">
+		<div class="form-group">
+			<label for="name">Namn</label>
+			<input type="text" id="name" name="name" class="form-control" [(ngModel)]="model.name" required #name="ngModel">
+			<small [hidden]="name.valid || name.pristine" class="form-text text-danger">Fyll i ett namn</small>
+		</div>
+		<div class="form-group">
+			<label for="description">Beskrivning</label>
+			<textarea autosize name="description" id="description" class="form-control" rows="3" [(ngModel)]="model.description"></textarea>
+		</div>
+		<div class="form-group">
+			<label>Arter</label>
+			<ul class="scrollable-list list-unstyled">
+				<li *ngFor="let s of species; let i = index">
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" [checked]="hasSpecies(s)" class="custom-control-input" [attr.id]="'speciesCheck' + i" (click)="onSpeciesClicked(s)">
+						<label class="custom-control-label" [attr.for]="'speciesCheck' + i">{{s.name}}</label>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="form-group">
+			<label for="rules">Regler</label>
+			<textarea autosize name="rules" id="rules" rows="3" class="form-control" [(ngModel)]="model.rules"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="website">Hemsida</label>
+			<input type="text" id="website" name="website" class="form-control" [(ngModel)]="model.website">
+		</div>
+		<button type="submit" class="btn btn-success btn-lg">Spara</button>
+	</form>
+</div>

@@ -1,0 +1,5 @@
+<label for="withinRange">{{label}}</label>
+<input type="range" class="custom-range" id="withinRange" name="withinRange" [attr.min]="infinity" [attr.max]="max" [(ngModel)]="withinRange" (ngModelChange)="onRangeChanged($event)">
+<div *ngIf="withinRange >= min; then rangeValue else ininityValue"></div>
+<ng-template #rangeValue><span>{{withinRange}}</span> {{unit}}</ng-template>
+<ng-template #ininityValue>∞</ng-template>

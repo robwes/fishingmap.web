@@ -1,0 +1,14 @@
+<div class="container mt-4">
+	<form (ngSubmit)="onSubmit()" #speciesForm="ngForm">
+		<div class="form-group">
+			<label for="name">Namn</label>
+			<input type="text" id="name" name="name" class="form-control" [(ngModel)]="model.name" #name="ngModel">
+			<small [hidden]="name.valid || name.pristine" class="form-text text-danger">Fyll i ett namn</small>
+			<div class="form-group">
+				<label for="description">Beskrivning</label>
+				<textarea autosize name="description" id="description" class="form-control" rows="3" [(ngModel)]="model.description"></textarea>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-success"><span class="oi oi-circle-check"></span>&nbsp;Spara</button>
+	</form>
+</div>

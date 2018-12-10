@@ -1,3 +1,2 @@
-<agm-map [latitude]="65" [longitude]="22" [mapTypeId]="'hybrid'">
-	<agm-marker *ngFor="let loc of locations" [latitude]="loc.position.lat" [longitude]="loc.position.lng"></agm-marker>
-</agm-map>
+<app-search (radiusChanged)="onRadiusChanged($event)" (newSearch)="onNewSearch($event)"></app-search>
+<div id="map-panel"></div>

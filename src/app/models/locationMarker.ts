@@ -5,6 +5,6 @@ export class LocationMarker {
 	id: number;
 	name: string;
 	description: string;
-	position: GeoPoint[];
+	position: GeoPoint;
 	species: Species[];
 }

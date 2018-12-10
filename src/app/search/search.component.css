@@ -1,0 +1,29 @@
+.scrollable-list {
+    height: auto;
+    max-height: 150px; 
+	overflow-x: hidden;
+	padding: .5rem 1.5rem .5rem 1rem
+}
+
+.scrollable-list::-webkit-scrollbar-track
+{
+	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;*/
+    display: none;
+}
+
+.scrollable-list::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: transparent;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: white;
+    cursor: pointer;
+}

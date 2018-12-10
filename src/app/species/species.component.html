@@ -1,3 +1,10 @@
-<p>
-  species works!
-</p>
+<div class="container mt-3">
+	<div *ngFor="let s of species">
+		<app-species-list-item [species]="s"></app-species-list-item>
+	</div>
+	<div class="mt-4">
+		<a class="btn btn-success" href="/addspecies">
+			<span class="oi oi-plus"></span>&nbsp;Lägg till ny
+		</a>
+	</div>
+</div>

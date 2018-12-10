@@ -1,3 +1,14 @@
-agm-map {
-    height: 900px;
+#map-panel {
+    height: 56.9rem;
+}
+
+.filter-panel {
+	top: 10rem;
+	position: absolute;
+	z-index: 100;
+	margin-right: auto;
+	margin-left: auto;
+	width: 60%;
+	float: right;
+
 }

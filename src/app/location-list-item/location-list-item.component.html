@@ -1,0 +1,14 @@
+<div class="card">
+	<div class="card-body pb-1">
+		<h4 class="card-title">
+			<span class="oi oi-map-marker" style="color: #c7c7c7;"></span>&nbsp;
+			<a routerLink="/locations/{{location.id}}">{{location.name}}</a>
+		</h4>
+		<p>{{location.description}}</p>
+		<hr>
+		<h6 class="card-subtitle mb-2 text-muted"><span class="oi oi-info"></span>&nbsp;&nbsp;Här kan du fiska:</h6>
+		<ul class="list-inline">
+			<li class="list-inline-item" *ngFor="let s of location.species">{{s.name}}</li>
+		</ul>
+	</div>
+</div>
