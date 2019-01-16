@@ -11,7 +11,7 @@ const httpOptions = {
 @Injectable()
 export class SpeciesService {
 
-	private baseUrl = 'http://localhost:49784/api';
+	private baseUrl = 'http://localhost:51355/api';
 	private speciessUrl = this.baseUrl + '/species';
 
 	constructor(private http: HttpClient) { }

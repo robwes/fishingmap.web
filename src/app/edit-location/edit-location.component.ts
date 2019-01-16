@@ -16,7 +16,7 @@ export class EditLocationComponent implements OnInit {
 	map: any;
 
 	submitted = false;
-	model = new Location();
+	model = null;
 	species: Species[] = [];
 
 	styleOptions: any = {
@@ -36,6 +36,10 @@ export class EditLocationComponent implements OnInit {
 		this.locationsService.getLocation(id)
 			.subscribe(l => {
 				this.model = l;
+
+				if (!this.model.species) {
+					this.model.species = [];
+				}
 
 				this.map = new google.maps.Map(document.getElementById('map-panel'), { mapTypeId: google.maps.MapTypeId.HYBRID, zoom: 13 });
 				this.map.data.setStyle(this.styleOptions);

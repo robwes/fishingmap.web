@@ -14,7 +14,7 @@ const httpOptions = {
 @Injectable()
 export class LocationsService {
 
-	private baseUrl = 'http://localhost:49784/api';
+	private baseUrl = 'http://localhost:51355/api';
 	private locationsUrl = this.baseUrl + '/locations';
 	private markersUrl = this.locationsUrl + '/markers';
 
@@ -58,6 +58,17 @@ export class LocationsService {
 		if (filter != null) {
 			params = new HttpParams()
 				.set("search", filter.search)
+		}
+
+		return this.http.get<Marker[]>(this.markersUrl, { params: params }).pipe(
+			tap(_ => this.log(`fetched markers`)),
+			catchError(this.handleError('getMarkers', []))
+		);
+
+		/*
+		if (filter != null) {
+			params = new HttpParams()
+				.set("search", filter.search)
 				.set("radius", filter.radius + "")
 				.set("lat", filter.lat + "")
 				.set("lng", filter.lng + "")
@@ -72,6 +83,7 @@ export class LocationsService {
 				tap(markers => this.log(`fetched markers`)),
 				catchError(this.handleError('getMarkers', []))
 			);
+			*/
 	}
 
 	updateLocation(location: Location): Observable<any> {

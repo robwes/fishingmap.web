@@ -6,4 +6,5 @@ export class Marker {
 	position: GeoPoint;
 	species: string[];
 	description?: string;
+	mapMarker?: google.maps.Marker;
 }

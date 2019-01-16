@@ -23,6 +23,7 @@ import { AddNewSpeciesComponent } from './add-new-species/add-new-species.compon
 import { EditSpeciesComponent } from './edit-species/edit-species.component';
 import { EditLocationComponent } from './edit-location/edit-location.component';
 import { Autosize } from './auto-size.directive';
+import { StorageServiceModule } from 'angular-webstorage-service';
 
 @NgModule({
 	declarations: [
@@ -48,7 +49,8 @@ import { Autosize } from './auto-size.directive';
 		BrowserModule,
 		FormsModule,
 		AppRoutingModule,
-		HttpClientModule
+		HttpClientModule,
+		StorageServiceModule
 	],
 	providers: [LocationsService, SpeciesService],
 	bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { LocationsService } from '../locations.service';
 import { Location } from '../models/location';
 import { Marker } from '../models/marker';
@@ -6,6 +6,7 @@ import { SpeciesService } from '../species.service';
 import { Species } from '../models/species';
 import { Filter } from '../models/filter';
 import { SearchComponent } from '../search/search.component';
+import { SESSION_STORAGE, WebStorageService } from 'angular-webstorage-service';
 
 @Component({
 	selector: 'app-map',
@@ -22,7 +23,7 @@ export class MapComponent implements OnInit {
 	@ViewChild(SearchComponent)
 	search: SearchComponent;
 
-	constructor(private locationsService: LocationsService, private speciesService: SpeciesService) { }
+	constructor(private locationsService: LocationsService, private speciesService: SpeciesService, @Inject(SESSION_STORAGE) private storage: WebStorageService) { }
 
 	ngOnInit() {
 		var _this = this;
@@ -59,7 +60,16 @@ export class MapComponent implements OnInit {
 			});
 	}
 
+	clearMarkers() {
+		if (this.markers) {
+			this.markers.forEach(m => {
+				m.mapMarker.setMap(null);
+			});
+		}
+	}
+
 	getMarkers(filter?: Filter) {
+		this.clearMarkers();
 		this.locationsService.getMarkers(filter)
 			.subscribe(markers => {
 				this.markers = markers;
@@ -69,9 +79,11 @@ export class MapComponent implements OnInit {
 						contentString += `<p>${m.description}</p>`
 					}
 					contentString += `<ul class='list-inline'>`;
-					m.species.forEach(s => {
-						contentString += `<li class='list-inline-item mb-0'>${s}</li>`;
-					});
+					if (m.species) {
+						m.species.forEach(s => {
+							contentString += `<li class='list-inline-item mb-0'>${s}</li>`;
+						});
+					}
 
 					contentString += "</ul></div>"
 
@@ -88,7 +100,14 @@ export class MapComponent implements OnInit {
 					marker.addListener("click", () => {
 						infowindow.open(this.map, marker)
 					});
+
+					m.mapMarker = marker;
 				});
+
+				if (filter && this.markers && this.markers.length == 1) {
+					var pos = new google.maps.LatLng(markers[0].position.latitude, markers[0].position.longitude);
+					this.map.panTo(pos);
+				}
 			});
 	}
 

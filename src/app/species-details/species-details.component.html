@@ -2,12 +2,12 @@
 	<div class="card">
 		<div class="card-body">
 			<h5 class="card-title">
-				{{species.name}}
+				{{species?.name}}
 			</h5>
 			<p class="card-text">
-				{{species.description}}
+				{{species?.description}}
 			</p>
 		</div>
 	</div>
-	<a routerLink="/species/{{species.id}}/edit" class="btn btn-success mt-4"><span class="oi oi-pencil"></span>&nbsp;Ändra</a>
+	<a routerLink="/species/{{species?.id}}/edit" class="btn btn-success mt-4"><span class="oi oi-pencil"></span>&nbsp;Ändra</a>
 </div>
