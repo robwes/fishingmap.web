@@ -29,8 +29,14 @@ export class MapComponent implements OnInit {
 		const _this = this;
 		const mapOptions = {
 			center: { lat: 65, lng: 22 },
-			mapTypeId: google.maps.MapTypeId.HYBRID, zoom: 8,
-			disableDefaultUI: true
+			mapTypeId: google.maps.MapTypeId.TERRAIN, 
+			zoom: 8,
+			zoomControl: true,
+			mapTypeControl: true,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+				position: google.maps.ControlPosition.RIGHT_TOP 
+			}
 		};
 		this.map = new google.maps.Map(document.getElementById('map-panel'), mapOptions);
 
