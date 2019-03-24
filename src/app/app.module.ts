@@ -24,6 +24,7 @@ import { EditSpeciesComponent } from './edit-species/edit-species.component';
 import { EditLocationComponent } from './edit-location/edit-location.component';
 import { Autosize } from './auto-size.directive';
 import { StorageServiceModule } from 'angular-webstorage-service';
+import { FilterComponent } from './filter/filter.component';
 
 @NgModule({
 	declarations: [
@@ -43,7 +44,8 @@ import { StorageServiceModule } from 'angular-webstorage-service';
 		AddNewSpeciesComponent,
 		EditSpeciesComponent,
 		EditLocationComponent,
-		Autosize
+		Autosize,
+		FilterComponent
 	],
 	imports: [
 		BrowserModule,

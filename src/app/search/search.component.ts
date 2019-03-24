@@ -1,8 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { SpeciesService } from '../species.service';
 import { Species } from '../models/species';
 import { Filter } from '../models/filter';
-import { RangeComponent } from '../range/range.component';
 
 @Component({
 	selector: 'app-search',
@@ -10,10 +9,14 @@ import { RangeComponent } from '../range/range.component';
 	styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-	species: Species[];
 
+	filterVisibile: Boolean;
+	searchVisible: Boolean;
+
+	species: Species[];
 	searchString: string;
 	selectedSpecies: Species[];
+
 	radius: number;
 
 	@Output()
@@ -32,7 +35,7 @@ export class SearchComponent implements OnInit {
 			});
 	}
 
-	search() {
+	onSubmit() {
 		let filter: Filter = {
 			search: this.searchString,
 			species: this.selectedSpecies.map(s => s.id),
@@ -53,5 +56,16 @@ export class SearchComponent implements OnInit {
 	onRangeChanged(radius: number) {
 		this.radius = radius;
 		this.radiusChanged.emit(this.radius);
+	}
+
+	toggleSearchVisibility() {
+		this.searchVisible = !this.searchVisible;
+		if (!this.searchVisible) {
+			this.filterVisibile = false;
+		}
+	}
+
+	toggleFilterVisibility() {
+		this.filterVisibile = !this.filterVisibile;
 	}
 }

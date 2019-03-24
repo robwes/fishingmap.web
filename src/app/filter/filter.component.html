@@ -1,0 +1,20 @@
+<nav id="filterPanel" class="bg-dark collapse text-light navbar-dark pb-2">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<label>Vad vill du fiska?</label>
+				<ul class="scrollable-list list-unstyled">
+					<li *ngFor="let s of species; let i = index">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" [attr.id]="'speciesCheck' + i" (click)="onSpeciesClicked(s)">
+							<label class="custom-control-label" [attr.for]="'speciesCheck' + i">{{s.name}}</label>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<app-range [label]="'Sök inom radie:'" [min]="1" [max]="1000" [unit]="'km'" (withinRangeChange)="onRangeChanged($event)"></app-range>
+			</div>
+		</div>
+	</div>
+</nav>

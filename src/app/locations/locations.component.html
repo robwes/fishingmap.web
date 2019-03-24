@@ -1,8 +1,8 @@
-<div class="container mt-3">
+<div id="locationsList" class="container top-margin">
 	<div *ngFor="let loc of locations">
 		<app-location-list-item [location]="loc"></app-location-list-item>
 	</div>
-	<div class="mt-4">
+	<div class="mt-4 mb-4">
 		<a class="btn btn-success" routerLink="/addlocation">
 			<span class="oi oi-plus"></span>&nbsp;Lägg till ny
 		</a>

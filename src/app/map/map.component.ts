@@ -18,7 +18,7 @@ export class MapComponent implements OnInit {
 	markers: Marker[];
 	species: Species[];
 	map: any;
-	searchCirce: google.maps.Circle;
+	searchCircle: google.maps.Circle;
 
 	@ViewChild(SearchComponent)
 	search: SearchComponent;
@@ -26,15 +26,20 @@ export class MapComponent implements OnInit {
 	constructor(private locationsService: LocationsService, private speciesService: SpeciesService, @Inject(SESSION_STORAGE) private storage: WebStorageService) { }
 
 	ngOnInit() {
-		var _this = this;
-		this.map = new google.maps.Map(document.getElementById('map-panel'), { center: { lat: 65, lng: 22 }, mapTypeId: google.maps.MapTypeId.HYBRID, zoom: 8 });
+		const _this = this;
+		const mapOptions = {
+			center: { lat: 65, lng: 22 },
+			mapTypeId: google.maps.MapTypeId.HYBRID, zoom: 8,
+			disableDefaultUI: true
+		};
+		this.map = new google.maps.Map(document.getElementById('map-panel'), mapOptions);
 
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(position => {
 
-				var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				const pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-				_this.searchCirce = new google.maps.Circle({
+				_this.searchCircle = new google.maps.Circle({
 					fillColor: "#0094ff",
 					strokeColor: "#0518ee",
 					strokeOpacity: 0.8,
@@ -44,7 +49,8 @@ export class MapComponent implements OnInit {
 					center: pos,
 					radius: 0,
 					draggable: true
-				  });
+				});
+
 				_this.map.setCenter(pos);
 			});
 		}
@@ -74,7 +80,7 @@ export class MapComponent implements OnInit {
 			.subscribe(markers => {
 				this.markers = markers;
 				this.markers.forEach(m => {
-					var contentString = `<div><h5 class='text-center'><a href='/locations/${m.id}'>${m.name}</a></h5>`;
+					let contentString = `<div><h5 class='text-center'><a href='/locations/${m.id}'>${m.name}</a></h5>`;
 					if (m.description) {
 						contentString += `<p>${m.description}</p>`
 					}
@@ -87,15 +93,16 @@ export class MapComponent implements OnInit {
 
 					contentString += "</ul></div>"
 
-					var infowindow = new google.maps.InfoWindow({
+					const infowindow = new google.maps.InfoWindow({
 						content: contentString
 					});
 
-					var marker = new google.maps.Marker({
+					const marker = new google.maps.Marker({
 						position: new google.maps.LatLng(m.position.latitude, m.position.longitude),
 						map: this.map,
-						title: m.name
-					  });		  
+						title: m.name,
+						icon: "../../assets/fishing.png"
+					});
 
 					marker.addListener("click", () => {
 						infowindow.open(this.map, marker)
@@ -105,20 +112,20 @@ export class MapComponent implements OnInit {
 				});
 
 				if (filter && this.markers && this.markers.length == 1) {
-					var pos = new google.maps.LatLng(markers[0].position.latitude, markers[0].position.longitude);
+					const pos = new google.maps.LatLng(markers[0].position.latitude, markers[0].position.longitude);
 					this.map.panTo(pos);
 				}
 			});
 	}
 
 	onRadiusChanged(radius: number) {
-		this.searchCirce.setRadius(radius * 1000);
+		this.searchCircle.setRadius(radius * 1000);
 	}
 
 	onNewSearch(filter: Filter) {
 		console.log(filter);
-		if (this.searchCirce) {
-			var pos = this.searchCirce.getCenter();
+		if (this.searchCircle) {
+			var pos = this.searchCircle.getCenter();
 			filter.lat = pos.lat();
 			filter.lng = pos.lng();
 		}

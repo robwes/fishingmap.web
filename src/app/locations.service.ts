@@ -55,9 +55,22 @@ export class LocationsService {
 
 	getMarkers(filter?: Filter): Observable<Marker[]> {
 		let params = new HttpParams();
-		if (filter != null) {
-			params = new HttpParams()
-				.set("search", filter.search)
+		if (filter) {
+			if (filter.search) {
+				params = params.append("search", filter.search);
+			}
+
+			if (filter.lat && filter.lng && filter.radius) {
+				params = params.append("radius", filter.radius + "")
+								.append("orgLat", filter.lat + "")
+								.append("orgLng", filter.lng + "");
+			}
+			
+			if (filter.species) {
+				filter.species.forEach(s => {
+					params = params.append("sIds", s + "");
+				});
+			}
 		}
 
 		return this.http.get<Marker[]>(this.markersUrl, { params: params }).pipe(
