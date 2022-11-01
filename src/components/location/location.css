@@ -1,0 +1,145 @@
+.locations {
+	display: flex;
+	flex-direction: column;
+}
+
+.locations .right {
+	margin-top: 3em;
+}
+
+.location-title {
+	margin: 0;
+	text-align: center;
+}
+
+.location-body {
+	display: grid;
+	gap: 2.5em 0;
+	margin-bottom: 1.5em;
+}
+
+.location-body > * {
+	margin: 0;
+}
+
+.location-position {
+	overflow: hidden;
+}
+
+.location-position,
+.add-location-position .map-input {
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+
+.add-location-position .error {
+	text-align: center;
+}
+
+.location-card {
+	width: 100%;
+	background: #FFF;
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+
+.card-image {
+	height: 330px;
+	border-radius: 5px 5px 0 0;
+	overflow: hidden;
+}
+
+.card-body {
+	padding: 1.5em 1.5em 3em;
+}
+
+.location-image {
+	overflow: hidden;
+	margin-bottom: 2em;
+}
+
+.add-location-image {
+	overflow: hidden;
+	border-radius: 5px 5px 0 0;
+}
+
+.location-submit {
+	width: 100%;
+}
+
+.location-directions {
+	font-size: 1rem;
+	margin-bottom: 2.5em;
+}
+
+/* Fishing map */
+
+.fishing-map {
+	position: relative;
+}
+
+.location-info-window {
+	padding: 0;
+}
+
+.location-info-window h3 {
+	margin: .3em 0 .5em 0;
+	text-align: center;
+}
+
+.location-info-window p {
+	font-weight: 400;
+	letter-spacing: 1px;
+}
+
+@media(min-width: 900px) {
+	.locations {
+		flex-direction: row;
+		gap: 3em;
+	}
+
+	.locations .left {
+		width: 30%;
+		max-width: 320px;
+		margin-top: 3em; 
+	}
+
+	.locations .right {
+		flex-grow: 1;
+	}
+
+	.location-body {
+		position: relative;
+		grid-template-areas: 
+		"left left title title"
+		"left left right right";
+		grid-template-rows: 2.5em auto;
+		grid-template-columns: 10% 35% 45% 10%;
+		gap: 0;
+	}
+
+	.location-title {
+		grid-area: title;
+	}
+
+	.location-card {
+		position: absolute;
+		min-height: calc(100vh + 2.5em);
+		grid-area: left;
+	}
+
+	.location-position,
+	.add-location-position {
+		grid-area: right;
+	}
+
+	.location-position,
+	.add-location-position .map-input {
+		border-radius: 0 5px 5px 0;
+	}
+
+	.location-submit {
+		width: unset;
+		margin-left: 5%;
+	}
+}

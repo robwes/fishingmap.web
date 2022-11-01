@@ -1,0 +1,94 @@
+const baseUrl = `https://localhost:7299/api/species`;
+
+export const speciesService = {
+    getSpecies: async (search) => {
+        try {
+
+            let requestUrl = baseUrl;
+            if (search) {
+                const searchParams = new URLSearchParams({search});
+                requestUrl += `?${searchParams}`;
+            }
+
+            const response = await fetch(requestUrl, { mode: 'cors' });
+            return await response.json();
+        } catch (e) {
+            console.log(e);
+        }
+
+        return [];
+    },
+
+    getSpeciesById: async (id) => {
+        try {
+            const response = await fetch(`${baseUrl}/${id}`);
+            return await response.json();
+        } catch (e) {
+            console.log(e);
+        }
+
+        return null;
+    },
+
+    createSpecies: async (species) => {
+        try {
+            const formData = new FormData();
+            
+            formData.append("name", species.name);
+            formData.append("description", species.description);
+
+            species.images.forEach(image => {
+                formData.append("images", image)
+            });
+
+            const response = await fetch(baseUrl,
+                {
+                    method: "POST",
+                    body: formData
+                });
+            return await response.json();
+        }
+        catch (e) {
+            console.log(e);
+        }
+
+        return null;
+    },
+
+    updateSpecies: async (id, species) => {
+        try {
+            const formData = new FormData();
+            
+            formData.append("id", species.id);
+            formData.append("name", species.name);
+            formData.append("description", species.description);
+
+            species.images.forEach(image => {
+                formData.append("images", image)
+            });
+
+            const response = await fetch(`${baseUrl}/${id}`,
+                {
+                    method: "PUT",
+                    body: formData
+                });
+            return await response.json();
+        }
+        catch (e) {
+            console.log(e);
+        }
+
+        return null;
+    },
+
+    deleteSpecies: async (id) => {
+        try {
+            await fetch(`${baseUrl}/${id}`,{ method: "DELETE" });
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+
+        return false;
+    }
+};
