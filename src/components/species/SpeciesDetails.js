@@ -4,8 +4,6 @@ import { speciesService } from '../../services/speciesService'
 import ImageCarousell from '../common/ImageCarousell';
 import './species.css'
 
-const baseUrl = `https://localhost:7299`;
-
 function SpeciesDetails() {
 
     const { id } = useParams();
@@ -26,7 +24,7 @@ function SpeciesDetails() {
         if (species && species.images.length > 0) {
             species.images.forEach(image => {
                 images.push({
-                    url: `${baseUrl}/${image.url}`,
+                    url: `${process.env.REACT_APP_BASE_URL}/${image.url}`,
                     description: species.name
                 });
             });

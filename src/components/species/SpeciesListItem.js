@@ -1,14 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const baseUrl = `https://localhost:7299`;
-
 function SpeciesListItem({ species }) {
     const { id, name, description, images } = species;
 
     const getImagesSrc = () => {
         if (images && images.length > 0) {
-            return `${baseUrl}/${images[0].url}`;
+            return `${process.env.REACT_APP_BASE_URL}/${images[0].url}`;
         } else {
             return "images/species/default.jpg";
         }

@@ -7,10 +7,8 @@ import LinkItemList from '../common/LinkItemList';
 import Map from '../map-components/Map'
 import ImageCarousell from '../common/ImageCarousell';
 
-const baseUrl = `https://localhost:7299`;
-
 function LocationDetails() {
-
+    
     const { id } = useParams();
     const [location, setLocation] = useState();
 
@@ -39,7 +37,7 @@ function LocationDetails() {
         if (location && location.images.length > 0) {
             location.images.forEach(image => {
                 images.push({
-                    url: `${baseUrl}/${image.url}`,
+                    url: `${process.env.REACT_APP_BASE_URL}/${image.url}`,
                     description: location.name
                 });
             });

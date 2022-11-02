@@ -1,4 +1,4 @@
-const baseUrl = `https://localhost:7299/api/locations`;
+const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/locations`;
 
 export const locationService = {
     getLocations: async (search = "", sIds = [], radius = "", radiusOrigin = null) => {

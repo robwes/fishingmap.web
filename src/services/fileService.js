@@ -1,4 +1,4 @@
-const baseUrl = `https://localhost:7299`;
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const fileService = {
     getImage: async (url, filename) => {

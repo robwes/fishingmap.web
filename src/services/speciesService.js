@@ -1,4 +1,4 @@
-const baseUrl = `https://localhost:7299/api/species`;
+const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/species`;
 
 export const speciesService = {
     getSpecies: async (search) => {

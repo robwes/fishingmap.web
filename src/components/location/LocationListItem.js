@@ -2,14 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import LinkItemList from '../common/LinkItemList';
 
-const baseUrl = `https://localhost:7299`;
-
 function LocationListItem({ location }) {
     const { id, name, description, species, images } = location;
 
     const getImagesSrc = () => {
         if (images && images.length > 0) {
-            return `${baseUrl}/${images[0].url}`;
+            return `${process.env.REACT_APP_BASE_URL}/${images[0].url}`;
         } else {
             return "images/locations/default.jpg";
         }
