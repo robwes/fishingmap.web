@@ -12,7 +12,7 @@ function Map({children, center, zoom, ...props}) {
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyCusymbIjlWq1f0iUqIauXoYJ-PYfg530A",
+        googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
         libraries: libraries
     });
 
