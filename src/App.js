@@ -13,7 +13,7 @@ import AddSpecies from './components/species/AddSpecies'
 import EditSpecies from './components/species/EditSpecies'
 import EditLocation from './components/location/EditLocation'
 import { CurrentUserProvider } from './hooks/CurrentUserContext'
-import Login from './components/Login/Login'
+import Login from './components/login/Login'
 import ProtectedRoute from './components/common/ProtectedRoute'
 
 function App() {
