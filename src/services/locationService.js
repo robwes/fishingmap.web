@@ -65,6 +65,7 @@ export const locationService = {
 
             const response = await fetch(baseUrl, {
                 method: "POST",
+                credentials: 'include',
                 body: formData
             });
             
@@ -96,6 +97,7 @@ export const locationService = {
 
             const response = await fetch(`${baseUrl}/${id}`, {
                 method: "PUT",
+                credentials: 'include',
                 body: formData
             });
 
@@ -110,7 +112,8 @@ export const locationService = {
     deleteLocation: async (id) => {
         try {
             await fetch(`${baseUrl}/${id}`, {
-                method: "DELETE"
+                method: "DELETE",
+                credentials: 'include'
             });
 
             return true;

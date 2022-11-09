@@ -31,6 +31,12 @@ function MapInput({ label, options, cssClass, ...props }) {
             draggable: true,
             editable: true
         });
+
+		const topLeftPos = window.google ? window.google.maps.ControlPosition.TOP_LEFT : 1;
+		data.setControlPosition(topLeftPos); 
+		data.setControls(["Polygon"]);
+		data.setDrawingMode("Polygon");
+
         setDataLayer(data);
     }
 
@@ -86,11 +92,6 @@ function MapInput({ label, options, cssClass, ...props }) {
 						onSetGeometry={handleSetGeometry}
 						onMouseDown={handleMouseDown}
 						onMouseUp={handleMouseUp}
-						options={{
-							controlPosition: window.google ? window.google.maps.ControlPosition.TOP_LEFT : undefined,
-							controls: ["Polygon"],
-							drawingMode: "Polygon"
-						}}
 					/>
 				</Map>
 			</div>

@@ -37,13 +37,14 @@ export const speciesService = {
             formData.append("name", species.name);
             formData.append("description", species.description);
 
-            species.images.forEach(image => {
+            species.images?.forEach(image => {
                 formData.append("images", image)
             });
 
             const response = await fetch(baseUrl,
                 {
                     method: "POST",
+                    credentials: 'include',
                     body: formData
                 });
             return await response.json();
@@ -70,6 +71,7 @@ export const speciesService = {
             const response = await fetch(`${baseUrl}/${id}`,
                 {
                     method: "PUT",
+                    credentials: 'include',
                     body: formData
                 });
             return await response.json();
@@ -83,7 +85,10 @@ export const speciesService = {
 
     deleteSpecies: async (id) => {
         try {
-            await fetch(`${baseUrl}/${id}`,{ method: "DELETE" });
+            await fetch(`${baseUrl}/${id}`,{ 
+                method: "DELETE",
+                credentials: 'include' 
+            });
             return true;
         } catch (e) {
             console.log(e);
