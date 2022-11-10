@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserMenu from './UserMenu';
 import authService from '../services/authService';
@@ -11,7 +11,7 @@ function Header(props) {
 
     function getLinkCssClasses(currentPath, pathTo) {
         let cssClasses = "nav-link";
-        
+
         if (currentPath === pathTo) {
             cssClasses += " current-page";
         }
@@ -19,7 +19,7 @@ function Header(props) {
     }
 
     return (
-        <header>
+        <header className='header'>
             <div className="container container-flex">
                 <div className="site-title">
                     <h1 className="title">Fishing Map</h1>

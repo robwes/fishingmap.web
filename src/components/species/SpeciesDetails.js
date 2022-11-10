@@ -22,7 +22,6 @@ function SpeciesDetails() {
         const images = [];
 
         if (species && species.images.length > 0) {
-            debugger;
             species.images.forEach(image => {
                 images.push({
                     url: `${process.env.REACT_APP_BASE_URL}/${image.url}`,

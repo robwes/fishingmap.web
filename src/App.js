@@ -15,6 +15,7 @@ import EditLocation from './components/location/EditLocation'
 import { CurrentUserProvider } from './hooks/CurrentUserContext'
 import Login from './components/login/Login'
 import ProtectedRoute from './components/common/ProtectedRoute'
+import UserDetails from './components/users/UserDetails'
 
 function App() {
 	return (
@@ -35,6 +36,7 @@ function App() {
 							<Route path="/locations/:id/edit" element={<EditLocation />} />
 							<Route path="/species/add" element={<AddSpecies />} />
 							<Route path="/species/:id/edit" element={<EditSpecies />} />
+							<Route exact path='/users/:id' element={<UserDetails />} />
 						</Route>
 
 						<Route path="/login" element={<Login />} />
