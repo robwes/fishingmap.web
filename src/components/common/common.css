@@ -116,6 +116,7 @@
 }
 
 .collapse {
+	width: 100%;
 	margin-bottom: 1.25em;
 }
 
@@ -154,7 +155,7 @@
 
 .collapse-body {
 	display: none;
-	padding: .5em .75em;
+	padding: .5em 0;
 }
 
 .collapsible-textarea .collapse-body {

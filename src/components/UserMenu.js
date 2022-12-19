@@ -39,8 +39,8 @@ function UserMenu({ user, open }) {
 					<li className='username'>
 						<Link
 							className='dropdown-button'
-							to={`/users/${user.id}`}>
-							{user.username}
+							to={`/users/${user.id}/edit`}>
+							{user.userName}
 						</Link>
 					</li>
 					<li className='list-separator'></li>

@@ -1,0 +1,123 @@
+.form-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+    padding: 1.6em 1em;
+    background: #FFF;
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    width: 100%;
+}
+
+.form-card > * {
+    margin-bottom: 0;
+}
+
+.edit-user {
+    padding: 3em 0;
+}
+
+/* TODO: Remove everywhere and fix form */
+.edit-user .input-group {
+    margin-bottom: 0;
+}
+
+.edit-user-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-user-container form {
+    width: 100%;
+}
+
+.user-form,
+.user-form .right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2em;
+    width: 100%;
+}
+
+.user-form button[type="submit"] {
+    width: 100%;
+}
+
+.user-details-form, .user-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin-bottom: 3em;
+}
+
+.user-password .collapse-body {
+    padding-bottom: 0;
+}
+
+.user-avatar {
+    position: relative;
+    color: #383D43;
+    background: #9E9E9E;
+    padding: 0.5em;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+
+.user-avatar i {
+    font-size: 182px;
+}
+
+.user-tag {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    text-align: center;
+    background: #FFF;
+    font-weight: 700;
+    padding: .5em;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,.1);
+    bottom: .5em;
+    max-width: 160px;
+}
+
+@media(min-width: 600px) {
+
+	.edit-user {
+		background: linear-gradient(90deg, var(--clr-bg-body) 77%, rgba(0,0,0, .05) 23%);
+	}
+
+    .user-form {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0;
+        width: 750px;
+    }
+
+    .user-form button[type="submit"] {
+        width: auto;
+        margin-left: auto;
+    }
+
+    .form-card {
+        padding: 1.6em 2em;
+    }
+
+    .user-form .right {
+        width: auto;
+        flex-grow: 1;
+        align-items: flex-end;
+        max-width: 750px;
+    }
+
+    .user-avatar {
+        border-radius: 5px 0 0 5px;
+    }
+
+    .user-info {
+        border-radius: 0 5px 5px 5px;
+    }
+}

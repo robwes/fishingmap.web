@@ -19,21 +19,11 @@ function Login() {
         }
     }
 
-    const handleWhoAmI = async () => {
-        const currentUser = await authService.getCurrentUser();
-    }
-
-    const handleLogout = async () => {
-        const currentUser = await authService.logout();
-    }
-
     return (
         <div className='login-page'>
             <LoginForm
                 onSubmit={handleSubmit}
             />
-            {/* <button className="button button-primary" onClick={handleWhoAmI}>Who am I?</button>
-            <button className="button button-secondary" onClick={handleLogout}>Logout</button> */}
         </div>
     )
 }
