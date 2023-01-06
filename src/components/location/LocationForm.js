@@ -19,10 +19,9 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
         geometry: Yup.object().required("Required")
     });
 
-    const formSubmitted = async ({ species, geometry, ...rest }, formikBag) => {
+    const formSubmitted = async ({ species, ...rest }, formikBag) => {
         const location = {
             species: species.map(s => ({ id: s.value })),
-            geometry: JSON.stringify(geometry.features[0]),
             ...rest
         };
 

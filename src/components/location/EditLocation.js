@@ -4,6 +4,7 @@ import { locationService } from '../../services/locationService';
 import { speciesService } from '../../services/speciesService';
 import { fileService } from '../../services/fileService';
 import LocationForm from './LocationForm';
+import useGeoJson from '../../hooks/useGeoJson';
 import './location.css';
 
 function EditLocation() {
@@ -13,6 +14,10 @@ function EditLocation() {
     const [species, setSpecies] = useState([]);
     const [locationImages, setLocationImages] = useState([]);
     const navigate = useNavigate();
+    const { 
+        multiPolygonFeatureToPolygonFeatureCollection, 
+        polygonFeatureCollectionToMultiPolygonFeature 
+    } = useGeoJson();
 
     useEffect(() => {
         (async () => {
@@ -47,7 +52,12 @@ function EditLocation() {
     }, [location])
 
     const handleSubmit = async (locationValues, { setSubmitting }) => {
-        var updatedLocation = await locationService.updateLocation(id, locationValues);
+        const locationUpdate = {
+            ...locationValues,
+            geometry: JSON.stringify(polygonFeatureCollectionToMultiPolygonFeature(locationValues.geometry))
+        };
+
+        var updatedLocation = await locationService.updateLocation(id, locationUpdate);
 
         if (updatedLocation) {
             navigate(`/locations/${updatedLocation.id}`);
@@ -65,7 +75,7 @@ function EditLocation() {
         return {
             ...location,
             species: location.species.map(s => ({ label: s.name, value: s.id })),
-            geometry: { "type": "FeatureCollection", "features": [JSON.parse(location.geometry)] },
+            geometry: multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry)),
             images: locationImages
         };
     };
