@@ -54,8 +54,8 @@ function AddLocation() {
         return {
             zoom: 7,
             center: {
-                lat: 65.22,
-                lng: 22.5
+                lat: 60.2,
+                lng: 23.5
             }
         };
     }
