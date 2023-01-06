@@ -8,7 +8,7 @@ function SpeciesListItem({ species }) {
         if (images && images.length > 0) {
             return `${process.env.REACT_APP_BASE_URL}/${images[0].url}`;
         } else {
-            return "images/species/default.jpg";
+            return "images/species/fish.png";
         }
     };
 

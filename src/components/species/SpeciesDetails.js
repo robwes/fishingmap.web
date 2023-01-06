@@ -30,7 +30,7 @@ function SpeciesDetails() {
             });
         } else {
             images.push({
-                url: "../images/species/default.jpg",
+                url: "../images/species/fish.png",
                 description: "Default species image"
             });
         }

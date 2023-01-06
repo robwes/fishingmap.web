@@ -47,7 +47,7 @@ function LocationDetails() {
             });
         } else {
             images.push({
-                url: "../images/locations/default.jpg",
+                url: "../images/locations/lake.png",
                 description: "Default location image"
             });
         }

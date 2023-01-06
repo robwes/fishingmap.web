@@ -9,7 +9,7 @@ function LocationListItem({ location }) {
         if (images && images.length > 0) {
             return `${process.env.REACT_APP_BASE_URL}/${images[0].url}`;
         } else {
-            return "images/locations/default.jpg";
+            return "images/locations/lake.png";
         }
     };
 
