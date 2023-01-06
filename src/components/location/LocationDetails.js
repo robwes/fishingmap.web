@@ -6,11 +6,15 @@ import Collapse from '../common/Collapse';
 import LinkItemList from '../common/LinkItemList';
 import Map from '../map-components/Map'
 import ImageCarousell from '../common/ImageCarousell';
+import useGeoJson from '../../hooks/useGeoJson';
 
 function LocationDetails() {
     
     const { id } = useParams();
     const [location, setLocation] = useState();
+    const { 
+        multiPolygonFeatureToPolygonFeatureCollection 
+    } = useGeoJson();
 
     useEffect(() => {
         (async () => {
@@ -27,7 +31,7 @@ function LocationDetails() {
             strokeColor: "#4285f4",
             strokeWeight: 5
         });
-        const geometry = { "type": "FeatureCollection", "features": [JSON.parse(location.geometry)] }
+        const geometry = multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry));
         data.addGeoJson(geometry);
     };
 
