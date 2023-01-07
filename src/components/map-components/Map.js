@@ -1,14 +1,15 @@
 import React, { useCallback } from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
-const containerStyle = {
+const defaultMapStyle = {
     width: '100%',
-    height: '100vh'
+    height: 'calc(100vh - (var(--header-height) + var(--footer-height)))',
+    minHeight: '800px'
 };
 
 const libraries = ["drawing"];
 
-function Map({children, center, zoom, ...props}) {
+function Map({children, center, zoom, mapStyle, ...props}) {
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -24,9 +25,17 @@ function Map({children, center, zoom, ...props}) {
 
     }, []);
 
+    const getMapStyle = () => {
+        if (mapStyle) {
+            return mapStyle;
+        }
+
+        return defaultMapStyle;
+    }
+
     return isLoaded ? (
         <GoogleMap
-            mapContainerStyle={containerStyle}
+            mapContainerStyle={getMapStyle()}
             onLoad={onLoad}
             onUnmount={onUnmount}
             center={center}

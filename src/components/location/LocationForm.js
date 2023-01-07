@@ -8,6 +8,11 @@ import MapInput from '../common/form/MapInput';
 import CollapsibleTextarea from '../common/form/CollapsibleTextarea';
 import './location.css';
 
+const mapStyle = {
+    width: '100%',
+    height: '650px'
+};
+
 function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubmit, onDelete, operation = "add" }) {
 
     const formValidation = Yup.object({

@@ -39,9 +39,9 @@ function SpeciesDetails() {
     }
 
     return (
-        <div className="species-details">
+        <div className="species-details page">
             {species ? (
-                <div className="container">
+                <div className="container center-content">
                     <div className="species-details-card">
                         <ImageCarousell images={getImages()} cssClass="species-details-image" />
                         <div className="species-details-info">

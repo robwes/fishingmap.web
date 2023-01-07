@@ -5,6 +5,11 @@ import { useField } from 'formik';
 import Error from './Error';
 import './form.css';
 
+const mapStyle = {
+    width: '100%',
+    height: '650px'
+};
+
 function MapInput({ label, options, cssClass, ...props }) {
 
 	// eslint-disable-next-line
@@ -85,6 +90,7 @@ function MapInput({ label, options, cssClass, ...props }) {
 				<Map
 					center={options.center}
 					zoom={options.zoom}
+					mapStyle={mapStyle}
 					fullscreenControl={false}
 					streetViewControl={false}
 					{...props}

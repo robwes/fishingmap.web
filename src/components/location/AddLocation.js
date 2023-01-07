@@ -60,10 +60,8 @@ function AddLocation() {
         };
     }
 
-    // https://codesandbox.io/s/jrze53pqr?file=/index.js
-
     return (
-        <div className="add-location container container-body">
+        <div className="add-location container container-body page">
             <LocationForm
                 title="Add location"
                 initialValues={getInitialFormValues()}

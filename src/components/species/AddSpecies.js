@@ -23,7 +23,7 @@ function AddSpecies() {
     }
 
     return (
-        <div className="add-species">
+        <div className="add-species page">
             <div className="container add-species-container">
                 <h1 className="page-title">Add species</h1>
                 <SpeciesForm

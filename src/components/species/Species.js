@@ -44,7 +44,7 @@ function Species() {
     };
 
     return (
-        <div className="species">
+        <div className="species page">
             <div className="container">
                 <h1 className="page-title">Species</h1>
                 <div className="species-search">

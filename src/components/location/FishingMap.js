@@ -60,7 +60,7 @@ function FishingMap() {
     }
 
     return (
-        <div className="fishing-map">
+        <div className="fishing-map page">
             <SlideInPanel isFloating={true}>
                 <LocationFilter
                     onSubmit={handleSearch}

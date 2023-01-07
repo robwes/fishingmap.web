@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserMenu from './UserMenu';
-import authService from '../services/authService';
 import { useCurrentUser } from '../hooks/CurrentUserContext';
 
 function Header(props) {

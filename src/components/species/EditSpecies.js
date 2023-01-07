@@ -65,7 +65,7 @@ function EditSpecies() {
     }
 
     return (
-        species ? (<div className="add-species">
+        species ? (<div className="add-species page">
             <div className="container add-species-container">
                 <h1 className="page-title">Edit species</h1>
                 <SpeciesForm

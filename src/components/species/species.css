@@ -2,8 +2,6 @@
 .add-species,
 .species-details {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
 }
 
 .add-species {

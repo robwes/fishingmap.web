@@ -50,10 +50,8 @@ function Locations() {
         setPagedLocations(currentLocations);
     };
 
-    //https://www.youtube.com/watch?v=DonxmmWW7Tk
-
     return (
-        <div className="container">
+        <div className="container page">
             <div className="locations">
                 <div className="left">
                     <SlideInPanel>

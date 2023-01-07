@@ -8,12 +8,17 @@ import Map from '../map-components/Map'
 import ImageCarousell from '../common/ImageCarousell';
 import useGeoJson from '../../hooks/useGeoJson';
 
+const mapStyle = {
+    width: '100%',
+    height: '650px'
+};
+
 function LocationDetails() {
-    
+
     const { id } = useParams();
     const [location, setLocation] = useState();
-    const { 
-        multiPolygonFeatureToPolygonFeatureCollection 
+    const {
+        multiPolygonFeatureToPolygonFeatureCollection
     } = useGeoJson();
 
     useEffect(() => {
@@ -70,7 +75,7 @@ function LocationDetails() {
 
     return (
         location ? (
-            <div className="location-details container container-body">
+            <div className="location-details container container-body page">
                 <div className="location-body">
                     <h1 className="location-title">{location.name}</h1>
                     <div className="location-card">
@@ -99,7 +104,10 @@ function LocationDetails() {
                         </div>
                     </div>
                     <div className="location-position">
-                        <Map center={{ lat: location.position.latitude, lng: location.position.longitude }} zoom={12}>
+                        <Map
+                            center={{ lat: location.position.latitude, lng: location.position.longitude }}
+                            zoom={12}
+                            mapStyle={mapStyle}>
                             <Data
                                 onLoad={handleDataLoad}
                             />

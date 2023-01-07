@@ -124,7 +124,6 @@
 
 	.location-card {
 		position: absolute;
-		min-height: calc(100vh + 2.5em);
 		grid-area: left;
 	}
 
@@ -135,7 +134,7 @@
 
 	.location-position,
 	.add-location-position .map-input {
-		border-radius: 0 5px 5px 0;
+		border-radius: 0 5px 5px 5px;
 	}
 
 	.location-submit {
