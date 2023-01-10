@@ -170,6 +170,11 @@
 	display: block;
 }
 
+.collapsible-paragraph {
+	padding: 0;
+	white-space: pre-line;
+}
+
 @media(min-width: 900px) {
 	.slide-in-panel.default {
 		position: unset;

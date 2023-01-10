@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { locationService } from '../../services/locationService'
 import Collapse from '../common/Collapse';
+import CollapsibleParagraph from '../common/CollapsibleParagraph';
 import LinkItemList from '../common/LinkItemList';
 import Map from '../map-components/Map'
 import ImageCarousell from '../common/ImageCarousell';
@@ -87,19 +88,23 @@ function LocationDetails() {
                                 </Collapse>
                             </div>
                             <div className="input-group">
-                                <Collapse label="Rules">
-                                    {location.rules}
-                                </Collapse>
+                                <CollapsibleParagraph
+                                    label="Rules"
+                                    text={location.rules}
+                                />
                             </div>
                             <div className="input-group">
-                                <Collapse label="Fishing License">
-                                    {location.licenseInfo}
-                                </Collapse>
+                                <CollapsibleParagraph
+                                    label="Fishing License"
+                                    text={location.licenseInfo}
+                                />
                             </div>
                             <div className='input-group'>
-                                <Collapse label="Description" open={true}>
-                                    {location.description}
-                                </Collapse>
+                                <CollapsibleParagraph
+                                    label="Description"
+                                    open={true}
+                                    text={location.description}
+                                />
                             </div>
                         </div>
                     </div>

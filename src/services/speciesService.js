@@ -34,8 +34,8 @@ export const speciesService = {
         try {
             const formData = new FormData();
             
-            formData.append("name", species.name);
-            formData.append("description", species.description);
+            formData.append("name", species.name ?? "");
+            formData.append("description", species.description ?? "");
 
             species.images?.forEach(image => {
                 formData.append("images", image)
@@ -60,9 +60,9 @@ export const speciesService = {
         try {
             const formData = new FormData();
             
-            formData.append("id", species.id);
-            formData.append("name", species.name);
-            formData.append("description", species.description);
+            formData.append("id", species.id ?? "");
+            formData.append("name", species.name ?? "");
+            formData.append("description", species.description ?? "");
 
             species.images.forEach(image => {
                 formData.append("images", image)

@@ -49,13 +49,13 @@ export const locationService = {
         try {
             const formData = new FormData();
             
-            formData.append("name", location.name);
-            formData.append("description", location.description);
-            formData.append("species", JSON.stringify(location.species));
+            formData.append("name", location.name ?? "");
+            formData.append("description", location.description ?? "");
+            formData.append("species", JSON.stringify(location.species ?? ""));
             
-            formData.append("geometry", location.geometry);
-            formData.append("rules", location.rules);
-            formData.append("licenseInfo", location.licenseInfo);
+            formData.append("geometry", location.geometry ?? "");
+            formData.append("rules", location.rules ?? "");
+            formData.append("licenseInfo", location.licenseInfo ?? "");
 
             if (location.images) {
                 location.images.forEach(image => {
@@ -81,13 +81,13 @@ export const locationService = {
         try {
             const formData = new FormData();
             
-            formData.append("name", location.name);
-            formData.append("description", location.description);
-            formData.append("species", JSON.stringify(location.species));
+            formData.append("name", location.name ?? "");
+            formData.append("description", location.description ?? "");
+            formData.append("species", JSON.stringify(location.species) ?? "");
             
-            formData.append("geometry", location.geometry);
-            formData.append("rules", location.rules);
-            formData.append("licenseInfo", location.licenseInfo);
+            formData.append("geometry", location.geometry ?? "");
+            formData.append("rules", location.rules ?? "");
+            formData.append("licenseInfo", location.licenseInfo ?? "");
 
             if (location.images) {
                 location.images.forEach(image => {
