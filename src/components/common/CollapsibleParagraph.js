@@ -1,11 +1,17 @@
-import React from 'react'
-import Collapse from './Collapse'
+import React from 'react';
+import Linkify from 'react-linkify';
+import { SecureLink } from "react-secure-link";
+import Collapse from './Collapse';
 
 function CollapsibleParagraph({ text, ...props }) {
     return (
         <Collapse {...props}>
             <p className='collapsible-paragraph'>
-                {text}
+                <Linkify componentDecorator={(decoratedHref, decoratedText, key) => (
+                    <SecureLink href={decoratedHref} key={key}>{decoratedText}</SecureLink>
+                )}>
+                    {text}
+                </Linkify>
             </p>
         </Collapse>
     )

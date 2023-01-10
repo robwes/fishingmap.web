@@ -175,6 +175,10 @@
 	white-space: pre-line;
 }
 
+.collapsible-paragraph a {
+	color: var(--clr-primary);
+}
+
 @media(min-width: 900px) {
 	.slide-in-panel.default {
 		position: unset;
