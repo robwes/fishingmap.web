@@ -20,16 +20,18 @@ function Header(props) {
     return (
         <header className='header'>
             <div className="container container-flex">
-                <div className="site-title">
-                    <h1 className="title">Fishing Map</h1>
-                    <p className="subtitle">Find new fishing places near you</p>
-                </div>
+                <Link to='/'>
+                    <div className="site-title">
+                        <h1 className="title">Fishing Map</h1>
+                        <p className="subtitle">Find new fishing places near you</p>
+                    </div>
+                </Link>
                 <nav>
                     <ul className='nav-list'>
                         <li>
                             <Link
-                                className={getLinkCssClasses(pathname, "/")}
-                                to="/"
+                                className={getLinkCssClasses(pathname, "/map")}
+                                to="/map"
                             >Map</Link>
                         </li>
                         <li>

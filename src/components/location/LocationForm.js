@@ -40,7 +40,7 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
 
     let buttons;
     if (operation === "add") {
-        buttons = <button className="submit-button location-submit" type="submit">Add</button>;
+        buttons = <button className="button submit-button location-submit" type="submit">Add</button>;
     } else if (operation === "edit") {
         buttons = <>
             <button onClick={onDeleteClick} className="button button-secondary">Delete</button>

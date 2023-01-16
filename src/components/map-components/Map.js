@@ -4,7 +4,7 @@ import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 const defaultMapStyle = {
     width: '100%',
     height: 'calc(100vh - (var(--header-height) + var(--footer-height)))',
-    minHeight: '800px'
+    minHeight: '550px'
 };
 
 const libraries = ["drawing"];

@@ -17,6 +17,7 @@ import Login from './components/login/Login';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import EditUser from './components/users/EditUser';
 import ProtectedRouteIsLoggedInUser from './components/common/ProtectedRouteCurrentUser';
+import LandingPage from './components/LandingPage';
 
 function App() {
 	return (
@@ -44,7 +45,8 @@ function App() {
 						</Route>
 
 						<Route path="/login" element={<Login />} />
-						<Route path="/" element={<FishingMap />} />
+						<Route path="/map" element={<FishingMap />} />
+						<Route path="/" element={<LandingPage />} />
 					</Routes>
 
 					<Footer />
