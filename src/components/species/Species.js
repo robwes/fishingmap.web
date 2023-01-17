@@ -4,7 +4,7 @@ import Pagination from '../common/Pagination';
 import SpeciesListItem from './SpeciesListItem';
 import SlideInPanel from '../common/SlideInPanel';
 import SpeciesFilter from './SpeciesFilter';
-import './species.css';
+import './species.scss';
 
 function Species() {
 

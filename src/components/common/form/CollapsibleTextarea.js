@@ -2,7 +2,7 @@ import React from 'react';
 import { useField } from 'formik';
 import Error from './Error';
 import Collapse from '../Collapse';
-import './form.css';
+import './form.scss';
 
 function CollapsibleTextarea({ label, ...props }) {
 

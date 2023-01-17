@@ -1,6 +1,6 @@
 import React from 'react';
 import { useField } from 'formik';
-import './form.css';
+import './form.scss';
 
 function SearchBar({cssClass, ...props}) {
     const [field] = useField({ type: "text", ...props });

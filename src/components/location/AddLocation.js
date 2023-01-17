@@ -4,7 +4,7 @@ import LocationForm from './LocationForm';
 import { locationService } from '../../services/locationService';
 import { speciesService } from '../../services/speciesService';
 import useGeoJson from '../../hooks/useGeoJson';
-import './location.css';
+import './location.scss';
 
 function AddLocation() {
 

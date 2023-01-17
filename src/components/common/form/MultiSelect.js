@@ -3,7 +3,7 @@ import { useField } from 'formik';
 
 import Select from 'react-select';
 import Error from './Error';
-import './form.css';
+import './form.scss';
 
 const customStyles = {
     option: (provided, state) => ({

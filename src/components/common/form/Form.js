@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik, Form as FormikForm } from 'formik';
-import './form.css';
+import './form.scss';
 
 function Form({children, initialValues, validationSchema, onSubmit}) {
     return (

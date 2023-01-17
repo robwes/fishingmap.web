@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import './components.css'
-import './common/form/form.css'
+import './components.scss'
+import './common/form/form.scss'
 
 function LandingPage() {
     return (

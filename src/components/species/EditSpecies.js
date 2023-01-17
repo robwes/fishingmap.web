@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { speciesService } from '../../services/speciesService';
 import { fileService } from '../../services/fileService';
 import SpeciesForm from './SpeciesForm';
-import './species.css';
+import './species.scss';
 
 function EditSpecies() {
 

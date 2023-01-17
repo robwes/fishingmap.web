@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './common.css';
+import './common.scss';
 
 const LEFT_PAGE = 'LEFT';
 const RIGHT_PAGE = 'RIGHT';

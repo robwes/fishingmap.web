@@ -5,7 +5,7 @@ import SlideInPanel from '../common/SlideInPanel';
 import LocationFilter from './LocationFilter';
 import LocationListItem from './LocationListItem';
 import { useCurrentUser } from '../../hooks/CurrentUserContext';
-import './location.css';
+import './location.scss';
 
 function Locations() {
 

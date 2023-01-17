@@ -5,7 +5,7 @@ import { speciesService } from '../../services/speciesService';
 import { fileService } from '../../services/fileService';
 import LocationForm from './LocationForm';
 import useGeoJson from '../../hooks/useGeoJson';
-import './location.css';
+import './location.scss';
 
 function EditLocation() {
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { speciesService } from '../../services/speciesService'
 import ImageCarousell from '../common/ImageCarousell';
-import './species.css'
+import './species.scss'
 
 function SpeciesDetails() {
 

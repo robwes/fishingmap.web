@@ -4,7 +4,7 @@ import DragAndDropImage from '../common/form/DragAndDropImage';
 import Form from "../common/form/Form";
 import Input from '../common/form/Input';
 import TextArea from '../common/form/TextArea';
-import './species.css';
+import './species.scss';
 
 function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
 
