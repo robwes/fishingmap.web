@@ -3,7 +3,7 @@ import Map from '../../map-components/Map';
 import { Data } from '@react-google-maps/api';
 import { useField } from 'formik';
 import Error from './Error';
-import './form.css';
+import './form.scss';
 
 const mapStyle = {
     width: '100%',

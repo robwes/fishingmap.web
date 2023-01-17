@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom'
 import * as Yup from 'yup';
 import Input from '../common/form/Input'
 import Form from '../common/form/Form'
-import './users.css';
 import authService from '../../services/authService'
 import userService from '../../services/userService'
 import Collapse from '../common/Collapse'
+import './users.scss';
 
 const userDetailsValidation = Yup.object({
     firstName: Yup.string()

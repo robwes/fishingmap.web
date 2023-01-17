@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Error from './Error';
 import { useField } from 'formik';
-import './form.css';
+import './form.scss';
 
 // https://blog.logrocket.com/create-a-drag-and-drop-component-with-react-dropzone/
 function DragAndDropImage({ text, initialValue = [], wide = false, maxNrOfFiles = 3, ...props }) {

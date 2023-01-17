@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './common.css';
+import './common.scss';
 
 function Collapse({ children, label, open = false }) {
 

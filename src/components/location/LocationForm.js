@@ -6,7 +6,7 @@ import MultiSelect from '../common/form/MultiSelect';
 import DragAndDropImage from '../common/form/DragAndDropImage';
 import MapInput from '../common/form/MapInput';
 import CollapsibleTextarea from '../common/form/CollapsibleTextarea';
-import './location.css';
+import './location.scss';
 
 const mapStyle = {
     width: '100%',

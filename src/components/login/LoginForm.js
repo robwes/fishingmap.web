@@ -2,7 +2,7 @@ import React from 'react'
 import Form from '../common/form/Form'
 import Input from '../common/form/Input';
 import { useHistory } from 'react-router-dom';
-import './login.css';
+import './login.scss';
 
 function LoginForm({initialValues, onSubmit}) {
 

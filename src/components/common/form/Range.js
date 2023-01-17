@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useField } from 'formik';
-import './form.css';
+import './form.scss';
 
 function Range({ label, name, value = 0, min = 0, max = 100, zeroIsInfinity = true, onChange, ...props }) {
 

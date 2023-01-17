@@ -5,7 +5,7 @@ import LocationMarker from './LocationMarker';
 import Map from '../map-components/Map';
 import LocationFilter from './LocationFilter';
 import SlideInPanel from '../common/SlideInPanel';
-import './location.css';
+import './location.scss';
 
 const center = {
     lat: 60.2,
