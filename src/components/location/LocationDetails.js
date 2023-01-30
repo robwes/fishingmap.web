@@ -1,13 +1,12 @@
 import { Data } from '@react-google-maps/api';
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { locationService } from '../../services/locationService'
-import Collapse from '../common/Collapse';
-import CollapsibleParagraph from '../common/CollapsibleParagraph';
-import LinkItemList from '../common/LinkItemList';
-import Map from '../map-components/Map'
-import ImageCarousell from '../common/ImageCarousell';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { locationService } from '../../services/locationService';
+import LocationCard from './LocationCard';
+import Map from '../map-components/Map';
 import useGeoJson from '../../hooks/useGeoJson';
+import './LocationDetails.scss';
+import LinkButtonPrimaryOutline from '../common/LinkButtonPrimaryOutline';
 
 const mapStyle = {
     width: '100%',
@@ -41,34 +40,6 @@ function LocationDetails() {
         data.addGeoJson(geometry);
     };
 
-    const getImages = () => {
-        const images = [];
-
-        if (location && location.images.length > 0) {
-            location.images.forEach(image => {
-                images.push({
-                    url: `${process.env.REACT_APP_BASE_URL}/${image.url}`,
-                    description: location.name
-                });
-            });
-        } else {
-            images.push({
-                url: "../images/locations/lake.png",
-                description: "Default location image"
-            });
-        }
-
-        return images;
-    }
-
-    const speciesLinkItems = location ? location.species.map(s => (
-        {
-            icon: "fas fa-fish",
-            text: s.name,
-            path: `/species/${s.id}`
-        }
-    )) : [];
-
     let directionsLink = "https://www.google.com/maps/dir/?api=1&destination=";
     if (location) {
         directionsLink += encodeURIComponent(`${location.position.latitude},${location.position.longitude}`) + "&travelmode=driving";
@@ -76,38 +47,10 @@ function LocationDetails() {
 
     return (
         location ? (
-            <div className="location-details container container-body page">
-                <div className="location-body">
-                    <h1 className="location-title">{location.name}</h1>
-                    <div className="location-card">
-                        <ImageCarousell images={getImages()} cssClass="card-image" />
-                        <div className="card-body">
-                            <div className="input-group">
-                                <Collapse label="Species" open={true}>
-                                    <LinkItemList items={speciesLinkItems} />
-                                </Collapse>
-                            </div>
-                            <div className="input-group">
-                                <CollapsibleParagraph
-                                    label="Rules"
-                                    text={location.rules}
-                                />
-                            </div>
-                            <div className="input-group">
-                                <CollapsibleParagraph
-                                    label="Fishing License"
-                                    text={location.licenseInfo}
-                                />
-                            </div>
-                            <div className='input-group'>
-                                <CollapsibleParagraph
-                                    label="Description"
-                                    open={true}
-                                    text={location.description}
-                                />
-                            </div>
-                        </div>
-                    </div>
+            <div className="location-details container page">
+                <div className="location-details-body">
+                    <h1 className="location-details-title">{location.name}</h1>
+                    <LocationCard location={location} />
                     <div className="location-position">
                         <Map
                             center={{ lat: location.position.latitude, lng: location.position.longitude }}
@@ -119,7 +62,14 @@ function LocationDetails() {
                         </Map>
                     </div>
                 </div>
-                <a href={directionsLink} target="_blank" rel="noreferrer" className="location-directions button button-primary-outline pull-right"><i className="fas fa-directions"></i> Directions</a>
+
+                <LinkButtonPrimaryOutline
+                    href={directionsLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="location-directions pull-right">
+                    <i className="fas fa-directions"></i> Directions
+                </LinkButtonPrimaryOutline>
             </div>
         ) : null
     )

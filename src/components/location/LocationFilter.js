@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import Form from "../common/form/Form";
-import SearchBar from '../common/form/SearchBar'
-import MultiSelect from '../common/form/MultiSelect'
-import { speciesService } from '../../services/speciesService';
+import SearchBar from '../common/form/SearchBar';
+import MultiSelect from '../common/form/MultiSelect';
 import FormRange from '../common/form/Range';
+import { speciesService } from '../../services/speciesService';
+import ButtonPrimary from '../common/ButtonPrimary';
+import ButtonSecondary from '../common/ButtonSecondary';
+import ButtonBar from '../common/ButtonBar';
 
 function LocationFilter({ onSubmit, onReset, onDistanceChange }) {
 
@@ -47,7 +50,6 @@ function LocationFilter({ onSubmit, onReset, onDistanceChange }) {
                 onSubmit={formSubmitted}
             >
                 <SearchBar
-                    cssClass="input-group"
                     name="search"
                 />
 
@@ -64,10 +66,15 @@ function LocationFilter({ onSubmit, onReset, onDistanceChange }) {
                     onChange={onDistanceChange}
                 />
 
-                <div className="button-bar">
-                    <button onClick={onReset} className="button button-secondary" type="reset"><i className="fas fa-times"></i>&nbsp;Clear</button>
-                    <button className="button button-primary" type="submit"><i className="fas fa-search"></i>&nbsp;Search</button>
-                </div>
+                <ButtonBar>
+                    <ButtonSecondary onClick={onReset} type="reset">
+                        <i className="fas fa-times"></i>&nbsp;Clear
+                    </ButtonSecondary>
+                    <ButtonPrimary type="submit">
+                        <i className="fas fa-search"></i>&nbsp;Search
+                    </ButtonPrimary>
+                </ButtonBar>
+
             </Form>
         </div>
     )

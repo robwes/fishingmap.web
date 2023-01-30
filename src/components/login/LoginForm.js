@@ -1,8 +1,8 @@
-import React from 'react'
-import Form from '../common/form/Form'
+import React from 'react';
+import ButtonSuccess from '../common/ButtonSuccess';
+import Form from '../common/form/Form';
 import Input from '../common/form/Input';
-import { useHistory } from 'react-router-dom';
-import './login.scss';
+import './LoginForm.scss';
 
 function LoginForm({initialValues, onSubmit}) {
 
@@ -10,11 +10,11 @@ function LoginForm({initialValues, onSubmit}) {
 
     return (
         <div className='login-form'>
+            <h3 className='login-form-title'>Log in</h3>
             <Form
                 initialValues={initialFormValues}
                 onSubmit={onSubmit}
             >
-                <h3 className='login-form-title'>Log in</h3>
                 <Input
                     label="Username"
                     name="username"
@@ -27,7 +27,7 @@ function LoginForm({initialValues, onSubmit}) {
                     type="password"
                     placeholder="Password..."
                 />
-                <button className="submit-button login-submit" type="submit">Log in</button>
+                <ButtonSuccess type="submit">Log in</ButtonSuccess>
             </Form>
         </div>
     )

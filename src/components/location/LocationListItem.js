@@ -1,6 +1,7 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 import LinkItemList from '../common/LinkItemList';
+import './LocationListItem.scss';
 
 function LocationListItem({ location }) {
     const { id, name, description, species, images } = location;
@@ -23,16 +24,16 @@ function LocationListItem({ location }) {
 
     return (
         <Link to={`/locations/${id}`}>
-            <div className="list-item">
-                <div className="list-item-image-container">
-                    <img src={getImagesSrc()} alt="The lake" className="list-item-image" />
+            <div className="location-list-item">
+                <div className="location-list-item-image-container">
+                    <img src={getImagesSrc()} alt="The lake" className="location-list-item-image" />
                 </div>
-                <div className="list-item-main">
-                    <h3 className="list-item-title">
+                <div className="location-list-item-main">
+                    <h3 className="location-list-item-title">
                         {name}
                     </h3>
-                    <p className="list-item-text">{description}</p>
-                    <div className="list-item-footer">
+                    <p className="location-list-item-text">{description}</p>
+                    <div className="location-list-item-footer">
                         <LinkItemList items={speciesItems} isLink={false} />
                     </div>
                 </div>

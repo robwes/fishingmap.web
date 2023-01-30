@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik, Form as FormikForm } from 'formik';
-import './form.scss';
+import './Form.scss';
 
 function Form({children, initialValues, validationSchema, onSubmit}) {
     return (
@@ -9,7 +9,7 @@ function Form({children, initialValues, validationSchema, onSubmit}) {
             validationSchema={validationSchema}
             onSubmit={onSubmit}
         >
-            <FormikForm>
+            <FormikForm className='form'>
                 {children}
             </FormikForm>
         </Formik>

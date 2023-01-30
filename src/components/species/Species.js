@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { speciesService } from '../../services/speciesService';
 import Pagination from '../common/Pagination';
 import SpeciesListItem from './SpeciesListItem';
 import SlideInPanel from '../common/SlideInPanel';
 import SpeciesFilter from './SpeciesFilter';
-import './species.scss';
+import './Species.scss';
 
 function Species() {
 
@@ -36,7 +36,6 @@ function Species() {
     };
 
     const handleSearch = async ({search}) => {
-        debugger;
         const species = await speciesService.getSpecies(search);
         if (species) {
             setSpecies(species);
@@ -52,7 +51,7 @@ function Species() {
                         <SpeciesFilter onSubmit={handleSearch} />
                     </SlideInPanel>
                 </div>
-                <div className="item-grid species-grid">
+                <div className="item-grid">
                     {pagedSpecies.map(s => (
                         <SpeciesListItem key={s.id} species={s} />
                     ))}

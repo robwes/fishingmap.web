@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import './common.scss';
+import './LinkItem.scss';
 
 function LinkItem({ icon, text, path, isLink = true }) {
 

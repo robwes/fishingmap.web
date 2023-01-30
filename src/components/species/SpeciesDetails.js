@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { speciesService } from '../../services/speciesService'
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { speciesService } from '../../services/speciesService';
 import ImageCarousell from '../common/ImageCarousell';
-import './species.scss'
+import './SpeciesDetails.scss';
 
 function SpeciesDetails() {
 
@@ -43,7 +43,7 @@ function SpeciesDetails() {
             {species ? (
                 <div className="container center-content">
                     <div className="species-details-card">
-                        <ImageCarousell images={getImages()} cssClass="species-details-image" />
+                        <ImageCarousell images={getImages()} className="species-details-image" />
                         <div className="species-details-info">
                             <h1 className="center-text">{species.name}</h1>
                             <p className="species-details-description">{species.description}</p>

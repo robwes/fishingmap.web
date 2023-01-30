@@ -1,18 +1,21 @@
 import { useField } from 'formik';
 import React from 'react';
+import Label from './Label';
 import Error from './Error';
-import './form.scss';
+import './TextArea.scss';
 
-function TextArea({label, cssClass, ...props}) {
+function TextArea({label, className, ...props}) {
 
     const [field, meta] = useField(props);
 
-    const cssClasses = "input-group" + (cssClass ? ` ${cssClass}` : "");
+    const getCssClasses = () => {
+        return "text-area" + (className ? ` ${className}` : "");
+    }
 
     return (
-        <div className={cssClasses}>
-            <label className="form-label" htmlFor={props.id || props.name}>{label}</label>
-            <textarea className="form-input" {...field} {...props} />
+        <div className={getCssClasses()}>
+            <Label htmlFor={props.id || props.name}>{label}</Label>
+            <textarea className="textarea-field" {...field} {...props} />
             {meta.touched && meta.error ? (
                 <Error message={meta.error} />
             ) : null}

@@ -5,7 +5,7 @@ import { speciesService } from '../../services/speciesService';
 import { fileService } from '../../services/fileService';
 import LocationForm from './LocationForm';
 import useGeoJson from '../../hooks/useGeoJson';
-import './location.scss';
+import './EditLocation.scss';
 
 function EditLocation() {
 
@@ -96,7 +96,7 @@ function EditLocation() {
 
     return (
         location ? (
-            <div className="add-location container container-body page">
+            <div className="edit-location container page">
                 <LocationForm 
                     title="Edit location"
                     initialValues={getInitialFormValues()}

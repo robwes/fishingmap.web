@@ -1,6 +1,6 @@
 import React from 'react';
 import Form from "../common/form/Form";
-import SearchBar from '../common/form/SearchBar'
+import SearchBar from '../common/form/SearchBar';
 
 function SpeciesFilter({ onSubmit }) {
     return (

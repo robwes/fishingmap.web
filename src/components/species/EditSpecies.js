@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { speciesService } from '../../services/speciesService';
 import { fileService } from '../../services/fileService';
 import SpeciesForm from './SpeciesForm';
-import './species.scss';
+import './EditSpecies.scss';
 
 function EditSpecies() {
 
@@ -65,8 +65,8 @@ function EditSpecies() {
     }
 
     return (
-        species ? (<div className="add-species page">
-            <div className="container add-species-container">
+        species ? (<div className="edit-species page">
+            <div className="container edit-species-container">
                 <h1 className="page-title">Edit species</h1>
                 <SpeciesForm
                     initialValues={{

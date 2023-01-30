@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Error from './Error';
 import { useField } from 'formik';
-import './form.scss';
+import './DragAndDropImage.scss';
 
 // https://blog.logrocket.com/create-a-drag-and-drop-component-with-react-dropzone/
-function DragAndDropImage({ text, initialValue = [], wide = false, maxNrOfFiles = 3, ...props }) {
-    
+function DragAndDropImage({ text, initialValue = [], maxNrOfFiles = 3, ...props }) {
+
     const [selectedFiles, meta, helpers] = useField(props);
     const { setError, setValue: setSelectedFiles } = helpers;
 
@@ -18,6 +18,7 @@ function DragAndDropImage({ text, initialValue = [], wide = false, maxNrOfFiles 
         if (initialValue.length > 0) {
             setSelectedFiles(initialValue);
         }
+        // eslint-disable-next-line
     }, [initialValue])
 
     useEffect(() => {
@@ -100,7 +101,7 @@ function DragAndDropImage({ text, initialValue = [], wide = false, maxNrOfFiles 
 
     const handleRemoveFile = (e) => {
         e.stopPropagation();
-        
+
         let files = [...selectedFiles.value];
         const removeAtIndex = files.indexOf(selectedFile);
         files.splice(removeAtIndex, 1);
@@ -110,7 +111,7 @@ function DragAndDropImage({ text, initialValue = [], wide = false, maxNrOfFiles 
 
     const showNextPreview = (e) => {
         e.stopPropagation();
-        
+
         let nextFileIndex = selectedFiles.value.indexOf(selectedFile) + 1;
         if (nextFileIndex >= selectedFiles.value.length) {
             nextFileIndex = 0;
@@ -121,7 +122,7 @@ function DragAndDropImage({ text, initialValue = [], wide = false, maxNrOfFiles 
 
     const showPreviousPreview = (e) => {
         e.stopPropagation();
-        
+
         let previousFileIndex = selectedFiles.value.indexOf(selectedFile) - 1;
         if (previousFileIndex < 0) {
             previousFileIndex = selectedFiles.value.length - 1;
@@ -152,18 +153,19 @@ function DragAndDropImage({ text, initialValue = [], wide = false, maxNrOfFiles 
     //     return fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length) || fileName;
     // }
 
-    const getDropContainerCssClasses = (wide) => {
-        let cssClasses = "drop-container";
-        if (wide) {
-            cssClasses += " drop-container-wide";
+    const getCssClasses = () => {
+        let cssClasses = "drag-and-drop-image";
+
+        if (props.className) {
+            cssClasses += ` ${props.className}`
         }
 
         return cssClasses;
     }
 
     return (
-        <div className={props.cssClass || ""}>
-            <div className={getDropContainerCssClasses(wide)}
+        <div className={getCssClasses()}>
+            <div className="drop-container"
                 onDragOver={(e) => e.preventDefault()}
                 onDragEnter={(e) => e.preventDefault()}
                 onDragLeave={(e) => e.preventDefault()}

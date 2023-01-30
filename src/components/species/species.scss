@@ -1,129 +1,36 @@
-.species,
-.add-species,
-.species-details {
+.species {
 	display: flex;
-}
 
-.add-species {
-	padding-bottom: 3em;
-}
+    .page-title {
+        display: none;
+    }
 
-.add-species-image {
-	border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
-}
+    .species-search {
+        width: 50%;
+    }
 
-.add-species-image .drop-panel {
-	border: 0;
-}
-
-.species .page-title {
-	display: none;
-}
-
-.species-search {
-	width: 50%;
-}
-
-.species-grid {
-	margin-top: 3em;
-}
-
-.add-species-form {
-	display: flex;
-	flex-direction: column;
-}
-
-.species-submit {
-	width: 100%;
-}
-
-/* Species details */
-
-.species-details-card {
-	display: flex;
-	flex-direction: column;
-	gap: 2.5em 0;
-	margin: 3em 0;
-	max-width: 960px;
-}
-
-.species-details-image {
-	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-	height: 240px;
-	overflow: hidden;
-}
-
-.species-details-description {
-	padding: 0 1.5em;
-	white-space: pre-line;
-}
-
-.species-details-info {
-	background: white;
-	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0,0,0,.15);
-	padding: 0 0 2em;
+    .item-grid {
+        display: grid;
+        gap: 1em 2em;
+        width: 100%;
+        margin-top: 3em;
+    }
 }
 
 @media(min-width: 600px) {
-
 	.species {
 		background: linear-gradient(90deg, var(--clr-bg-body) 60%, rgba(0,0,0, .05) 40%);
-	}
 
-	.add-species,
-	.species-details {
-		background: linear-gradient(90deg, var(--clr-bg-body) 85%, rgba(0,0,0, .05) 40%);
-	}
-
-	.add-species-container {
-		padding-left: 1.5em;
-	}
-
-    .add-species-form {
-		width: 87%;
-		flex-direction: row;
-		align-items: flex-start;
-    	justify-content: space-between;
-    	gap: 3em;
-	}
-
-	.add-species-image {
-		width: 300px;
-	}
-
-	.add-species-right {
-		flex-grow: 1;
-	}
-
-	.species-submit {
-		width: unset;
-	}
-
-	.species-details-card {
-		flex-direction: row;
-		margin: 4.5em 0;
-	}
-
-	.species-details-image {
-		width: 280px;
-		height: 240px;
-		border-radius: 5px 0 0 5px;
-		flex-shrink: 0;
-	}
-
-	.species-details-info {
-		border-radius: 0 5px 5px 5px;
-		min-height: 350px;
-		flex-grow: 1;
+        .item-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
 	}
 }
 
 @media(min-width: 900px) {
-	.species .page-title {
-		display: block;
-	}
+	.species {
+        .page-title {
+            display: block;
+        }
+    }
 }

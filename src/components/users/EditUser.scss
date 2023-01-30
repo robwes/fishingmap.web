@@ -10,17 +10,8 @@
     width: 100%;
 }
 
-.form-card > * {
-    margin-bottom: 0;
-}
-
 .edit-user {
     padding: 3em 0;
-}
-
-/* TODO: Remove everywhere and fix form */
-.edit-user .input-group {
-    margin-bottom: 0;
 }
 
 .edit-user-container {
@@ -29,9 +20,9 @@
     align-items: center;
 }
 
-.edit-user-container form {
-    width: 100%;
-}
+// .edit-user-container form {
+//     width: 100%;
+// }
 
 .user-form,
 .user-form .right {
@@ -43,6 +34,7 @@
 }
 
 .user-form button[type="submit"] {
+    margin-top: 1.5em;
     width: 100%;
 }
 

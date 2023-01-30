@@ -1,0 +1,47 @@
+.image-carousell {
+    position: relative;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .image-carousell-previous,
+    .image-carousell-next {
+        text-shadow: 0 0 2px #000;
+        padding: 0 15px;
+        top: calc(50% - 20px);
+        position: absolute;
+        color: #f1f1f1;
+        opacity: .5;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 99;
+    }
+
+    .image-carousell-previous {
+        left: 0;
+    }
+
+    .image-carousell-next {
+        right: 0;
+    }
+}
+
+
+@media(min-width: 900px) {
+
+    .image-carousell {
+
+        .image-carousell-previous,
+        .image-carousell-next {
+            display: none;
+        }
+
+        &:hover .image-carousell-previous,
+        &:hover .image-carousell-next {
+            display: inline;
+        }
+    }
+}

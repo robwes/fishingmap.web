@@ -2,6 +2,7 @@ import React from 'react';
 import Linkify from 'react-linkify';
 import { SecureLink } from "react-secure-link";
 import Collapse from './Collapse';
+import './CollapsibleParagraph.scss';
 
 function CollapsibleParagraph({ text, ...props }) {
     return (

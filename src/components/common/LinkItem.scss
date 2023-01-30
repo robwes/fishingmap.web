@@ -1,0 +1,22 @@
+.link-item {
+	position: relative;
+	display: flex;
+	gap: .33em;
+	align-items: center;
+	padding-bottom: .15em;
+
+    &::after {
+        position: absolute;
+        content: '';
+        height: 2px;
+        width: 90%;
+        left: calc(5%);
+        bottom: 0;
+        background: var(--clr-primary);
+    }
+    
+    .link-item-icon {
+        color: var(--clr-primary);
+        font-size: 1.125rem;
+    }
+}

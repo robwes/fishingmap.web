@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserMenu from './UserMenu';
 import { useCurrentUser } from '../hooks/CurrentUserContext';
+import './Header.scss';
 
 function Header(props) {
 
@@ -21,9 +22,9 @@ function Header(props) {
         <header className='header'>
             <div className="container container-flex">
                 <Link to='/'>
-                    <div className="site-title">
-                        <h1 className="title">Fishing Map</h1>
-                        <p className="subtitle">Find new fishing places near you</p>
+                    <div className="header-title-container">
+                        <h1 className="header-title">Fishing Map</h1>
+                        <p className="header-subtitle">Find new fishing places near you</p>
                     </div>
                 </Link>
                 <nav>

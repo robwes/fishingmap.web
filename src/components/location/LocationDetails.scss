@@ -1,0 +1,61 @@
+.location-details {
+
+	padding: 2.5em 0;
+
+	.location-details-title {
+		margin: 0;
+		text-align: center;
+	}
+
+	.location-details-body {
+		display: grid;
+		gap: 2.5em 0;
+		margin-bottom: 1.5em;
+	}
+	
+	.location-details-body > * {
+		margin: 0;
+	}
+
+	.location-directions {
+		font-size: 1rem;
+		margin-bottom: 2.5em;
+	}
+
+	.location-position {
+		overflow: hidden;
+		border-radius: 5px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+	}
+}
+
+@media(min-width: 900px) {
+
+	.location-details {
+
+		.location-details-title {
+			grid-area: title;
+		}
+
+		.location-details-body {
+			position: relative;
+			grid-template-areas: 
+			"left left title title"
+			"left left right right";
+			grid-template-rows: 2.5em auto;
+			grid-template-columns: 10% 35% 45% 10%;
+			gap: 0;
+		}
+
+		.location-card {
+            position: absolute;
+            grid-area: left;
+        }
+
+		.location-position {
+			grid-area: right;
+			border-radius: 0 5px 5px 5px;
+		}
+	}
+
+}

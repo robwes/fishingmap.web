@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './common.scss';
+import './Pagination.scss';
 
 const LEFT_PAGE = 'LEFT';
 const RIGHT_PAGE = 'RIGHT';

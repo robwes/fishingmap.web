@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { locationService } from '../../services/locationService'
+import React, { useEffect, useState } from 'react';
+import { locationService } from '../../services/locationService';
 import Pagination from '../common/Pagination';
 import SlideInPanel from '../common/SlideInPanel';
 import LocationFilter from './LocationFilter';
 import LocationListItem from './LocationListItem';
 import { useCurrentUser } from '../../hooks/CurrentUserContext';
-import './location.scss';
+import './Locations.scss';
 
 function Locations() {
 

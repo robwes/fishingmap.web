@@ -1,10 +1,13 @@
 import React from 'react';
 import * as Yup from 'yup';
+import ButtonSecondary from '../common/ButtonSecondary';
+import ButtonSuccess from '../common/ButtonSuccess';
 import DragAndDropImage from '../common/form/DragAndDropImage';
 import Form from "../common/form/Form";
 import Input from '../common/form/Input';
 import TextArea from '../common/form/TextArea';
-import './species.scss';
+import ButtonBar from '../common/ButtonBar';
+import './SpeciesForm.scss';
 
 function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
 
@@ -18,11 +21,11 @@ function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
 
     let buttons;
     if (operation === "add") {
-        buttons = <button className="submit-button species-submit" type="submit">Add</button>;
+        buttons = <ButtonSuccess type="submit">Add</ButtonSuccess>;
     } else if (operation === "edit") {
         buttons = <>
-            <button onClick={onDelete} className="button button-secondary">Delete</button>
-            <button className="button submit-button" type="submit">Save</button>
+            <ButtonSecondary onClick={onDelete}>Delete</ButtonSecondary>
+            <ButtonSuccess type="submit">Save</ButtonSuccess>
         </>;
     }
 
@@ -32,15 +35,15 @@ function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
             validationSchema={formValidation}
             onSubmit={onSubmit}
         >
-            <div className="add-species-form">
+            <div className="species-form">
                 <DragAndDropImage
                     text="Add some images"
-                    cssClass="add-species-image input-group"
+                    className="species-form-image"
                     name="images"
                     initialValue={initialValues.images}
                     maxNrOfFiles={4}
                 />
-                <div className="add-species-right">
+                <div className="right">
                     <Input
                         label="Name"
                         name="name"
@@ -52,9 +55,9 @@ function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
                         type="textarea"
                         rows="10"
                     />
-                    <div className="button-bar button-bar-right">
+                    <ButtonBar>
                         {buttons}
-                    </div>
+                    </ButtonBar>
                 </div>
             </div>
         </Form>

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import { Circle, MarkerClusterer } from '@react-google-maps/api';
 import { locationService } from '../../services/locationService';
 import LocationMarker from './LocationMarker';
 import Map from '../map-components/Map';
 import LocationFilter from './LocationFilter';
 import SlideInPanel from '../common/SlideInPanel';
-import './location.scss';
+import './FishingMap.scss';
 
 const center = {
     lat: 60.2,
@@ -83,7 +83,6 @@ function FishingMap() {
                 </MarkerClusterer>
             </Map>
         </div>
-
     )
 }
 
