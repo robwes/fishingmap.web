@@ -4,7 +4,7 @@ import LocationForm from './LocationForm';
 import { locationService } from '../../services/locationService';
 import { speciesService } from '../../services/speciesService';
 import useGeoJson from '../../hooks/useGeoJson';
-import './location.scss';
+import './AddLocation.scss';
 
 function AddLocation() {
 
@@ -61,7 +61,7 @@ function AddLocation() {
     }
 
     return (
-        <div className="add-location container container-body page">
+        <div className="add-location container page">
             <LocationForm
                 title="Add location"
                 initialValues={getInitialFormValues()}

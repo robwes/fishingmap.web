@@ -1,0 +1,19 @@
+.pagination {
+	display: flex;
+	list-style: none;
+	padding: 0;
+	margin: 2em 0;
+	justify-content: center;
+
+    .page-link {
+        border: 1px solid #dee2e6;
+        padding: .5rem .75rem;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .page-link.active {
+        background: #143774;
+        color: white;
+    }
+}

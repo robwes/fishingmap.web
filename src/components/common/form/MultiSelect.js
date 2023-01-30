@@ -1,9 +1,8 @@
 import React from 'react';
 import { useField } from 'formik';
-
 import Select from 'react-select';
+import Label from './Label';
 import Error from './Error';
-import './form.scss';
 
 const customStyles = {
     option: (provided, state) => ({
@@ -57,8 +56,8 @@ function MultiSelect({ label, options, ...props }) {
     const { setTouched, setValue } = helpers;
 
     return (
-        <div className="input-group">
-            <label className="form-label" htmlFor={props.id || props.name}>{label}</label>
+        <div className="multi-select">
+            <Label htmlFor={props.id || props.name}>{label}</Label>
             <Select
                 value={field.value}
                 styles={customStyles}

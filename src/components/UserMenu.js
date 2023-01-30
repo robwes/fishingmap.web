@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCurrentUser } from '../hooks/CurrentUserContext';
 import authService from '../services/authService';
-import './components.scss';
+import './UserMenu.scss';
 
 function UserMenu({ user, open }) {
 

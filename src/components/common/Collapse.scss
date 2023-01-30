@@ -1,0 +1,49 @@
+.collapse {
+	width: 100%;
+
+    .collapse-header {
+        display: flex;
+        align-items: center;
+        gap: .5em;
+        padding: .25em 0 .5em 0;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, .25);
+    }
+    
+    .collapse-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        background: var(--clr-primary);
+        border: 0;
+        font-size: .8rem;
+        width: 1.8em;
+        height: 1.8em;
+        border-radius: 50%;
+        cursor: pointer;
+        outline: 0;
+    }
+    
+    .collapse-toggle:focus,
+    .collapse-toggle:hover {
+        background: var(--clr-primary-dark);
+    }
+    
+    .label-collapse {
+        font-size: 1.125rem;
+        font-weight: 700;
+    }
+    
+    .collapse-body {
+        display: none;
+        padding: .5em 0;
+    }
+    
+    &.open .collapse-header {
+        box-shadow: none;
+    }
+    
+    &.open .collapse-body {
+        display: block;
+    }
+}

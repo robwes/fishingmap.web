@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
-import LoginForm from './LoginForm'
-import './login.scss';
+import LoginForm from './LoginForm';
 import { useCurrentUser } from '../../hooks/CurrentUserContext';
+import './Login.scss';
 
 function Login() {
 
@@ -20,7 +20,7 @@ function Login() {
     }
 
     return (
-        <div className='login-page'>
+        <div className='login'>
             <LoginForm
                 onSubmit={handleSubmit}
             />

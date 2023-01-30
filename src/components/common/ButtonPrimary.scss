@@ -1,0 +1,9 @@
+.button-primary {
+    background: var(--clr-primary);
+    color: white;
+
+    &:hover,
+    &:focus {
+        background: var(--clr-primary-dark);
+    }
+}

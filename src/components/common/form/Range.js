@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useField } from 'formik';
-import './form.scss';
+import Label from './Label';
+import './Range.scss';
 
 function Range({ label, name, value = 0, min = 0, max = 100, zeroIsInfinity = true, onChange, ...props }) {
 
@@ -35,9 +36,10 @@ function Range({ label, name, value = 0, min = 0, max = 100, zeroIsInfinity = tr
     }, [field.value])
 
     return (
-        <div className="input-group">
-            <label className="form-label" htmlFor={props.id || props.name}>{label}</label>
+        <div className="range">
+            <Label htmlFor={props.id || props.name}>{label}</Label>
             <input 
+                className='range-input'
                 type="range"
                 min={min}
                 max={max}

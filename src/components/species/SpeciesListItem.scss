@@ -1,0 +1,62 @@
+.species-list-item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.15);
+    margin-bottom: 1.5em;
+    justify-content: flex-start;
+    background: var(--clr-bg-light);
+    max-height: 400px;
+
+
+    .species-list-item-image {
+        height: 190px;
+        border-radius: 5px 5px 0 0;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .species-list-item-main {
+        display: flex;
+        flex-direction: column;
+        font-size: 1rem;
+        padding: .75em 1.5em 1em;
+        max-height: 210px;
+        overflow: hidden;
+    }
+
+    .species-list-item-title {
+        font-size: 1.625rem;
+        text-align: center;
+        margin: 0 0 .5em 0;
+        padding-bottom: .5em;
+        border-bottom: 1px solid var(--clr-primary);
+    }
+
+    .species-list-item-text {
+        padding: 0;
+        letter-spacing: .5px;
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
+@media(min-width: 600px) {
+    
+    .species-list-item {
+        height: 400px;
+    
+        .species-list-item-main {
+            height: 210px;
+        }
+    
+        .species-list-item-main {
+            font-size: .875rem;
+        }
+    
+        .species-list-item-title {
+            font-size: 1.5rem; 
+        }
+    }
+
+}

@@ -1,0 +1,10 @@
+.link-button-primary-outline {
+    background: white;
+    color: var(--clr-primary);
+    border: 2px solid;
+
+    &:hover,
+    &:focus {
+        background: var(--clr-secondary-dark);
+    }
+}

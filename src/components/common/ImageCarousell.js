@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import './ImageCarousell.scss';
 
-function ImageCarousell({ images, cssClass }) {
+function ImageCarousell({ images, className }) {
 
 	const [index, setIndex] = useState(0);
 	const currentImage = images[index];
@@ -21,20 +22,22 @@ function ImageCarousell({ images, cssClass }) {
 		}
 	}
 
-	const cssClasses = "image-carousell" + (cssClass ? ` ${cssClass}` : "");
+	const getCssClasses = () => {
+		return "image-carousell" + (className ? ` ${className}` : "");
+	}
 
 	return (
-		<div className={cssClasses}>
+		<div className={getCssClasses()}>
 			<img
 				src={currentImage.url}
 				alt={currentImage.description}
 			/>
 			{images.length > 1 && (
 				<>
-					<span className="btn-image-next" onClick={showNextImage}>
+					<span className="image-carousell-next" onClick={showNextImage}>
 						<i className="fas fa-chevron-right"></i>
 					</span>
-					<span className="btn-image-previous" onClick={showPreviousImage}>
+					<span className="image-carousell-previous" onClick={showPreviousImage}>
 						<i className="fas fa-chevron-left"></i>
 					</span>
 				</>

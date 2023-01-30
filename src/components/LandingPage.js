@@ -1,7 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import './components.scss'
-import './common/form/form.scss'
+import React from 'react';
+import CallToAction from './common/CallToAction';
+import './LandingPage.scss';
 
 function LandingPage() {
     return (
@@ -16,7 +15,8 @@ function LandingPage() {
                     <p className='landing-subtitle'>Looking for fishing locations in Uusimaa?<br />
                         This fishing map helps you find the<br />
                         best ones easily.</p>
-                    <Link to="/map" className='button call-to-action'>Let's go fishing!</Link>
+                    <CallToAction to="/map">Let's go fishing!</CallToAction>
+                    {/* <Link to="/map" className='button call-to-action'>Let's go fishing!</Link> */}
                 </div>
                 <div className='right'>
                     <img

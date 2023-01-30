@@ -1,0 +1,10 @@
+.button-secondary {
+    background: var(--clr-secondary);
+    color: var(--clr-secondary-text);
+    border: 2px solid;
+
+    &:hover,
+    &:focus {
+        background: var(--clr-secondary-dark);
+    }
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './common.scss';
+import './Collapse.scss';
 
 function Collapse({ children, label, open = false }) {
 
@@ -31,7 +31,7 @@ function Collapse({ children, label, open = false }) {
     return (
         <div className={getCollapseCssClasses()}>
             <div className="collapse-header">
-                <button className="button-collapse" onClick={toggleOpen}>
+                <button className="collapse-toggle" onClick={toggleOpen}>
                     <i className={getButtonIcon()}></i>
                 </button>
                 <label className="label-collapse">{label}</label>

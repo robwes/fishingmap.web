@@ -2,7 +2,7 @@ import React from 'react';
 import  { useNavigate } from 'react-router-dom';
 import { speciesService } from '../../services/speciesService';
 import SpeciesForm from './SpeciesForm';
-import './species.scss';
+import './AddSpecies.scss';
 
 function AddSpecies() {
 

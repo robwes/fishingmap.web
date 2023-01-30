@@ -1,5 +1,5 @@
 import React from 'react';
-import './form.scss';
+import './Error.scss';
 
 function Error({message}) {
     return (

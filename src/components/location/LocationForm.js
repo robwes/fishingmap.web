@@ -6,12 +6,10 @@ import MultiSelect from '../common/form/MultiSelect';
 import DragAndDropImage from '../common/form/DragAndDropImage';
 import MapInput from '../common/form/MapInput';
 import CollapsibleTextarea from '../common/form/CollapsibleTextarea';
-import './location.scss';
-
-const mapStyle = {
-    width: '100%',
-    height: '650px'
-};
+import './LocationForm.scss';
+import ButtonBar from '../common/ButtonBar';
+import ButtonSecondary from '../common/ButtonSecondary';
+import ButtonSuccess from '../common/ButtonSuccess';
 
 function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubmit, onDelete, operation = "add" }) {
 
@@ -40,11 +38,11 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
 
     let buttons;
     if (operation === "add") {
-        buttons = <button className="button submit-button location-submit" type="submit">Add</button>;
+        buttons = <ButtonSuccess type="submit">Add</ButtonSuccess>;
     } else if (operation === "edit") {
         buttons = <>
-            <button onClick={onDeleteClick} className="button button-secondary">Delete</button>
-            <button className="button submit-button" type="submit">Save</button>
+            <ButtonSecondary onClick={onDeleteClick}>Delete</ButtonSecondary>
+            <ButtonSuccess type="submit">Save</ButtonSuccess>
         </>;
     }
 
@@ -54,17 +52,17 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
             validationSchema={formValidation}
             onSubmit={formSubmitted}
         >
-            <div className="location-body">
-                <h1 className="location-title">{title}</h1>
-                <div className="location-card">
+            <div className="location-form">
+                <h1 className="location-form-title">{title}</h1>
+                <div className="location-form-card">
                     <DragAndDropImage
                         text="Add some images"
                         name="images"
                         maxNrOfFiles={5}
-                        cssClass="add-location-image"
+                        className="location-form-card-image"
                         initialValue={initialValues.images}
                     />
-                    <div className="card-body">
+                    <div className="location-form-card-body">
                         <Input
                             label="Name"
                             name="name"
@@ -93,14 +91,14 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
                     </div>
                 </div>
                 <MapInput
-                    cssClass="add-location-position"
+                    className="location-form-position"
                     name="geometry"
                     options={mapOptions}
                 />
             </div>
-            <div className="button-bar button-bar-right">
+            <ButtonBar>
                 {buttons}
-            </div>
+            </ButtonBar>
         </Form>
     )
 }

@@ -1,13 +1,16 @@
 import React from 'react';
 import { useField } from 'formik';
-import './form.scss';
+import './SearchBar.scss';
 
-function SearchBar({cssClass, ...props}) {
+function SearchBar({className, ...props}) {
     const [field] = useField({ type: "text", ...props });
 
-    const cssClasses = "search" + (cssClass ? ` ${cssClass}` : "");
+    const getCssClasses = () => {
+        return "search-bar" + (className ? ` ${className}` : "");
+    }
+
     return (
-        <div className={cssClasses}>
+        <div className={getCssClasses()}>
             <input
                 className="search-input"
                 placeholder="Search..."

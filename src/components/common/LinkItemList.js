@@ -1,5 +1,6 @@
 import React from 'react';
 import LinkItem from './LinkItem';
+import './LinkItemList.scss';
 
 function LinkItemList({items, isLink = true}) {
     return (

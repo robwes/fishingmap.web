@@ -1,14 +1,14 @@
 import { useField } from 'formik';
 import React from 'react';
+import Label from './Label';
 import Error from './Error';
-import './form.scss';
 
 function Select({ label, ...props }) {
     const [field, meta] = useField(props)
 
     return (
-        <div className="input-group">
-            <label className="form-label" htmlFor={props.id || props.name}>{label}</label>
+        <div className="select">
+            <Label htmlFor={props.id || props.name}>{label}</Label>
             <select {...field} {...props} />
             {meta.touched && meta.error ? (
                 <Error message={meta.error} />

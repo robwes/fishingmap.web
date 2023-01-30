@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import MapMarker from '../map-components/MapMarker'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import MapMarker from '../map-components/MapMarker';
 
 function LocationMarker({ location, clusterer }) {
     const position = {

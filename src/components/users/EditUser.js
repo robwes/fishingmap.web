@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import Input from '../common/form/Input'
-import Form from '../common/form/Form'
-import authService from '../../services/authService'
-import userService from '../../services/userService'
-import Collapse from '../common/Collapse'
-import './users.scss';
+import Input from '../common/form/Input';
+import Form from '../common/form/Form';
+import authService from '../../services/authService';
+import userService from '../../services/userService';
+import Collapse from '../common/Collapse';
+import './EditUser.scss';
+import ButtonSecondary from '../common/ButtonSecondary';
 
 const userDetailsValidation = Yup.object({
     firstName: Yup.string()
@@ -96,25 +97,23 @@ function EditUser() {
                                 }}
                                 validationSchema={userDetailsValidation}
                                 onSubmit={handleUserDetailsSubmit}
-                                >
-                                <div className='user-details-form'>
-                                    <Input
-                                        label="First name"
-                                        name="firstName"
-                                        type="text"
-                                    />
-                                    <Input
-                                        label="Last name"
-                                        name="lastName"
-                                        type="text"
-                                    />
-                                    <Input
-                                        label="Email"
-                                        name="email"
-                                        type="email"
-                                    />
-                                </div>
-                                <button className="button button-secondary" type="submit">Update</button>
+                            >
+                                <Input
+                                    label="First name"
+                                    name="firstName"
+                                    type="text"
+                                />
+                                <Input
+                                    label="Last name"
+                                    name="lastName"
+                                    type="text"
+                                />
+                                <Input
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                />
+                                <ButtonSecondary type="submit">Update</ButtonSecondary>
                             </Form>
                         </div>
 
@@ -128,24 +127,22 @@ function EditUser() {
                                     }}
                                     validationSchema={userPasswordValidation}
                                     onSubmit={handleUserPasswordSubmit}>
-                                    <div className='user-password-form'>
-                                        <Input
-                                            label="Password"
-                                            name="currentPassword"
-                                            type="password"
-                                        />
-                                        <Input
-                                            label="New password"
-                                            name="newPassword"
-                                            type="password"
-                                        />
-                                        <Input
-                                            label="Confirm password"
-                                            name="confirmPassword"
-                                            type="password"                                         
-                                        />
-                                    </div>
-                                    <button className="button button-secondary" type="submit">Change password</button>
+                                    <Input
+                                        label="Password"
+                                        name="currentPassword"
+                                        type="password"
+                                    />
+                                    <Input
+                                        label="New password"
+                                        name="newPassword"
+                                        type="password"
+                                    />
+                                    <Input
+                                        label="Confirm password"
+                                        name="confirmPassword"
+                                        type="password"
+                                    />
+                                    <ButtonSecondary type="submit">Change password</ButtonSecondary>
                                 </Form>
                             </Collapse>
                         </div>

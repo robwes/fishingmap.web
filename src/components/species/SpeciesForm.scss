@@ -1,0 +1,52 @@
+.species-form {
+	display: flex;
+	flex-direction: column;
+    gap: 1.5em;
+
+    .button-success {
+        width: 100%;
+    }
+
+    .species-form-image {
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    
+        .drop-panel {
+            border: 0;
+        }
+    }
+
+    .right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+    }
+
+    .button-bar {
+        justify-content: end;
+    }
+}
+
+@media(min-width: 600px) {
+
+    .species-form {
+		width: 87%;
+		flex-direction: row;
+		align-items: flex-start;
+    	justify-content: space-between;
+    	gap: 3em;
+
+        .species-form-image {
+            width: 300px;
+        }
+    
+        .right {
+            flex-grow: 1;
+        }
+    
+        .button-success {
+            width: unset;
+        }
+	}
+}

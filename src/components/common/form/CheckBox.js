@@ -1,13 +1,12 @@
 import { useField } from 'formik';
 import React from 'react';
 import Error from './Error';
-import './form.scss';
 
 function CheckBox({ children, ...props}) {
     const [field, meta] = useField({ ...props, type: "checkbox"})
     return (
-        <div className="input-group">
-            <label className="form-checkbox">
+        <div className="check-box">
+            <label>
                 <input {...field} {...props} />
                 {children}
             </label>

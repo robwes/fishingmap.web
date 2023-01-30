@@ -1,5 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './SpeciesListItem.scss';
 
 function SpeciesListItem({ species }) {
     const { id, name, description, images } = species;
@@ -14,13 +15,13 @@ function SpeciesListItem({ species }) {
 
     return (
         <Link to={`/species/${id}`}>
-            <div className="grid-item">
+            <div className="species-list-item">
                 <div>
-                    <img src={getImagesSrc()} alt="The fish" className="grid-item-image" />
+                    <img src={getImagesSrc()} alt="The fish" className="species-list-item-image" />
                 </div>
-                <div className="grid-item-main">
-                    <h3 className="grid-item-title">{name}</h3>
-                    <p className="grid-item-text">{description}</p>
+                <div className="species-list-item-main">
+                    <h3 className="species-list-item-title">{name}</h3>
+                    <p className="species-list-item-text">{description}</p>
                 </div>
             </div>
         </Link>

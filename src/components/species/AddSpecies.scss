@@ -1,0 +1,14 @@
+.add-species {
+	display: flex;
+	padding-bottom: 3em;
+}
+
+@media(min-width: 600px) {
+	.add-species {
+		background: linear-gradient(90deg, var(--clr-bg-body) 85%, rgba(0,0,0, .05) 40%);
+
+        .add-species-container {
+            padding-left: 1.5em;
+        }
+	}
+}

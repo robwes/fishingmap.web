@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react'
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import React, { useCallback } from 'react';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 
 const defaultMapStyle = {
     width: '100%',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './common.scss';
+import './SlideInPanel.scss';
 
 function SlideInPanel({ iconOpen = "fa-search", iconClose = "fa-times", isFloating = false, children }) {
 

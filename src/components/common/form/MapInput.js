@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Map from '../../map-components/Map';
 import { Data } from '@react-google-maps/api';
 import { useField } from 'formik';
+import Label from './Label';
 import Error from './Error';
-import './form.scss';
+import './MapInput.scss';
 
 const mapStyle = {
     width: '100%',
     height: '650px'
 };
 
-function MapInput({ label, options, cssClass, ...props }) {
+function MapInput({ label, options, className, ...props }) {
 
 	// eslint-disable-next-line
 	const [field, meta, helpers] = useField(props);
@@ -77,13 +78,11 @@ function MapInput({ label, options, cssClass, ...props }) {
 		}
 	}
 
-	const cssClasses = "input-group" + (cssClass ? ` ${cssClass}` : "");
-
 	return (
-		<div className={cssClasses}>
+		<div className={className}>
 
 			{label &&
-				<label className="form-label">{label}</label>
+				<Label htmlFor={props.id || props.name}>{label}</Label>
 			}
 
 			<div className="map-input">
