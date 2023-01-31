@@ -1,23 +1,22 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import FishingMap from './components/location/FishingMap';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import Locations from './components/location/Locations';
-import LocationDetails from './components/location/LocationDetails';
-import Species from './components/species/Species';
-import AddLocation from './components/location/AddLocation';
-import SpeciesDetails from './components/species/SpeciesDetails';
-import AddSpecies from './components/species/AddSpecies';
-import EditSpecies from './components/species/EditSpecies';
-import EditLocation from './components/location/EditLocation';
-import { CurrentUserProvider } from './hooks/CurrentUserContext';
-import Login from './components/login/Login';
-import ProtectedRoute from './components/common/ProtectedRoute';
-import EditUser from './components/users/EditUser';
-import ProtectedRouteIsLoggedInUser from './components/common/ProtectedRouteCurrentUser';
-import LandingPage from './components/LandingPage';
+import FishingMap from './pages/map/FishingMap';
+import Footer from './components/ui/footer/Footer';
+import Header from './components/ui/header/Header';
+import Locations from './pages/location/list/Locations';
+import LocationDetails from './pages/location/details/LocationDetails';
+import Species from './pages/species/list/Species';
+import AddLocation from './pages/location/add/AddLocation';
+import SpeciesDetails from './pages/species/details/SpeciesDetails';
+import AddSpecies from './pages/species/add/AddSpecies';
+import EditSpecies from './pages/species/edit/EditSpecies';
+import EditLocation from './pages/location/edit/EditLocation';
+import { CurrentUserProvider } from './context/CurrentUserContext';
+import Login from './pages/login/Login';
+import ProtectedRoute from './components/route/ProtectedRoute';
+import EditUser from './pages/user/edit/EditUser';
+import ProtectedRouteIsLoggedInUser from './components/route/ProtectedRouteCurrentUser';
+import LandingPage from './pages/landingPage/LandingPage';
 
 function App() {
 	return (
