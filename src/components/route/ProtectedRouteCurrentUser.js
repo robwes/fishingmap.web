@@ -9,7 +9,12 @@ function ProtectedRouteIsLoggedInUser({ redirectPath = "/", children }) {
 	const [currentUser] = useCurrentUser();
 
 	const isAllowed = () => {
-        return currentUser?.id == id;
+		if (!currentUser) {
+			return false;
+		}
+		
+		const userId = currentUser?.id + "";
+        return userId === id;
 	}
 
 	if (!isAllowed()) {

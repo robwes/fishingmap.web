@@ -20,6 +20,7 @@ function EditSpecies() {
                 setSpecies(s);
             }
         })();
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {

@@ -8,6 +8,8 @@ import './Login.scss';
 function Login() {
 
     const navigate = useNavigate();
+
+    // eslint-disable-next-line
     const [currentUser, setCurrentUser] = useCurrentUser();
 
     const handleSubmit = async (loginValues, { setSubmitting }) => {

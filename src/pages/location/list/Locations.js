@@ -11,6 +11,8 @@ function Locations() {
 
     const [locations, setLocations] = useState([]);
     const [pagedLocations, setPagedLocations] = useState([]);
+
+    // eslint-disable-next-line
     const [currentUser, setCurrentUser, currentLocation] = useCurrentUser();
 
     const pageLimit = 10;

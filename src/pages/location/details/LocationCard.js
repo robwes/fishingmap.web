@@ -3,6 +3,7 @@ import Collapse from '../../../components/ui/collapse/Collapse';
 import CollapsibleParagraph from '../../../components/ui/collapse/CollapsibleParagraph';
 import LinkItemList from '../../../components/ui/linkItemList/LinkItemList';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
+import lake from '../../../assets/images/lake.png';
 import './LocationCard.scss';
 
 function LocationCard({ location }) {
@@ -19,7 +20,7 @@ function LocationCard({ location }) {
             });
         } else {
             images.push({
-                url: "../images/locations/lake.png",
+                url: lake,
                 description: "Default location image"
             });
         }

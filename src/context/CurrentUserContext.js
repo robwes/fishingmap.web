@@ -18,6 +18,7 @@ export const CurrentUserProvider = ({children}) => {
                 setCurrentLocation(userLocation);
             }
         })();
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {

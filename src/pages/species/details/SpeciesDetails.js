@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { speciesService } from '../../../services/speciesService';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
+import fish from '../../../assets/images/fish.png';
 import './SpeciesDetails.scss';
 
 function SpeciesDetails() {
@@ -30,7 +31,7 @@ function SpeciesDetails() {
             });
         } else {
             images.push({
-                url: "../images/species/fish.png",
+                url: fish,
                 description: "Default species image"
             });
         }
