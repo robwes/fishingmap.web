@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import fish from '../../../assets/images/fish.png';
 import './SpeciesListItem.scss';
 
 function SpeciesListItem({ species }) {
@@ -9,7 +10,7 @@ function SpeciesListItem({ species }) {
         if (images && images.length > 0) {
             return `${process.env.REACT_APP_BASE_URL}/${images[0].url}`;
         } else {
-            return "images/species/fish.png";
+            return fish;
         }
     };
 

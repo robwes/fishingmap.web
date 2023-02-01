@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Marker, InfoWindow } from '@react-google-maps/api';
+import marker from '../../../assets/images/map_marker.svg';
 
 function MapMarker({position, clusterer, children}) {
 
@@ -12,7 +13,7 @@ function MapMarker({position, clusterer, children}) {
             position={position} 
             clusterer={clusterer}
             icon={{
-                url: "images/map_marker.svg"
+                url: marker
             }}>
             {isInfoWindowOpen && <InfoWindow onLoad={onLoad} position={position} onCloseClick={() => setIsInfoWindowOpen(false)}>
                 {children}

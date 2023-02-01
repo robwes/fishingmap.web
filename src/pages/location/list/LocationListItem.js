@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LinkItemList from '../../../components/ui//linkItemList/LinkItemList';
+import lake from '../../../assets/images/lake.png';
 import './LocationListItem.scss';
 
 function LocationListItem({ location }) {
@@ -10,7 +11,7 @@ function LocationListItem({ location }) {
         if (images && images.length > 0) {
             return `${process.env.REACT_APP_BASE_URL}/${images[0].url}`;
         } else {
-            return "images/locations/lake.png";
+            return lake;
         }
     };
 
