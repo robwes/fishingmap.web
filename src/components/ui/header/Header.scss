@@ -6,6 +6,7 @@
 
     .container {
         position: relative;
+        align-items: center;
     }
 
     .header-title-container {
@@ -16,8 +17,8 @@
 
     .header-title {
         font-family: 'Lora', serif;
-        font-size: 2rem;
-        margin: 0 0 3px;
+        font-size: 2.25rem;
+        margin: 0 0 5px;
         font-weight: 400;
         margin-top: 0;
     }
@@ -39,7 +40,7 @@
         justify-content: center;
     }
 
-    .nav-list>li {
+    .nav-list > li {
         margin: .5em 0;
     }
 
