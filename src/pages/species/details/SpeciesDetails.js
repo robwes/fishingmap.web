@@ -25,7 +25,7 @@ function SpeciesDetails() {
         if (species && species.images.length > 0) {
             species.images.forEach(image => {
                 images.push({
-                    url: `${process.env.REACT_APP_BASE_URL}/${image.url}`,
+                    url: `${process.env.REACT_APP_IMAGES_URL}/${image.path}`,
                     description: species.name
                 });
             });

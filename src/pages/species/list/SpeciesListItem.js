@@ -8,7 +8,7 @@ function SpeciesListItem({ species }) {
 
     const getImagesSrc = () => {
         if (images && images.length > 0) {
-            return `${process.env.REACT_APP_BASE_URL}/${images[0].url}`;
+            return `${process.env.REACT_APP_IMAGES_URL}/${images[0].path}`;
         } else {
             return fish;
         }

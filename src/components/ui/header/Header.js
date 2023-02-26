@@ -23,8 +23,8 @@ function Header(props) {
             <div className="container container-flex">
                 <Link to='/'>
                     <div className="header-title-container">
-                        <h1 className="header-title">Uusimap</h1>
-                        <p className="header-subtitle">Find new fishing places near you</p>
+                        <h1 className="header-title">Fishing Map</h1>
+                        <p className="header-subtitle">Find new fishing places in Uusimaa</p>
                     </div>
                 </Link>
                 <nav>

@@ -14,7 +14,7 @@ function LocationCard({ location }) {
         if (location && location.images.length > 0) {
             location.images.forEach(image => {
                 images.push({
-                    url: `${process.env.REACT_APP_BASE_URL}/${image.url}`,
+                    url: `${process.env.REACT_APP_IMAGES_URL}/${image.path}`,
                     description: location.name
                 });
             });

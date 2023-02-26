@@ -30,7 +30,7 @@ function EditSpecies() {
                 const images = [];
 
                 for (let image of species.images) {
-                    const imageFile = await fileService.getImage(image.url, image.name);
+                    const imageFile = await fileService.getImage(image.path, image.name);
                     if (imageFile) {
                         images.push(imageFile);
                     }
