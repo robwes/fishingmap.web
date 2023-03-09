@@ -17,6 +17,7 @@ import ProtectedRoute from './components/route/ProtectedRoute';
 import EditUser from './pages/user/edit/EditUser';
 import ProtectedRouteIsLoggedInUser from './components/route/ProtectedRouteCurrentUser';
 import LandingPage from './pages/landingPage/LandingPage';
+import ScrollToTop from './components/route/ScrollToTop';
 
 function App() {
 	return (
@@ -24,7 +25,7 @@ function App() {
 			<div className="App">
 				<CurrentUserProvider>
 					<Header />
-
+					<ScrollToTop />
 					<Routes>
 						<Route exact path="/locations" element={<Locations />} />
 						<Route exact path="/locations/:id" element={<LocationDetails />} />

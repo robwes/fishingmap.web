@@ -45,7 +45,8 @@ function Map({children, center, zoom, mapStyle, ...props}) {
                 streetViewControl: false,
                 mapTypeControlOptions: {
                     position: 3 // google.maps.ControlPosition.TOP_RIGHT
-                }
+                },
+                gestureHandling: "cooperative"
             }}
             {...props}
         >

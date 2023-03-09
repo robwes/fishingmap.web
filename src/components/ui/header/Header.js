@@ -24,7 +24,7 @@ function Header(props) {
                 <Link to='/'>
                     <div className="header-title-container">
                         <h1 className="header-title">Fishing Map</h1>
-                        <p className="header-subtitle">Find new fishing places in Uusimaa</p>
+                        <p className="header-subtitle">Fishing locations in Uusimaa</p>
                     </div>
                 </Link>
                 <nav>

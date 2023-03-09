@@ -34,7 +34,7 @@ function MapInput({ label, options, className, ...props }) {
 			fillColor: "#4285f4",
 			strokeColor: "#4285f4",
 			strokeWeight: 5,
-			draggable: true,
+			draggable: false,
 			editable: true
 		});
 
