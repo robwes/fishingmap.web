@@ -4,11 +4,13 @@ import { useField } from 'formik';
 import Map from '../map/Map';
 import Label from './Label';
 import Error from './Error';
+import ImportGeoJson from './ImportGeoJson';
+import geoUtils from '../../../utils/geoUtils';
 import './MapInput.scss';
 
 const mapStyle = {
-    width: '100%',
-    height: '650px'
+	width: '100%',
+	height: '650px'
 };
 
 function MapInput({ label, options, className, ...props }) {
@@ -17,7 +19,7 @@ function MapInput({ label, options, className, ...props }) {
 	const [field, meta, helpers] = useField(props);
 
 	const { value } = meta;
-	const { setValue } = helpers;
+	const { setValue, setError } = helpers;
 
 	const [dataLayer, setDataLayer] = useState(null);
 	const [isDragging, setIsDragging] = useState(false);
@@ -25,6 +27,11 @@ function MapInput({ label, options, className, ...props }) {
 	useEffect(() => {
 		if (dataLayer && value) {
 			dataLayer.addGeoJson(value);
+
+			const boundingBox = geoUtils.getBoundingBox(value);
+			if (boundingBox) {
+				dataLayer.getMap().fitBounds(boundingBox);
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataLayer])
@@ -52,6 +59,22 @@ function MapInput({ label, options, className, ...props }) {
 		dataLayer.toGeoJson(geoJson => {
 			setValue(geoJson);
 		});
+	}
+
+	const handleImport = geoJson => {
+		dataLayer.forEach(feature => {
+			dataLayer.remove(feature);
+		});
+		dataLayer.addGeoJson(geoJson);
+		
+		const boundingBox = geoUtils.getBoundingBox(geoJson);
+		if (boundingBox) {
+			dataLayer.getMap().fitBounds(boundingBox);
+		}
+	}
+
+	const handleImportError = errorMessage => {
+		setError(errorMessage);
 	}
 
 	const handleMouseDown = event => {
@@ -86,6 +109,10 @@ function MapInput({ label, options, className, ...props }) {
 			}
 
 			<div className="map-input">
+				<ImportGeoJson
+					onImport={handleImport}
+					onError={handleImportError}
+				/>
 				<Map
 					center={options.center}
 					zoom={options.zoom}

@@ -4,10 +4,11 @@
   "private": true,
   "dependencies": {
     "@mdi/js": "^7.0.96",
-    "@react-google-maps/api": "^2.17.1",
+    "@react-google-maps/api": "^2.18.1",
     "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
+    "@turf/turf": "^6.5.0",
     "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
