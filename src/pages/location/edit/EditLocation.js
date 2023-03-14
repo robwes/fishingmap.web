@@ -4,7 +4,7 @@ import { locationService } from '../../../services/locationService';
 import { speciesService } from '../../../services/speciesService';
 import { fileService } from '../../../services/fileService';
 import LocationForm from '../../../components/ui/location/LocationForm';
-import useGeoJson from '../../../hooks/useGeoJson';
+import geoUtils from '../../../utils/geoUtils';
 import './EditLocation.scss';
 
 function EditLocation() {
@@ -14,10 +14,6 @@ function EditLocation() {
     const [species, setSpecies] = useState([]);
     const [locationImages, setLocationImages] = useState([]);
     const navigate = useNavigate();
-    const { 
-        multiPolygonFeatureToPolygonFeatureCollection, 
-        polygonFeatureCollectionToMultiPolygonFeature 
-    } = useGeoJson();
 
     useEffect(() => {
         (async () => {
@@ -45,7 +41,7 @@ function EditLocation() {
                         images.push(imageFile);
                     }
                 }
-                
+
                 setLocationImages(images);
             }
         })();
@@ -54,7 +50,9 @@ function EditLocation() {
     const handleSubmit = async (locationValues, { setSubmitting }) => {
         const locationUpdate = {
             ...locationValues,
-            geometry: JSON.stringify(polygonFeatureCollectionToMultiPolygonFeature(locationValues.geometry))
+            geometry: JSON.stringify(
+                geoUtils.polygonFeatureCollectionToMultiPolygonFeature(locationValues.geometry)
+            )
         };
 
         var updatedLocation = await locationService.updateLocation(id, locationUpdate);
@@ -71,11 +69,11 @@ function EditLocation() {
         }
     }
 
-    const getInitialFormValues = () => {    
+    const getInitialFormValues = () => {
         return {
             ...location,
             species: location.species.map(s => ({ label: s.name, value: s.id })),
-            geometry: multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry)),
+            geometry: geoUtils.multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry)),
             images: locationImages
         };
     };
@@ -87,9 +85,9 @@ function EditLocation() {
     const getMapOptions = () => {
         return {
             zoom: 12,
-            center: { 
-                lat: location.position.latitude, 
-                lng: location.position.longitude 
+            center: {
+                lat: location.position.latitude,
+                lng: location.position.longitude
             }
         };
     }
@@ -97,7 +95,7 @@ function EditLocation() {
     return (
         location ? (
             <div className="edit-location container page">
-                <LocationForm 
+                <LocationForm
                     title="Edit location"
                     initialValues={getInitialFormValues()}
                     speciesOptions={getSpeciesOptions()}

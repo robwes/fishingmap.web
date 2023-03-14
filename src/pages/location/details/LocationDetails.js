@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import LocationCard from './LocationCard';
 import LinkButtonPrimaryOutline from '../../../components/ui/buttons/LinkButtonPrimaryOutline';
 import Map from '../../../components/ui/map/Map';
-import useGeoJson from '../../../hooks/useGeoJson';
+import geoUtils from '../../../utils/geoUtils';
 import { locationService } from '../../../services/locationService';
 import './LocationDetails.scss';
 
@@ -17,9 +17,6 @@ function LocationDetails() {
 
     const { id } = useParams();
     const [location, setLocation] = useState();
-    const {
-        multiPolygonFeatureToPolygonFeatureCollection
-    } = useGeoJson();
 
     useEffect(() => {
         (async () => {
@@ -36,8 +33,13 @@ function LocationDetails() {
             strokeColor: "#4285f4",
             strokeWeight: 5
         });
-        const geometry = multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry));
+        const geometry = geoUtils.multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry));
         data.addGeoJson(geometry);
+
+        const boundingBox = geoUtils.getBoundingBox(geometry);
+        if (boundingBox) {
+            data.getMap().fitBounds(boundingBox);
+        }
     };
 
     let directionsLink = "https://www.google.com/maps/dir/?api=1&destination=";

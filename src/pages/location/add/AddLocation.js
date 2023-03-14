@@ -3,16 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import LocationForm from '../../../components/ui/location/LocationForm';
 import { locationService } from '../../../services/locationService';
 import { speciesService } from '../../../services/speciesService';
-import useGeoJson from '../../../hooks/useGeoJson';
+import geoUtils from '../../../utils/geoUtils';
 import './AddLocation.scss';
 
 function AddLocation() {
 
     const [species, setSpecies] = useState([]);
     const navigate = useNavigate();
-    const { 
-        polygonFeatureCollectionToMultiPolygonFeature 
-    } = useGeoJson();
 
     useEffect(() => {
         (async () => {
@@ -26,7 +23,9 @@ function AddLocation() {
     const handleSubmit = async (values, { setSubmitting }) => {
         const locationValues = {
             ...values,
-            geometry: JSON.stringify(polygonFeatureCollectionToMultiPolygonFeature(values.geometry))
+            geometry: JSON.stringify(
+                geoUtils.polygonFeatureCollectionToMultiPolygonFeature(values.geometry)
+            )
         };
 
         var newLocation = await locationService.createLocation(locationValues);
