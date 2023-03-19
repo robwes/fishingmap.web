@@ -2,11 +2,6 @@
 
 	padding: 2.5em 0;
 
-	.location-details-title {
-		margin: 0;
-		text-align: center;
-	}
-
 	.location-details-body {
 		display: grid;
 		gap: 2.5em 0;
@@ -46,10 +41,6 @@
 @media(min-width: 900px) {
 
 	.location-details {
-
-		.location-details-title {
-			grid-area: title;
-		}
 
 		.location-details-body {
 			position: relative;
