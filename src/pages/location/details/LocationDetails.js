@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Data } from '@react-google-maps/api';
 import { useParams } from 'react-router-dom';
+import Linkify from 'react-linkify';
+import { SecureLink } from "react-secure-link";
 import LocationCard from './LocationCard';
 import LinkButtonPrimaryOutline from '../../../components/ui/buttons/LinkButtonPrimaryOutline';
 import Map from '../../../components/ui/map/Map';
@@ -51,7 +53,6 @@ function LocationDetails() {
         location ? (
             <div className="location-details container page">
                 <div className="location-details-body">
-                    <h1 className="location-details-title">{location.name}</h1>
                     <LocationCard location={location} />
                     <div className="location-position">
                         <Map
@@ -72,6 +73,17 @@ function LocationDetails() {
                     className="location-directions pull-right">
                     <i className="fas fa-directions"></i> Directions
                 </LinkButtonPrimaryOutline>
+
+                {location.description && (
+                    <p className='location-description'>
+                        <Linkify componentDecorator={(decoratedHref, decoratedText, key) => (
+                            <SecureLink href={decoratedHref} key={key}>{decoratedText}</SecureLink>
+                        )}>
+                            {location.description}
+                        </Linkify>
+                    </p>
+                )}
+
             </div>
         ) : null
     )
