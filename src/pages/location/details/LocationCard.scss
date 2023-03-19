@@ -10,10 +10,16 @@
 		overflow: hidden;
 	}
 
+	.location-card-title {
+		text-align: center;
+		font-size: 2rem;
+		margin: .75em;
+	}
+
     .location-card-body {
 		display: flex;
 		flex-direction: column;
 		gap: 1.5em;
-        padding: 1.5em 1.5em 3em;
+        padding: 0 1.5em 3em;
     }
 }

@@ -39,22 +39,20 @@ function LocationCard({ location }) {
     return (
         <div className="location-card">
             <ImageCarousell images={getImages()} className="location-card-image" />
+            <h3 className='location-card-title'>
+                {location.name}
+            </h3>
             <div className="location-card-body">
                 <Collapse label="Species" open={true}>
                     <LinkItemList items={speciesLinkItems} />
                 </Collapse>
                 <CollapsibleParagraph
-                    label="Rules"
-                    text={location?.rules}
-                />
-                <CollapsibleParagraph
-                    label="Fishing License"
+                    label="Permits"
                     text={location?.licenseInfo}
                 />
                 <CollapsibleParagraph
-                    label="Description"
-                    open={true}
-                    text={location?.description}
+                    label="Rules"
+                    text={location?.rules}
                 />
             </div>
         </div>
