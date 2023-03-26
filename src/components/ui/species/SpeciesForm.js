@@ -17,6 +17,7 @@ function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
             .required("Required"),
         description: Yup.string()
             .max(1000, "Max 1000 characters")
+            .nullable()
     });
 
     let buttons;

@@ -1,0 +1,13 @@
+.location-map {
+	position: relative;
+	overflow: hidden;
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+
+	.location-directions {
+		position: absolute;
+		font-size: 1rem;
+		right: 1em;
+		bottom: 1em;
+	}
+}

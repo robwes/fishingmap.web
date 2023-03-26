@@ -1,71 +1,43 @@
 .location-details {
-
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2em;
+	width: 95%;
+	margin: 0 auto;
 	padding: 2.5em 0;
 
-	.location-details-body {
-		display: grid;
-		gap: 2.5em 0;
-		margin-bottom: 1.5em;
-	}
-	
-	.location-details-body > * {
-		margin: 0;
-	}
-
-	.location-directions {
-		font-size: 1rem;
-		margin-bottom: 2.5em;
-	}
-
-	.location-position {
-		overflow: hidden;
-		border-radius: 5px;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+	.left, .right {
+		display: flex;
+		flex-direction: column;
 	}
 
 	.location-description {
-		background-color: #FFF;
-		padding: 1.5em 1em;
-		letter-spacing: .5px;
-		line-height: 1.5;
-		white-space: pre-line;
 		border-radius: 5px;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+	}
 
-		a {
-			color: var(--clr-primary);
-		}
+	.right {
+		gap: 2em;
+	}
+
+	.location-rules {
+		background-color: var(--clr-primary);
+		color: #FFF;
 	}
 }
 
 @media(min-width: 900px) {
 
 	.location-details {
+		flex-direction: row;
 
-		.location-details-body {
-			position: relative;
-			grid-template-areas: 
-			"left left empty empty"
-			"left left right right";
-			grid-template-rows: 1em auto;
-			grid-template-columns: 10% 30% 50% 10%;
-			gap: 0;
+		.left {
+			width: 35%;
 		}
 
-		.location-card {
-            position: absolute;
-            grid-area: left;
-        }
-
-		.location-position {
-			grid-area: right;
-			border-radius: 0 5px 5px 0;
-		}
-
-		.location-description {
-			width: 80%;
-			margin: 0 auto;
-			padding: 1.5em;
+		.right {
+			width: 65%;
 		}
 	}
 

@@ -18,7 +18,8 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
             .max(30, "Max 30 characters")
             .required("Required"),
         description: Yup.string()
-            .max(1000, "Max 1000 characters"),
+            .max(1000, "Max 1000 characters")
+            .nullable(),
         geometry: Yup.object().required("Required")
     });
 
@@ -74,13 +75,13 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
                             options={speciesOptions}
                         />
                         <CollapsibleTextarea
-                            label="Rules"
-                            name="rules"
+                            label="Permits"
+                            name="licenseInfo"
                             rows="6"
                         />
                         <CollapsibleTextarea
-                            label="License info"
-                            name="licenseInfo"
+                            label="Rules"
+                            name="rules"
                             rows="6"
                         />
                         <CollapsibleTextarea

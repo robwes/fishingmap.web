@@ -5,6 +5,7 @@ import LinkItemList from '../../../components/ui/linkItemList/LinkItemList';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
 import lake from '../../../assets/images/lake.png';
 import './LocationCard.scss';
+import Article from '../../../components/ui/article/Article';
 
 function LocationCard({ location }) {
 
@@ -50,11 +51,12 @@ function LocationCard({ location }) {
                     label="Permits"
                     text={location?.licenseInfo}
                 />
-                <CollapsibleParagraph
-                    label="Rules"
-                    text={location?.rules}
-                />
             </div>
+            <Article
+                className="location-card-footer"
+                title="Rules"
+                text={location?.rules}
+            />
         </div>
     )
 }
