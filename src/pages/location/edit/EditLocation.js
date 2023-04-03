@@ -94,7 +94,7 @@ function EditLocation() {
 
     return (
         location ? (
-            <div className="edit-location container page">
+            <div className="edit-location page">
                 <LocationForm
                     title="Edit location"
                     initialValues={getInitialFormValues()}

@@ -1,0 +1,24 @@
+.location-form-card {  
+    width: 100%;
+    background: #FFF;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    
+    .location-form-card-image {
+        height: 340px;
+        overflow: hidden;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .location-form-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+        padding: 1.5em 1.5em 3em;
+    }
+
+    .location-form-card-footer {
+        border-top: 1px solid var(--clr-input-border);
+		border-radius: 0 0 5px 5px;
+	}
+}

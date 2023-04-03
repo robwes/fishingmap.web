@@ -1,29 +1,22 @@
 .location-form {
-	display: grid;
-	gap: 2.5em 0;
-	margin-bottom: 1.5em;
+	display: flex;
+    flex-direction: column;
+	justify-content: center;
+	gap: 2em;
 
-    & > * {
-        margin: 0;
-    }
+    .left, .right {
+		display: flex;
+		flex-direction: column;
+        gap: 2em;
+	}
 
-    .location-form-title {
-        margin: 0;
-        text-align: center;
-    }
+    .right {
+		gap: 2em;
+	}
 
-    .location-form-card {
-        width: 100%;
-        background: #FFF;
+    .location-form-description {
         border-radius: 5px;
-        box-shadow: 0 1px 4px rgba(0,0,0,.15);
-    }
-    
-    .location-form-card-body {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5em;
-        padding: 1.5em 1.5em 3em;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
     }
 
     .map-input {
@@ -34,53 +27,23 @@
     .location-form-position .error {
         text-align: center;
     }
-    
-    .location-form-card-image {
-        height: 340px;
-        overflow: hidden;
-        border-radius: 5px 5px 0 0;
-    }
-    
-    .button-success {
-        width: 100%;
-    }
-
-    & + .button-bar {
-        justify-content: end;
-    }
 }
 
 @media(min-width: 900px) {
 
     .location-form {
-		position: relative;
-		grid-template-areas: 
-		"left left title title"
-		"left left right right";
-		grid-template-rows: 2.5em auto;
-		grid-template-columns: 10% 30% 50% 10%;
-		gap: 0;
+		flex-direction: row;
 
-        .location-form-title {
-            grid-area: title;
-        }
+		.left {
+			width: 35%;
+		}
 
-        .location-form-card {
-            position: absolute;
-            grid-area: left;
-        }
+		.right {
+			width: 65%;
+		}
 
-        .location-form-position {
-            grid-area: right;
-        }
-    
-        .map-input {
-            border-radius: 0 5px 5px 5px;
-        }
-    
-        .button-success {
-            width: unset;
-            margin-left: 5%;
+        .button-bar {
+            justify-content: end;
         }
     }
 }

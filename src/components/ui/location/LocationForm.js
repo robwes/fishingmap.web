@@ -1,14 +1,12 @@
 import React from 'react';
 import * as Yup from 'yup';
 import Form from "../form/Form";
-import Input from '../form/Input';
-import MultiSelect from '../form/MultiSelect';
-import DragAndDropImage from '../form/DragAndDropImage';
 import MapInput from '../form/MapInput';
-import CollapsibleTextarea from '../form/CollapsibleTextarea';
 import ButtonBar from '../buttons/ButtonBar';
 import ButtonSecondary from '../buttons/ButtonSecondary';
 import ButtonSuccess from '../buttons/ButtonSuccess';
+import LocationFormCard from './LocationFormCard';
+import ArticleInput from '../form/ArticleInput';
 import './LocationForm.scss';
 
 function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubmit, onDelete, operation = "add" }) {
@@ -18,6 +16,9 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
             .max(30, "Max 30 characters")
             .required("Required"),
         description: Yup.string()
+            .max(1000, "Max 1000 characters")
+            .nullable(),
+        rules: Yup.string()
             .max(1000, "Max 1000 characters")
             .nullable(),
         geometry: Yup.object().required("Required")
@@ -54,52 +55,29 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
             onSubmit={formSubmitted}
         >
             <div className="location-form">
-                <h1 className="location-form-title">{title}</h1>
-                <div className="location-form-card">
-                    <DragAndDropImage
-                        text="Add some images"
-                        name="images"
-                        maxNrOfFiles={5}
-                        className="location-form-card-image"
-                        initialValue={initialValues.images}
+                <div className='left'>
+                    <LocationFormCard
+                        initialValues={initialValues}
+                        speciesOptions={speciesOptions}
                     />
-                    <div className="location-form-card-body">
-                        <Input
-                            label="Name"
-                            name="name"
-                            type="text"
-                        />
-                        <MultiSelect
-                            label="Species"
-                            name="species"
-                            options={speciesOptions}
-                        />
-                        <CollapsibleTextarea
-                            label="Permits"
-                            name="licenseInfo"
-                            rows="6"
-                        />
-                        <CollapsibleTextarea
-                            label="Rules"
-                            name="rules"
-                            rows="6"
-                        />
-                        <CollapsibleTextarea
-                            label="Description"
-                            name="description"
-                            rows="8"
-                        />
-                    </div>
                 </div>
-                <MapInput
-                    className="location-form-position"
-                    name="geometry"
-                    options={mapOptions}
-                />
+                <div className='right'>
+                    <MapInput
+                        className="location-form-position"
+                        name="geometry"
+                        options={mapOptions}
+                    />
+                    <ArticleInput
+                        className='location-form-description'
+                        label='Information'
+                        name='description'
+                        rows={15}
+                    />
+                    <ButtonBar>
+                        {buttons}
+                    </ButtonBar>
+                </div>
             </div>
-            <ButtonBar>
-                {buttons}
-            </ButtonBar>
         </Form>
     )
 }

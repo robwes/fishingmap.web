@@ -12,23 +12,17 @@
 		flex-direction: column;
 	}
 
-	.location-description {
-		border-radius: 5px;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
-	}
-
 	.right {
 		gap: 2em;
 	}
 
-	.location-rules {
-		background-color: var(--clr-primary);
-		color: #FFF;
+	.location-description {
+		border-radius: 5px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
 	}
 }
 
 @media(min-width: 900px) {
-
 	.location-details {
 		flex-direction: row;
 
@@ -40,5 +34,4 @@
 			width: 65%;
 		}
 	}
-
 }

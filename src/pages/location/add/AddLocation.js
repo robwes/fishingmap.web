@@ -60,7 +60,7 @@ function AddLocation() {
     }
 
     return (
-        <div className="add-location container page">
+        <div className="add-location page">
             <LocationForm
                 title="Add location"
                 initialValues={getInitialFormValues()}
