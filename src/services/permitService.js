@@ -1,7 +1,7 @@
-const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/species`;
+const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/permits`;
 
-export const speciesService = {
-    getSpecies: async (search) => {
+export const permitService = {
+    getPermits: async (search) => {
         try {
             let requestUrl = baseUrl;
             if (search) {
@@ -18,7 +18,7 @@ export const speciesService = {
         return [];
     },
 
-    getSpeciesById: async (id) => {
+    getPermitById: async (id) => {
         try {
             const response = await fetch(`${baseUrl}/${id}`);
             return await response.json();
@@ -29,16 +29,12 @@ export const speciesService = {
         return null;
     },
 
-    createSpecies: async (species) => {
+    createPermit: async (permit) => {
         try {
             const formData = new FormData();
             
-            formData.append("name", species.name ?? "");
-            formData.append("description", species.description ?? "");
-
-            species.images?.forEach(image => {
-                formData.append("images", image)
-            });
+            formData.append("name", permit.name ?? "");
+            formData.append("url", permit.url ?? "");
 
             const response = await fetch(baseUrl,
                 {
@@ -55,17 +51,13 @@ export const speciesService = {
         return null;
     },
 
-    updateSpecies: async (id, species) => {
+    updatePermit: async (id, permit) => {
         try {
             const formData = new FormData();
             
-            formData.append("id", species.id ?? "");
-            formData.append("name", species.name ?? "");
-            formData.append("description", species.description ?? "");
-
-            species.images.forEach(image => {
-                formData.append("images", image)
-            });
+            formData.append("id", permit.id ?? "");
+            formData.append("name", permit.name ?? "");
+            formData.append("url", permit.url ?? "");
 
             const response = await fetch(`${baseUrl}/${id}`,
                 {
@@ -82,7 +74,7 @@ export const speciesService = {
         return null;
     },
 
-    deleteSpecies: async (id) => {
+    deletePermit: async (id) => {
         try {
             await fetch(`${baseUrl}/${id}`,{ 
                 method: "DELETE",
@@ -95,4 +87,4 @@ export const speciesService = {
 
         return false;
     }
-};
+}

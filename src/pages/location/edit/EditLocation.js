@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { locationService } from '../../../services/locationService';
 import { speciesService } from '../../../services/speciesService';
+import { permitService } from '../../../services/permitService';
 import { fileService } from '../../../services/fileService';
 import LocationForm from '../../../components/ui/location/LocationForm';
 import geoUtils from '../../../utils/geoUtils';
@@ -12,6 +13,8 @@ function EditLocation() {
     const { id } = useParams();
     const [location, setLocation] = useState(null);
     const [species, setSpecies] = useState([]);
+    const [permits, setPermits] = useState([]);
+    
     const [locationImages, setLocationImages] = useState([]);
     const navigate = useNavigate();
 
@@ -47,6 +50,15 @@ function EditLocation() {
         })();
     }, [location])
 
+    useEffect(() => {
+        (async () => {
+            const p = await permitService.getPermits();
+            if (p.length > 0) {
+                setPermits(p);
+            }
+        })();
+    }, [])
+
     const handleSubmit = async (locationValues, { setSubmitting }) => {
         const locationUpdate = {
             ...locationValues,
@@ -73,6 +85,7 @@ function EditLocation() {
         return {
             ...location,
             species: location.species.map(s => ({ label: s.name, value: s.id })),
+            permits: location.permits.map(p => ({ label: p.name, value: p.id })),
             geometry: geoUtils.multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry)),
             images: locationImages
         };
@@ -80,6 +93,10 @@ function EditLocation() {
 
     const getSpeciesOptions = () => {
         return species.map(s => ({ label: s.name, value: s.id }));
+    }
+
+    const getPermitOptions = () => {
+        return permits.map(p => ({ label: p.name, value: p.id}));
     }
 
     const getMapOptions = () => {
@@ -99,6 +116,7 @@ function EditLocation() {
                     title="Edit location"
                     initialValues={getInitialFormValues()}
                     speciesOptions={getSpeciesOptions()}
+                    permitOptions={getPermitOptions()}
                     mapOptions={getMapOptions()}
                     onSubmit={handleSubmit}
                     onDelete={handleDelete}

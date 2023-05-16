@@ -42,7 +42,6 @@ function EditSpecies() {
     }, [species])
 
     const handleSubmit = async (values, { setSubmitting }) => {
-        console.log(values);
         var response = await speciesService.updateSpecies(
             species.id,
             {

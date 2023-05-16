@@ -1,0 +1,30 @@
+.permits {
+    .permits-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+        width: 100%;
+        max-width: 745px;
+        margin-bottom: 1.5em;
+    }
+}
+
+@media (min-width: 600px) {
+    .permits {
+        background: linear-gradient(90deg, var(--clr-bg-body) 85%, rgba(0,0,0, .05) 40%);
+    }
+}
+
+@media (min-width: 900px) {
+    .permits {
+
+        .slide-in-panel {
+            width: 40%;
+            margin: 0 auto 3em;
+        }
+
+        .permits-list {
+            width: 55%;
+        }
+    }
+}

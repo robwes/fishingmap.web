@@ -31,9 +31,17 @@ function LocationCard({ location }) {
 
     const speciesLinkItems = location ? location.species.map(s => (
         {
-            icon: "fas fa-fish",
+            icon: "fa-solid fa-fish",
             text: s.name,
             path: `/species/${s.id}`
+        }
+    )) : [];
+
+    const permitLinkItems = location ? location.permits.map(p => (
+        {
+            icon: "fa-solid fa-file-lines",
+            text: p.name,
+            url: p.url
         }
     )) : [];
 
@@ -47,10 +55,9 @@ function LocationCard({ location }) {
                 <Collapse label="Species" open={true}>
                     <LinkItemList items={speciesLinkItems} />
                 </Collapse>
-                <CollapsibleParagraph
-                    label="Permits"
-                    text={location?.licenseInfo}
-                />
+                <Collapse label="Permits" open={true}>
+                    <LinkItemList items={permitLinkItems} />
+                </Collapse>
             </div>
             <Article
                 className="location-card-footer"

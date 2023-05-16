@@ -2,11 +2,11 @@ import React from 'react';
 import Input from '../form/Input';
 import MultiSelect from '../form/MultiSelect';
 import DragAndDropImage from '../form/DragAndDropImage';
-import CollapsibleTextarea from '../form/CollapsibleTextarea';
 import ArticleInput from '../form/ArticleInput';
 import './LocationFormCard.scss';
 
-function LocationFormCard({ initialValues, speciesOptions }) {
+function LocationFormCard({ initialValues, speciesOptions, permitOptions }) {
+
     return (
         <div className="location-form-card">
             <DragAndDropImage
@@ -27,10 +27,10 @@ function LocationFormCard({ initialValues, speciesOptions }) {
                     name="species"
                     options={speciesOptions}
                 />
-                <CollapsibleTextarea
+                <MultiSelect
                     label="Permits"
-                    name="licenseInfo"
-                    rows="6"
+                    name="permits"
+                    options={permitOptions}
                 />
             </div>
             <ArticleInput

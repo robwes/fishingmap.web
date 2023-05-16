@@ -1,0 +1,42 @@
+.permit-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 700px;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+    overflow: hidden;
+
+    .permit-card-title {
+        margin-top: 0;
+        text-align: center;
+    }
+
+    .permit-card-image {
+        height: 256px;
+        object-fit: contain;
+        background-color: var(--clr-primary);
+    }
+
+    .permit-card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        height: 192px;
+        align-items: center;
+        justify-content: space-between;
+        background: #FFF;
+        padding: 1em 1.5em;
+    }
+}
+
+@media (min-width: 600px) {
+    .permit-card {
+        flex-direction: row;
+
+        .permit-card-image {
+            width: 192px;
+            height: 192px;
+        }
+    }
+}

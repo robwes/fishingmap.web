@@ -9,24 +9,25 @@ import LocationFormCard from './LocationFormCard';
 import ArticleInput from '../form/ArticleInput';
 import './LocationForm.scss';
 
-function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubmit, onDelete, operation = "add" }) {
+const formValidation = Yup.object({
+    name: Yup.string()
+        .max(30, "Max 30 characters")
+        .required("Required"),
+    description: Yup.string()
+        .max(1000, "Max 1000 characters")
+        .nullable(),
+    rules: Yup.string()
+        .max(1000, "Max 1000 characters")
+        .nullable(),
+    geometry: Yup.object().required("Required")
+});
 
-    const formValidation = Yup.object({
-        name: Yup.string()
-            .max(30, "Max 30 characters")
-            .required("Required"),
-        description: Yup.string()
-            .max(1000, "Max 1000 characters")
-            .nullable(),
-        rules: Yup.string()
-            .max(1000, "Max 1000 characters")
-            .nullable(),
-        geometry: Yup.object().required("Required")
-    });
+function LocationForm({ initialValues, speciesOptions, permitOptions, mapOptions, onSubmit, onDelete, operation = "add" }) {
 
-    const formSubmitted = async ({ species, ...rest }, formikBag) => {
+    const formSubmitted = async ({ species, permits, ...rest }, formikBag) => {
         const location = {
-            species: species.map(s => ({ id: s.value })),
+            species: species.map(s => ({ id: s.value, name: s.label })),
+            permits: permits.map(p => ({ id: p.value, name: p.label })),
             ...rest
         };
 
@@ -59,6 +60,7 @@ function LocationForm({ initialValues, title, speciesOptions, mapOptions, onSubm
                     <LocationFormCard
                         initialValues={initialValues}
                         speciesOptions={speciesOptions}
+                        permitOptions={permitOptions}
                     />
                 </div>
                 <div className='right'>

@@ -1,0 +1,9 @@
+.permit-details {
+    padding: 4.5em 0;
+}
+
+@media(min-width: 600px) {
+	.permit-details {
+		background: linear-gradient(90deg, var(--clr-bg-body) 85%, rgba(0,0,0, .05) 40%);
+    }
+}

@@ -18,6 +18,10 @@ import EditUser from './pages/user/edit/EditUser';
 import ProtectedRouteIsLoggedInUser from './components/route/ProtectedRouteCurrentUser';
 import LandingPage from './pages/landingPage/LandingPage';
 import ScrollToTop from './components/route/ScrollToTop';
+import Permits from './pages/permit/list/Permits';
+import PermitDetails from './pages/permit/details/PermitDetails';
+import AddPermit from './pages/permit/add/AddPermit';
+import EditPermit from './pages/permit/edit/EditPermit';
 
 function App() {
 	return (
@@ -31,13 +35,16 @@ function App() {
 						<Route exact path="/locations/:id" element={<LocationDetails />} />
 						<Route exact path="/species" element={<Species />} />
 						<Route exact path="/species/:id" element={<SpeciesDetails />} />
+						<Route exact path="/permits" element={<Permits />} />
+						<Route exact path="/permits/:id" element={<PermitDetails />} />
 
 						<Route element={<ProtectedRoute />}>
 							<Route path="/locations/add" element={<AddLocation />} />
 							<Route path="/locations/:id/edit" element={<EditLocation />} />
 							<Route path="/species/add" element={<AddSpecies />} />
 							<Route path="/species/:id/edit" element={<EditSpecies />} />
-
+							<Route path="/permits/add" element={<AddPermit />} />
+							<Route path="/permits/:id/edit" element={<EditPermit />} />
 						</Route>
 
 						<Route element={<ProtectedRouteIsLoggedInUser />}>

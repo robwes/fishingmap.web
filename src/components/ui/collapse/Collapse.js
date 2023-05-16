@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Collapse.scss';
 
-function Collapse({ children, label, open = false }) {
+function Collapse({ children, className, label, open = false }) {
 
     const [isOpen, setIsOpen] = useState(open);
 
@@ -13,8 +13,12 @@ function Collapse({ children, label, open = false }) {
         return cssClasses;
     }
 
-    const getCollapseCssClasses = () => {
+    const getCssClasses = () => {
         let cssClasses = "collapse";
+
+        if (className) {
+            cssClasses += ` ${className}`;
+        }
 
         if (isOpen) {
             cssClasses += " open";
@@ -29,7 +33,7 @@ function Collapse({ children, label, open = false }) {
     }
 
     return (
-        <div className={getCollapseCssClasses()}>
+        <div className={getCssClasses()}>
             <div className="collapse-header">
                 <button className="collapse-toggle" onClick={toggleOpen}>
                     <i className={getButtonIcon()}></i>

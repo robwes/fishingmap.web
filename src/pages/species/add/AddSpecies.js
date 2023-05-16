@@ -10,7 +10,6 @@ function AddSpecies() {
     const initialValues = { name: "", description: "" };
 
     const handleSubmit = async (values, { setSubmitting }) => {
-        console.log(values);
         var response = await speciesService.createSpecies({
             name: values.name,
             description: values.description,
