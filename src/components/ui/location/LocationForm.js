@@ -58,7 +58,6 @@ function LocationForm({ initialValues, speciesOptions, permitOptions, mapOptions
             <div className="location-form">
                 <div className='left'>
                     <LocationFormCard
-                        initialValues={initialValues}
                         speciesOptions={speciesOptions}
                         permitOptions={permitOptions}
                     />

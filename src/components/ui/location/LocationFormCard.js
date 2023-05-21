@@ -5,7 +5,7 @@ import DragAndDropImage from '../form/DragAndDropImage';
 import ArticleInput from '../form/ArticleInput';
 import './LocationFormCard.scss';
 
-function LocationFormCard({ initialValues, speciesOptions, permitOptions }) {
+function LocationFormCard({ speciesOptions, permitOptions }) {
 
     return (
         <div className="location-form-card">
@@ -14,7 +14,6 @@ function LocationFormCard({ initialValues, speciesOptions, permitOptions }) {
                 name="images"
                 maxNrOfFiles={5}
                 className="location-form-card-image"
-                initialValue={initialValues?.images}
             />
             <div className="location-form-card-body">
                 <Input

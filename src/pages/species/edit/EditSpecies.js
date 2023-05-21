@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { speciesService } from '../../../services/speciesService';
-import { fileService } from '../../../services/fileService';
 import SpeciesForm from '../../../components/ui/species/SpeciesForm';
 import './EditSpecies.scss';
 
@@ -10,8 +9,6 @@ function EditSpecies() {
     const { id } = useParams();
     const [species, setSpecies] = useState(null);
     const navigate = useNavigate();
-
-    const [speciesImages, setSpeciesImages] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -22,24 +19,6 @@ function EditSpecies() {
         })();
         // eslint-disable-next-line
     }, [])
-
-    useEffect(() => {
-        (async () => {
-            if (species && species.images) {
-
-                const images = [];
-
-                for (let image of species.images) {
-                    const imageFile = await fileService.getImage(image.path, image.name);
-                    if (imageFile) {
-                        images.push(imageFile);
-                    }
-                }
-                
-                setSpeciesImages(images);
-            }
-        })();
-    }, [species])
 
     const handleSubmit = async (values, { setSubmitting }) => {
         var response = await speciesService.updateSpecies(
@@ -69,14 +48,9 @@ function EditSpecies() {
             <div className="container edit-species-container">
                 <h1 className="page-title">Edit species</h1>
                 <SpeciesForm
-                    initialValues={{
-                        name: species.name,
-                        description: species.description,
-                        images: speciesImages
-                    }}
+                    species={species}
                     onSubmit={handleSubmit}
                     onDelete={handleDelete}
-                    operation='edit'
                 />
             </div>
         </div>) : null

@@ -4,7 +4,7 @@ import { useField } from 'formik';
 import './DragAndDropImage.scss';
 
 // https://blog.logrocket.com/create-a-drag-and-drop-component-with-react-dropzone/
-function DragAndDropImage({ text, initialValue = [], maxNrOfFiles = 3, ...props }) {
+function DragAndDropImage({ text, maxNrOfFiles = 3, ...props }) {
 
     const [selectedFiles, meta, helpers] = useField(props);
     const { setError, setValue: setSelectedFiles } = helpers;
@@ -13,13 +13,6 @@ function DragAndDropImage({ text, initialValue = [], maxNrOfFiles = 3, ...props 
     const [imagePreview, setImagePreview] = useState("");
 
     const fileInputRef = useRef();
-
-    useEffect(() => {
-        if (initialValue.length > 0) {
-            setSelectedFiles(initialValue);
-        }
-        // eslint-disable-next-line
-    }, [initialValue])
 
     useEffect(() => {
         if (selectedFile) {

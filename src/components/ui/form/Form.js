@@ -18,6 +18,7 @@ function Form({children, className, initialValues, validationSchema, onSubmit}) 
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
+            enableReinitialize={true}
         >
             <FormikForm className={getCssClasses()}>
                 {children}

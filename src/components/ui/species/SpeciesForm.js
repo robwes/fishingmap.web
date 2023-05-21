@@ -1,38 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import Form from "../form/Form";
-import ButtonSecondary from '../buttons/ButtonSecondary';
-import ButtonSuccess from '../buttons/ButtonSuccess';
+import Form from '../form/Form';
 import DragAndDropImage from '../form/DragAndDropImage';
 import Input from '../form/Input';
 import TextArea from '../form/TextArea';
+import ButtonSecondary from '../buttons/ButtonSecondary';
+import ButtonSuccess from '../buttons/ButtonSuccess';
 import ButtonBar from '../buttons/ButtonBar';
+import { fileService } from '../../../services/fileService';
 import './SpeciesForm.scss';
 
-function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
+const formValidation = Yup.object({
+    name: Yup.string()
+        .max(30, "Max 30 characters")
+        .required("Required"),
+    description: Yup.string()
+        .max(1000, "Max 1000 characters")
+        .nullable()
+});
 
-    const formValidation = Yup.object({
-        name: Yup.string()
-            .max(30, "Max 30 characters")
-            .required("Required"),
-        description: Yup.string()
-            .max(1000, "Max 1000 characters")
-            .nullable()
-    });
+function SpeciesForm({ species, onSubmit, onDelete }) {
 
-    let buttons;
-    if (operation === "add") {
-        buttons = <ButtonSuccess type="submit">Add</ButtonSuccess>;
-    } else if (operation === "edit") {
-        buttons = <>
-            <ButtonSecondary onClick={onDelete}>Delete</ButtonSecondary>
-            <ButtonSuccess type="submit">Save</ButtonSuccess>
-        </>;
+    const [speciesImages, setSpeciesImages] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            if (species && species.images) {
+
+                const images = [];
+
+                for (let image of species.images) {
+                    const imageFile = await fileService.getImage(image.path, image.name);
+                    if (imageFile) {
+                        images.push(imageFile);
+                    }
+                }
+
+                setSpeciesImages(images);
+            }
+        })();
+    }, [species])
+
+    const getInitialValues = () => {
+        if (species) {
+            return {
+                name: species.name ?? "",
+                description: species.description ?? "",
+                images: speciesImages
+            }
+        }
+
+        return { name: "", description: "" };
+    }
+
+    const getFormButtons = () => {
+        if (species) {
+            return <>
+                <ButtonSecondary onClick={onDelete}>Delete</ButtonSecondary>
+                <ButtonSuccess type="submit">Save</ButtonSuccess>
+            </>;
+        }
+
+        return <ButtonSuccess type="submit">Add</ButtonSuccess>;
     }
 
     return (
         <Form
-            initialValues={initialValues}
+            initialValues={getInitialValues()}
             validationSchema={formValidation}
             onSubmit={onSubmit}
         >
@@ -41,7 +75,6 @@ function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
                     text="Add some images"
                     className="species-form-image"
                     name="images"
-                    initialValue={initialValues.images}
                     maxNrOfFiles={4}
                 />
                 <div className="right">
@@ -57,7 +90,7 @@ function SpeciesForm({ initialValues, onSubmit, onDelete, operation = "add" }) {
                         rows="10"
                     />
                     <ButtonBar>
-                        {buttons}
+                        {getFormButtons()}
                     </ButtonBar>
                 </div>
             </div>

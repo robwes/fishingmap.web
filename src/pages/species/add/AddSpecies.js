@@ -7,7 +7,6 @@ import './AddSpecies.scss';
 function AddSpecies() {
 
     const navigate = useNavigate();
-    const initialValues = { name: "", description: "" };
 
     const handleSubmit = async (values, { setSubmitting }) => {
         var response = await speciesService.createSpecies({
@@ -26,7 +25,6 @@ function AddSpecies() {
             <div className="container add-species-container">
                 <h1 className="page-title">Add species</h1>
                 <SpeciesForm
-                    initialValues={initialValues}
                     onSubmit={handleSubmit}
                 />
             </div>
