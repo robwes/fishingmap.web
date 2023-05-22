@@ -4,7 +4,6 @@ import LocationForm from '../../../components/ui/location/LocationForm';
 import { locationService } from '../../../services/locationService';
 import { speciesService } from '../../../services/speciesService';
 import { permitService } from '../../../services/permitService';
-import geoUtils from '../../../utils/geoUtils';
 import './AddLocation.scss';
 
 function AddLocation() {
@@ -33,28 +32,12 @@ function AddLocation() {
     }, [])
 
     const handleSubmit = async (values, { setSubmitting }) => {
-        const locationValues = {
-            ...values,
-            geometry: JSON.stringify(
-                geoUtils.polygonFeatureCollectionToMultiPolygonFeature(values.geometry)
-            )
-        };
-
-        var newLocation = await locationService.createLocation(locationValues);
+        var newLocation = await locationService.createLocation(values);
 
         if (newLocation) {
             navigate(`/locations/${newLocation.id}`);
         }
     }
-
-    const getInitialFormValues = () => {
-        return {
-            name: "",
-            description: "",
-            rules: "",
-            images: []
-        };
-    };
 
     const getSpeciesOptions = () => {
         return species.map(s => ({ label: s.name, value: s.id }));
@@ -78,7 +61,6 @@ function AddLocation() {
         <div className="add-location page">
             <LocationForm
                 title="Add location"
-                initialValues={getInitialFormValues()}
                 speciesOptions={getSpeciesOptions()}
                 permitOptions={getPermitOptions()}
                 mapOptions={getMapOptions()}

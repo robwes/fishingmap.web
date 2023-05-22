@@ -1,11 +1,10 @@
 import React from 'react';
 import Collapse from '../../../components/ui/collapse/Collapse';
-import CollapsibleParagraph from '../../../components/ui/collapse/CollapsibleParagraph';
 import LinkItemList from '../../../components/ui/linkItemList/LinkItemList';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
+import Article from '../../../components/ui/article/Article';
 import lake from '../../../assets/images/lake.png';
 import './LocationCard.scss';
-import Article from '../../../components/ui/article/Article';
 
 function LocationCard({ location }) {
 

@@ -25,9 +25,7 @@ function EditSpecies() {
             species.id,
             {
                 id: species.id,
-                name: values.name,
-                description: values.description,
-                images: values.images
+                ...values
             });
 
         if (response) {
@@ -35,8 +33,7 @@ function EditSpecies() {
         }
     }
 
-    const handleDelete = async ($event) => {
-        $event.preventDefault();
+    const handleDelete = async () => {
         if (window.confirm(`Are you sure you want to delete ${species.name}?`)) {
             await speciesService.deleteSpecies(species.id);
             navigate(`/species`);

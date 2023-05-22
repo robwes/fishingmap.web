@@ -51,8 +51,8 @@ export const locationService = {
             
             formData.append("name", location.name ?? "");
             formData.append("description", location.description ?? "");
-            formData.append("species", JSON.stringify(location.species ?? ""));
-            formData.append("permits", JSON.stringify(location.permits ?? ""));
+            formData.append("species", JSON.stringify(location.species ?? []));
+            formData.append("permits", JSON.stringify(location.permits ?? []));
 
             formData.append("geometry", location.geometry ?? "");
             formData.append("rules", location.rules ?? "");
@@ -83,8 +83,8 @@ export const locationService = {
             
             formData.append("name", location.name ?? "");
             formData.append("description", location.description ?? "");
-            formData.append("species", JSON.stringify(location.species ?? ""));
-            formData.append("permits", JSON.stringify(location.permits ?? ""));
+            formData.append("species", JSON.stringify(location.species ?? []));
+            formData.append("permits", JSON.stringify(location.permits ?? []));
 
             formData.append("geometry", location.geometry ?? "");
             formData.append("rules", location.rules ?? "");

@@ -53,10 +53,15 @@ function SpeciesForm({ species, onSubmit, onDelete }) {
         return { name: "", description: "" };
     }
 
+    const onDeleteClick = async ($event) => {
+        $event.preventDefault();
+        await onDelete();
+    }
+
     const getFormButtons = () => {
         if (species) {
             return <>
-                <ButtonSecondary onClick={onDelete}>Delete</ButtonSecondary>
+                <ButtonSecondary onClick={onDeleteClick}>Delete</ButtonSecondary>
                 <ButtonSuccess type="submit">Save</ButtonSuccess>
             </>;
         }

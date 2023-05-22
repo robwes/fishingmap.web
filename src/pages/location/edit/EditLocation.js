@@ -3,9 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { locationService } from '../../../services/locationService';
 import { speciesService } from '../../../services/speciesService';
 import { permitService } from '../../../services/permitService';
-import { fileService } from '../../../services/fileService';
 import LocationForm from '../../../components/ui/location/LocationForm';
-import geoUtils from '../../../utils/geoUtils';
 import './EditLocation.scss';
 
 function EditLocation() {
@@ -14,8 +12,7 @@ function EditLocation() {
     const [location, setLocation] = useState(null);
     const [species, setSpecies] = useState([]);
     const [permits, setPermits] = useState([]);
-    
-    const [locationImages, setLocationImages] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -34,24 +31,6 @@ function EditLocation() {
 
     useEffect(() => {
         (async () => {
-            if (location && location.images) {
-
-                const images = [];
-
-                for (let image of location.images) {
-                    const imageFile = await fileService.getImage(image.path, image.name);
-                    if (imageFile) {
-                        images.push(imageFile);
-                    }
-                }
-
-                setLocationImages(images);
-            }
-        })();
-    }, [location])
-
-    useEffect(() => {
-        (async () => {
             const p = await permitService.getPermits();
             if (p.length > 0) {
                 setPermits(p);
@@ -59,15 +38,14 @@ function EditLocation() {
         })();
     }, [])
 
-    const handleSubmit = async (locationValues, { setSubmitting }) => {
-        const locationUpdate = {
-            ...locationValues,
-            geometry: JSON.stringify(
-                geoUtils.polygonFeatureCollectionToMultiPolygonFeature(locationValues.geometry)
-            )
-        };
-
-        var updatedLocation = await locationService.updateLocation(id, locationUpdate);
+    const handleSubmit = async (values, { setSubmitting }) => {
+        var updatedLocation = await locationService.updateLocation(
+            location.id, 
+            {
+                id: location.id,
+                ...values
+            }
+        );
 
         if (updatedLocation) {
             navigate(`/locations/${updatedLocation.id}`);
@@ -81,22 +59,12 @@ function EditLocation() {
         }
     }
 
-    const getInitialFormValues = () => {
-        return {
-            ...location,
-            species: location.species.map(s => ({ label: s.name, value: s.id })),
-            permits: location.permits.map(p => ({ label: p.name, value: p.id })),
-            geometry: geoUtils.multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry)),
-            images: locationImages
-        };
-    };
-
     const getSpeciesOptions = () => {
         return species.map(s => ({ label: s.name, value: s.id }));
     }
 
     const getPermitOptions = () => {
-        return permits.map(p => ({ label: p.name, value: p.id}));
+        return permits.map(p => ({ label: p.name, value: p.id }));
     }
 
     const getMapOptions = () => {
@@ -114,13 +82,12 @@ function EditLocation() {
             <div className="edit-location page">
                 <LocationForm
                     title="Edit location"
-                    initialValues={getInitialFormValues()}
+                    location={location}
                     speciesOptions={getSpeciesOptions()}
                     permitOptions={getPermitOptions()}
                     mapOptions={getMapOptions()}
                     onSubmit={handleSubmit}
                     onDelete={handleDelete}
-                    operation='edit'
                 />
             </div>) : null
     )

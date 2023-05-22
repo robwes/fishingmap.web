@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import Form from "../form/Form";
 import MapInput from '../form/MapInput';
@@ -7,6 +7,8 @@ import ButtonSecondary from '../buttons/ButtonSecondary';
 import ButtonSuccess from '../buttons/ButtonSuccess';
 import LocationFormCard from './LocationFormCard';
 import ArticleInput from '../form/ArticleInput';
+import { fileService } from '../../../services/fileService';
+import geoUtils from '../../../utils/geoUtils';
 import './LocationForm.scss';
 
 const formValidation = Yup.object({
@@ -22,12 +24,53 @@ const formValidation = Yup.object({
     geometry: Yup.object().required("Required")
 });
 
-function LocationForm({ initialValues, speciesOptions, permitOptions, mapOptions, onSubmit, onDelete, operation = "add" }) {
+function LocationForm({ location, speciesOptions, permitOptions, mapOptions, onSubmit, onDelete }) {
 
-    const formSubmitted = async ({ species, permits, ...rest }, formikBag) => {
+    const [locationImages, setLocationImages] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            if (location && location.images) {
+
+                const images = [];
+
+                for (let image of location.images) {
+                    const imageFile = await fileService.getImage(image.path, image.name);
+                    if (imageFile) {
+                        images.push(imageFile);
+                    }
+                }
+
+                setLocationImages(images);
+            }
+        })();
+    }, [location])
+
+    const getInitialValues = () => {
+        if (location) {
+            return {
+                ...location,
+                species: location.species.map(s => ({ label: s.name, value: s.id })),
+                permits: location.permits.map(p => ({ label: p.name, value: p.id })),
+                geometry: geoUtils.multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry)),
+                images: locationImages
+            };
+        } else {
+            return {
+                name: "",
+                description: "",
+                rules: ""
+            };
+        }
+    };
+
+    const onFormSubmitted = async ({ species, permits, geometry, ...rest }, formikBag) => {
         const location = {
             species: species.map(s => ({ id: s.value, name: s.label })),
             permits: permits.map(p => ({ id: p.value, name: p.label })),
+            geometry: JSON.stringify(
+                geoUtils.polygonFeatureCollectionToMultiPolygonFeature(geometry)
+            ),
             ...rest
         };
 
@@ -39,21 +82,22 @@ function LocationForm({ initialValues, speciesOptions, permitOptions, mapOptions
         await onDelete();
     }
 
-    let buttons;
-    if (operation === "add") {
-        buttons = <ButtonSuccess type="submit">Add</ButtonSuccess>;
-    } else if (operation === "edit") {
-        buttons = <>
-            <ButtonSecondary onClick={onDeleteClick}>Delete</ButtonSecondary>
-            <ButtonSuccess type="submit">Save</ButtonSuccess>
-        </>;
+    const getFormButtons = () => {
+        if (location) {
+            return <>
+                <ButtonSecondary onClick={onDeleteClick}>Delete</ButtonSecondary>
+                <ButtonSuccess type="submit">Save</ButtonSuccess>
+            </>;
+        }
+
+        return <ButtonSuccess type="submit">Add</ButtonSuccess>;
     }
 
     return (
         <Form
-            initialValues={initialValues}
+            initialValues={getInitialValues()}
             validationSchema={formValidation}
-            onSubmit={formSubmitted}
+            onSubmit={onFormSubmitted}
         >
             <div className="location-form">
                 <div className='left'>
@@ -75,7 +119,7 @@ function LocationForm({ initialValues, speciesOptions, permitOptions, mapOptions
                         rows={15}
                     />
                     <ButtonBar>
-                        {buttons}
+                        {getFormButtons()}
                     </ButtonBar>
                 </div>
             </div>
