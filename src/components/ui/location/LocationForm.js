@@ -13,10 +13,10 @@ import './LocationForm.scss';
 
 const formValidation = Yup.object({
     name: Yup.string()
-        .max(30, "Max 30 characters")
+        .max(30, "Max 50 characters")
         .required("Required"),
     description: Yup.string()
-        .max(1000, "Max 1000 characters")
+        .max(3000, "Max 3000 characters")
         .nullable(),
     rules: Yup.string()
         .max(1000, "Max 1000 characters")

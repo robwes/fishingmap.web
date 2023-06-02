@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { SecureLink } from 'react-secure-link';
 import Collapse from '../../../components/ui/collapse/Collapse';
-import LinkItemList from '../../../components/ui/linkItemList/LinkItemList';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
 import Article from '../../../components/ui/article/Article';
+import LocationSpeciesItem from '../../../components/ui/location/LocationSpeciesItem';
+import LocationPermitItem from './LocationPermitItem';
 import lake from '../../../assets/images/lake.png';
 import './LocationCard.scss';
 
@@ -28,21 +31,30 @@ function LocationCard({ location }) {
         return images;
     }
 
-    const speciesLinkItems = location ? location.species.map(s => (
-        {
-            icon: "fa-solid fa-fish",
-            text: s.name,
-            path: `/species/${s.id}`
-        }
-    )) : [];
+    const getSpecies = () => {
+        return location.species.map(s => (
+            <Link to={`/species/${s.id}`}>
+                <LocationSpeciesItem
+                    key={s.id}
+                    species={s}
+                />
+            </Link>
+        ));
+    }
 
-    const permitLinkItems = location ? location.permits.map(p => (
-        {
-            icon: "fa-solid fa-file-lines",
-            text: p.name,
-            url: p.url
-        }
-    )) : [];
+    const getPermits = () => {
+        return location.permits.map(p => (
+            <SecureLink
+                href={p.url}
+                target="_blank"
+                rel="noreferrer">
+                <LocationPermitItem
+                    key={p.id}
+                    permit={p}
+                />
+            </SecureLink>
+        ));
+    }
 
     return (
         <div className="location-card">
@@ -51,11 +63,17 @@ function LocationCard({ location }) {
                 {location.name}
             </h3>
             <div className="location-card-body">
+
                 <Collapse label="Species" open={true}>
-                    <LinkItemList items={speciesLinkItems} />
+                    <div className="location-species-list">
+                        {getSpecies()}
+                    </div>
                 </Collapse>
+
                 <Collapse label="Permits" open={true}>
-                    <LinkItemList items={permitLinkItems} />
+                    <div className='location-permit-list'>
+                        {getPermits()}
+                    </div>
                 </Collapse>
             </div>
             <Article

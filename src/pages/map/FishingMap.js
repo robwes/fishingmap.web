@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Circle, MarkerClusterer } from '@react-google-maps/api';
 import { locationService } from '../../services/locationService';
 import LocationMarker from './LocationMarker';
@@ -7,13 +7,12 @@ import LocationFilter from '../../components/ui/location/LocationFilter';
 import SlideInPanel from '../../components/ui/slideInPanel/SlideInPanel';
 import './FishingMap.scss';
 
-const center = {
+const startCenter = {
     lat: 60.2,
     lng: 23.5
 };
 
 const searchCircleOptions = {
-    center: center,
     fillColor: "#0094ff",
     strokeColor: "#0518ee",
     strokeOpacity: 0.8,
@@ -26,6 +25,8 @@ const searchCircleOptions = {
 function FishingMap() {
     const [locations, setLocations] = useState([]);
     const [searchRadius, setSearchRadius] = useState(0);
+    const [map, setMap] = useState();
+    const [searchCenter, setSearchCenter] = useState(startCenter);
     const circleRef = useRef();
 
     useEffect(() => {
@@ -57,7 +58,23 @@ function FishingMap() {
 
     const handleDistanceChange = (value) => {
         setSearchRadius(value * 1000);
+
+        if (value === 0 && searchCenter !== startCenter) {
+            setSearchCenter(startCenter);
+        }
+        else if (map && searchCenter === startCenter) {
+            setSearchCenter(map.getCenter());
+        }
     }
+
+    const handleMapLoad = useCallback((mapObject) => {
+        mapObject.panTo(startCenter);
+        setMap(mapObject);
+    }, []);
+
+    const handleMapUnMount = useCallback((map) => {
+        setMap(null);
+    }, []);
 
     return (
         <div className="fishing-map page">
@@ -67,11 +84,16 @@ function FishingMap() {
                     onReset={handleReset}
                     onDistanceChange={handleDistanceChange} />
             </SlideInPanel>
-            <Map center={center} zoom={8}>
+            <Map
+                center={startCenter}
+                zoom={8}
+                onLoad={handleMapLoad}
+                onUnmount={handleMapUnMount}>
                 <Circle
                     ref={circleRef}
                     radius={searchRadius}
-                    options={searchCircleOptions} />
+                    options={searchCircleOptions}
+                    center={searchCenter} />
                 <MarkerClusterer>
                     {(clusterer) =>
                         locations.map((location) => (

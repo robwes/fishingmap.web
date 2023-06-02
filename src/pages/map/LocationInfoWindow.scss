@@ -1,0 +1,19 @@
+.location-info-window {
+    max-width: 300px;
+    padding-bottom: .5em;
+
+    .location-info-window-title {
+        text-align: center;
+        padding-bottom: .5em;
+        margin: .5em 0;
+        border-bottom: 1px solid var(--clr-primary);
+    }
+
+    .location-species-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        justify-content: center;
+        padding: .25em 0;
+    }
+}

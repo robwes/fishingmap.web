@@ -9,21 +9,13 @@ const defaultMapStyle = {
 
 const libraries = ["drawing"];
 
-function Map({children, center, zoom, mapStyle, ...props}) {
+function Map({children, center, zoom, mapStyle, onLoad, onUnmount, ...props}) {
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
         libraries: libraries
     });
-
-    const onLoad = useCallback((map) => {
-        map.panTo(center);
-    }, [center]);
-
-    const onUnmount = useCallback((map) => {
-
-    }, []);
 
     const getMapStyle = () => {
         if (mapStyle) {

@@ -28,4 +28,16 @@
 		color: #FFF;
 		border-radius: 0 0 5px 5px;
 	}
+
+	.location-species-list,
+	.location-permit-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+    }
+
+	.location-permit-list {
+		flex-direction: column;
+		align-items: flex-start;
+	}
 }

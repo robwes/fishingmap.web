@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LinkItemList from '../../../components/ui//linkItemList/LinkItemList';
+import LocationSpeciesItem from '../../../components/ui/location/LocationSpeciesItem';
 import lake from '../../../assets/images/lake.png';
 import './LocationListItem.scss';
 
@@ -15,14 +15,6 @@ function LocationListItem({ location }) {
         }
     };
 
-    const speciesItems = species.map(s => (
-        {
-            icon: "fas fa-fish",
-            text: s.name,
-            path: `/species/${s.id}`
-        }
-    ));
-
     return (
         <Link to={`/locations/${id}`}>
             <div className="location-list-item">
@@ -35,7 +27,11 @@ function LocationListItem({ location }) {
                     </h3>
                     <p className="location-list-item-text">{description}</p>
                     <div className="location-list-item-footer">
-                        <LinkItemList items={speciesItems} isLink={false} />
+                        <div className='location-species-list'>
+                            {species.map(s => (
+                                <LocationSpeciesItem species={s} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
