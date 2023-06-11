@@ -5,13 +5,14 @@ function useLocation() {
             navigator.geolocation.getCurrentPosition(
                 (location) => {
                     resolve({
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude
+                        lat: location.coords.latitude,
+                        lng: location.coords.longitude
                     });
                 },
                 (error) => {
                     reject(error);
-                }
+                },
+                {maximumAge:0, timeout:5000, enableHighAccuracy: true}
             )
         });
     }

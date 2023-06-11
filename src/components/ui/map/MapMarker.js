@@ -9,7 +9,7 @@ function MapMarker({position, clusterer, children}) {
     const onLoad = infoWindow => {}
 
     return (
-        <Marker onClick={() => setIsInfoWindowOpen(!isInfoWindowOpen)} 
+        position ? <Marker onClick={() => setIsInfoWindowOpen(!isInfoWindowOpen)} 
             position={position} 
             clusterer={clusterer}
             icon={{
@@ -18,7 +18,7 @@ function MapMarker({position, clusterer, children}) {
             {isInfoWindowOpen && <InfoWindow onLoad={onLoad} position={position} onCloseClick={() => setIsInfoWindowOpen(false)}>
                 {children}
             </InfoWindow>}
-        </Marker>
+        </Marker> : <></>
     )
 }
 

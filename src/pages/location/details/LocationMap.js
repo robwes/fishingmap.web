@@ -4,13 +4,18 @@ import LinkButtonPrimaryOutline from '../../../components/ui/buttons/LinkButtonP
 import Map from '../../../components/ui/map/Map';
 import geoUtils from '../../../utils/geoUtils';
 import './LocationMap.scss';
+import { useCurrentUser } from '../../../context/CurrentUserContext';
+import PositionMarker from '../../../components/ui/map/PositionMarker';
 
 const mapStyle = {
     width: '100%',
     height: '650px'
 };
 
-function LocationMap({location}) {
+function LocationMap({ location }) {
+
+    // eslint-disable-next-line
+    const [currentUser, updateCurrentUser, currentLocation] = useCurrentUser();
 
     const handleDataLoad = data => {
         data.setStyle({
@@ -38,6 +43,7 @@ function LocationMap({location}) {
                 center={{ lat: location.position.latitude, lng: location.position.longitude }}
                 zoom={12}
                 mapStyle={mapStyle}>
+                <PositionMarker position={currentLocation} />
                 <Data
                     onLoad={handleDataLoad}
                 />

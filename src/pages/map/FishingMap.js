@@ -3,8 +3,10 @@ import { Circle, MarkerClusterer } from '@react-google-maps/api';
 import { locationService } from '../../services/locationService';
 import LocationMarker from './LocationMarker';
 import Map from '../../components/ui/map/Map';
+import PositionMarker from '../../components/ui/map/PositionMarker';
 import LocationFilter from '../../components/ui/location/LocationFilter';
 import SlideInPanel from '../../components/ui/slideInPanel/SlideInPanel';
+import { useCurrentUser } from '../../context/CurrentUserContext';
 import './FishingMap.scss';
 
 const startCenter = {
@@ -23,11 +25,14 @@ const searchCircleOptions = {
 }
 
 function FishingMap() {
+    const [map, setMap] = useState();
     const [locations, setLocations] = useState([]);
     const [searchRadius, setSearchRadius] = useState(0);
-    const [map, setMap] = useState();
     const [searchCenter, setSearchCenter] = useState(startCenter);
     const circleRef = useRef();
+
+    // eslint-disable-next-line
+    const [currentUser, updateCurrentUser, currentLocation] = useCurrentUser();
 
     useEffect(() => {
         (async () => {
@@ -89,6 +94,9 @@ function FishingMap() {
                 zoom={8}
                 onLoad={handleMapLoad}
                 onUnmount={handleMapUnMount}>
+                <PositionMarker
+                    position={currentLocation}
+                />
                 <Circle
                     ref={circleRef}
                     radius={searchRadius}
