@@ -13,10 +13,15 @@ export const CurrentUserProvider = ({children}) => {
 
     useEffect(() => {
         (async () => {
-            const userLocation = await getLocation();
-            if (userLocation) {
-                setCurrentLocation(userLocation);
+            try {
+                const userLocation = await getLocation();
+                if (userLocation) {
+                    setCurrentLocation(userLocation);
+                }
+            } catch (e) {
+                console.error(e);
             }
+
         })();
         // eslint-disable-next-line
     }, [])

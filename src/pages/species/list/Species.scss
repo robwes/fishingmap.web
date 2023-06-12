@@ -5,8 +5,9 @@
         display: none;
     }
 
-    .species-search {
-        width: 50%;
+    .slide-in-panel.open {
+        margin-left: -2.5%;
+        width: 105%;
     }
 
     .item-grid {
@@ -31,6 +32,10 @@
 	.species {
         .page-title {
             display: block;
+        }
+
+        .species-search {
+            width: 50%;
         }
     }
 }

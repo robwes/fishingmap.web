@@ -29,7 +29,10 @@ function LocationListItem({ location }) {
                     <div className="location-list-item-footer">
                         <div className='location-species-list'>
                             {species.map(s => (
-                                <LocationSpeciesItem species={s} />
+                                <LocationSpeciesItem
+                                    key={s.id}
+                                    species={s}
+                                />
                             ))}
                         </div>
                     </div>

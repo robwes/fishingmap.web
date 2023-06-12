@@ -11,6 +11,11 @@
         flex-direction: column;
         width: 100%;
     }
+
+    .slide-in-panel.open {
+        margin-left: -2.5%;
+        width: 105%;
+    }
 }
 
 @media(min-width: 600px) {

@@ -14,7 +14,6 @@ const customStyles = {
     control: (provided, state) => ({
         ...provided,
         borderColor: state.isFocused || state.isActive ? "#00ADFF" : "#9e9e9e",
-        // borderWidth: state.isFocused || state.isActive ? "2px" : "1px",
         boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
         borderRadius: ".5em"
     }),
@@ -24,7 +23,6 @@ const customStyles = {
     }),
     menuList: (provided, state) => ({
         ...provided,
-        overflow: "hidden",
         padding: 0
     }),
     valueContainer: (provided, state) => ({

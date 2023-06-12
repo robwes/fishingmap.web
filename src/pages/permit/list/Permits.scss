@@ -1,4 +1,9 @@
 .permits {
+    .slide-in-panel.open {
+        margin-left: -2.5%;
+        width: 105%;
+    }
+
     .permits-list {
         display: flex;
         flex-direction: column;
