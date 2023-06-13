@@ -9,7 +9,9 @@
     .item-list {
         display: flex;
         flex-direction: column;
+        gap: 2em;
         width: 100%;
+        margin-bottom: 3em;
     }
 
     .slide-in-panel.open {
