@@ -1,0 +1,18 @@
+.collapsible-article-primary {
+    background-color: var(--clr-primary);
+    color: #FFF;
+
+    .collapse-header {
+        box-shadow: none;
+    }
+
+    .collapse-toggle {
+        background-color: #FFF;
+        color: var(--clr-primary);
+    }
+
+    .collapse-toggle:focus,
+    .collapse-toggle:hover {
+        background: var(--clr-secondary-dark);
+    }
+}

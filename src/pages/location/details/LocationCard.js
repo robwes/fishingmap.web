@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { SecureLink } from 'react-secure-link';
 import Collapse from '../../../components/ui/collapse/Collapse';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
-import Article from '../../../components/ui/article/Article';
 import LocationSpeciesItem from '../../../components/ui/location/LocationSpeciesItem';
 import LocationPermitItem from './LocationPermitItem';
+import CollapsibleArticlePrimary from '../../../components/ui/collapse/CollapsibleArticlePrimary';
 import lake from '../../../assets/images/lake.png';
 import './LocationCard.scss';
 
@@ -33,9 +33,10 @@ function LocationCard({ location }) {
 
     const getSpecies = () => {
         return location.species.map(s => (
-            <Link to={`/species/${s.id}`}>
+            <Link
+                key={s.id}
+                to={`/species/${s.id}`}>
                 <LocationSpeciesItem
-                    key={s.id}
                     species={s}
                 />
             </Link>
@@ -45,11 +46,11 @@ function LocationCard({ location }) {
     const getPermits = () => {
         return location.permits.map(p => (
             <SecureLink
+                key={p.id}
                 href={p.url}
                 target="_blank"
                 rel="noreferrer">
                 <LocationPermitItem
-                    key={p.id}
                     permit={p}
                 />
             </SecureLink>
@@ -76,7 +77,7 @@ function LocationCard({ location }) {
                     </div>
                 </Collapse>
             </div>
-            <Article
+            <CollapsibleArticlePrimary
                 className="location-card-footer"
                 title="Rules"
                 text={location?.rules}

@@ -38,7 +38,7 @@ function Collapse({ children, className, label, open = false }) {
                 <button className="collapse-toggle" onClick={toggleOpen}>
                     <i className={getButtonIcon()}></i>
                 </button>
-                <label className="label-collapse">{label}</label>
+                <label className="collapse-label">{label}</label>
             </div>
             <div className="collapse-body">
                 {children}
