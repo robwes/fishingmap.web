@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { speciesService } from '../../../services/speciesService';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
+import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import fish from '../../../assets/images/fish.png';
 import './SpeciesDetails.scss';
 
@@ -9,6 +10,7 @@ function SpeciesDetails() {
 
     const { id } = useParams();
     const [species, setSpecies] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -16,6 +18,7 @@ function SpeciesDetails() {
             if (s) {
                 setSpecies(s);
             }
+            setIsLoading(false);
         })();
     }, [id])
 
@@ -41,7 +44,9 @@ function SpeciesDetails() {
 
     return (
         <div className="species-details page">
-            {species ? (
+            {isLoading && <FloatingSpinner />}
+
+            {species && (
                 <div className="container center-content">
                     <div className="species-details-card">
                         <ImageCarousell images={getImages()} className="species-details-image" />
@@ -51,7 +56,7 @@ function SpeciesDetails() {
                         </div>
                     </div>
                 </div>
-            ) : null}
+            )}
         </div>
     )
 }

@@ -4,12 +4,14 @@ import LocationCard from './LocationCard';
 import { locationService } from '../../../services/locationService';
 import LocationMap from './LocationMap';
 import Article from '../../../components/ui/article/Article';
+import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import './LocationDetails.scss';
 
 function LocationDetails() {
 
     const { id } = useParams();
     const [location, setLocation] = useState();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -17,12 +19,14 @@ function LocationDetails() {
             if (l) {
                 setLocation(l);
             }
+            setIsLoading(false);
         })();
     }, [id]);
 
     return (
-        location ? (
-            <div className="location-details page">
+        <div className="location-details page">
+            {isLoading && <FloatingSpinner />}
+            {location && <>
                 <div className='left'>
                     <LocationCard location={location} />
                 </div>
@@ -37,8 +41,8 @@ function LocationDetails() {
                         text={location.description}
                     />
                 </div>
-            </div>
-        ) : null
+            </>}
+        </div>
     )
 }
 

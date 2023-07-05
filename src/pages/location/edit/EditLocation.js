@@ -4,6 +4,7 @@ import { locationService } from '../../../services/locationService';
 import { speciesService } from '../../../services/speciesService';
 import { permitService } from '../../../services/permitService';
 import LocationForm from '../../../components/ui/location/LocationForm';
+import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import './EditLocation.scss';
 
 function EditLocation() {
@@ -12,6 +13,7 @@ function EditLocation() {
     const [location, setLocation] = useState(null);
     const [species, setSpecies] = useState([]);
     const [permits, setPermits] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -26,6 +28,8 @@ function EditLocation() {
             if (s.length > 0) {
                 setSpecies(s);
             }
+
+            setIsLoading(false);
         })();
     }, [id])
 
@@ -40,7 +44,7 @@ function EditLocation() {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         var updatedLocation = await locationService.updateLocation(
-            location.id, 
+            location.id,
             {
                 id: location.id,
                 ...values
@@ -78,18 +82,21 @@ function EditLocation() {
     }
 
     return (
-        location ? (
             <div className="edit-location page">
-                <LocationForm
-                    title="Edit location"
-                    location={location}
-                    speciesOptions={getSpeciesOptions()}
-                    permitOptions={getPermitOptions()}
-                    mapOptions={getMapOptions()}
-                    onSubmit={handleSubmit}
-                    onDelete={handleDelete}
-                />
-            </div>) : null
+                {isLoading && <FloatingSpinner />}
+
+                {location && (
+                    <LocationForm
+                        title="Edit location"
+                        location={location}
+                        speciesOptions={getSpeciesOptions()}
+                        permitOptions={getPermitOptions()}
+                        mapOptions={getMapOptions()}
+                        onSubmit={handleSubmit}
+                        onDelete={handleDelete}
+                    />
+                )}
+            </div>
     )
 }
 

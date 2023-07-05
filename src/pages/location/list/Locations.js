@@ -3,6 +3,7 @@ import LocationListItem from './LocationListItem';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
 import LocationFilter from '../../../components/ui/location/LocationFilter';
+import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import { locationService } from '../../../services/locationService';
 import { useCurrentUser } from '../../../context/CurrentUserContext';
 import './Locations.scss';
@@ -11,6 +12,7 @@ function Locations() {
 
     const [locations, setLocations] = useState([]);
     const [pagedLocations, setPagedLocations] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     // eslint-disable-next-line
     const [currentUser, setCurrentUser, currentLocation] = useCurrentUser();
@@ -24,6 +26,7 @@ function Locations() {
             if (l) {
                 setLocations(l);
             }
+            setIsLoading(false);
         })();
     }, [])
 
@@ -54,6 +57,8 @@ function Locations() {
 
     return (
         <div className="container page">
+            {isLoading && <FloatingSpinner />}
+
             <div className="locations">
                 <div className="left">
                     <SlideInPanel>

@@ -4,12 +4,15 @@ import Pagination from '../../../components/ui/pagination/Pagination';
 import SpeciesListItem from './SpeciesListItem';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
 import SpeciesFilter from '../../../components/ui/species/SpeciesFilter';
+import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import './Species.scss';
 
 function Species() {
 
     const [species, setSpecies] = useState([]);
     const [pagedSpecies, setPagedSpecies] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
     const pageLimit = 8;
     const pageNeighbours = 1;
 
@@ -19,6 +22,7 @@ function Species() {
             if (s) {
                 setSpecies(s);
             }
+            setIsLoading(false);
         })();
     }, []);
 
@@ -44,6 +48,8 @@ function Species() {
 
     return (
         <div className="species page">
+            {isLoading && <FloatingSpinner />}
+
             <div className="container">
                 <h1 className="page-title">Species</h1>
                 <div className="species-search">
@@ -51,11 +57,13 @@ function Species() {
                         <SpeciesFilter onSubmit={handleSearch} />
                     </SlideInPanel>
                 </div>
+
                 <div className="item-grid">
                     {pagedSpecies.map(s => (
                         <SpeciesListItem key={s.id} species={s} />
                     ))}
                 </div>
+
                 <Pagination totalRecords={species.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
             </div>
         </div>

@@ -6,12 +6,13 @@ import Map from '../../components/ui/map/Map';
 import PositionMarker from '../../components/ui/map/PositionMarker';
 import LocationFilter from '../../components/ui/location/LocationFilter';
 import SlideInPanel from '../../components/ui/slideInPanel/SlideInPanel';
+import FloatingSpinner from '../../components/ui/spinner/FloatingSpinner';
 import { useCurrentUser } from '../../context/CurrentUserContext';
 import './FishingMap.scss';
 
 const startCenter = {
-    lat: 60.2,
-    lng: 23.5
+    lat: 60.314063,
+    lng: 24.881883
 };
 
 const searchCircleOptions = {
@@ -29,6 +30,7 @@ function FishingMap() {
     const [locations, setLocations] = useState([]);
     const [searchRadius, setSearchRadius] = useState(0);
     const [searchCenter, setSearchCenter] = useState(startCenter);
+    const [isLoading, setIsLoading] = useState(true);
     const circleRef = useRef();
 
     // eslint-disable-next-line
@@ -40,6 +42,7 @@ function FishingMap() {
             if (l) {
                 setLocations(l);
             }
+            setIsLoading(false);
         })();
     }, []);
 
@@ -83,12 +86,15 @@ function FishingMap() {
 
     return (
         <div className="fishing-map page">
+            {isLoading && <FloatingSpinner />}
+
             <SlideInPanel isFloating={true}>
                 <LocationFilter
                     onSubmit={handleSearch}
                     onReset={handleReset}
                     onDistanceChange={handleDistanceChange} />
             </SlideInPanel>
+
             <Map
                 center={startCenter}
                 zoom={8}

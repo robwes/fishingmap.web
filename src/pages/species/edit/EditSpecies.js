@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { speciesService } from '../../../services/speciesService';
 import SpeciesForm from '../../../components/ui/species/SpeciesForm';
+import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import './EditSpecies.scss';
 
 function EditSpecies() {
 
     const { id } = useParams();
     const [species, setSpecies] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,6 +19,7 @@ function EditSpecies() {
             if (s) {
                 setSpecies(s);
             }
+            setIsLoading(false);
         })();
         // eslint-disable-next-line
     }, [])
@@ -41,16 +45,20 @@ function EditSpecies() {
     }
 
     return (
-        species ? (<div className="edit-species page">
-            <div className="container edit-species-container">
-                <h1 className="page-title">Edit species</h1>
-                <SpeciesForm
-                    species={species}
-                    onSubmit={handleSubmit}
-                    onDelete={handleDelete}
-                />
-            </div>
-        </div>) : null
+        <div className="edit-species page">
+            {isLoading && <FloatingSpinner />}
+
+            {species && (
+                <div className="container edit-species-container">
+                    <h1 className="page-title">Edit species</h1>
+                    <SpeciesForm
+                        species={species}
+                        onSubmit={handleSubmit}
+                        onDelete={handleDelete}
+                    />
+                </div>
+            )}
+        </div>
     )
 }
 
