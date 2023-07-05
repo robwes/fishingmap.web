@@ -13,8 +13,11 @@ function LandingPage() {
                         fishing spots in<br />
                         Uusimaa
                     </h1>
-                    <p className='landing-subtitle'>This fishing map helps you find<br />
-                        the best locations easily</p>
+                    <p className='landing-subtitle'>
+                        This fishing map makes fishing in Uusimaa simple and easy.
+                        Find all the information that you need for each location.
+                        Fish species, permits, rules and restrictions.
+                    </p>
                     <CallToAction to="/map">Let's go fishing!</CallToAction>
                 </div>
                 <div className='right'>
