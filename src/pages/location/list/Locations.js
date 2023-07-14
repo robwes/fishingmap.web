@@ -31,11 +31,18 @@ function Locations() {
     }, [])
 
     useEffect(() => {
-        const pagedLocations = locations.slice(0, pageLimit);
-        setPagedLocations(pagedLocations);
+        if (locations?.length > 0) {
+            const pagedLocations = locations.slice(0, pageLimit);
+            setPagedLocations(pagedLocations);
+        }
+        else {
+            setPagedLocations([]);
+        }
+
     }, [locations])
 
     const handleSearch = async ({ search, species, distance }, { setSubmitting }) => {
+        debugger;
         const matchingLocations = await locationService.getLocations(search, species, distance, currentLocation);
         setLocations(matchingLocations);
     }

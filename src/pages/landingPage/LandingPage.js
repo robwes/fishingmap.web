@@ -14,7 +14,7 @@ function LandingPage() {
                         Uusimaa
                     </h1>
                     <p className='landing-subtitle'>
-                        This fishing map makes fishing in Uusimaa simple and easy.
+                        This fishing map makes fishing in Uusimaa <b>simple and easy</b>.
                         Find all the information that you need for each location.
                         Fish species, permits, rules and restrictions.
                     </p>

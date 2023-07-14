@@ -23,7 +23,14 @@ const searchCircleOptions = {
     fillOpacity: 0.35,
     radius: 0,
     draggable: true
-}
+};
+
+const clustererOptions = {
+    gridSize: 50,
+    averageCenter: true,
+    minimumClusterSize: 8,
+    ignoreHidden: true
+};
 
 function FishingMap() {
     const [map, setMap] = useState();
@@ -100,15 +107,20 @@ function FishingMap() {
                 zoom={8}
                 onLoad={handleMapLoad}
                 onUnmount={handleMapUnMount}>
-                <PositionMarker
-                    position={currentLocation}
-                />
+                {currentLocation && (
+                    <PositionMarker
+                        position={{
+                            lat: currentLocation.latitude,
+                            lng: currentLocation.longitude
+                        }}
+                    />
+                )}
                 <Circle
                     ref={circleRef}
                     radius={searchRadius}
                     options={searchCircleOptions}
                     center={searchCenter} />
-                <MarkerClusterer>
+                <MarkerClusterer options={clustererOptions}>
                     {(clusterer) =>
                         locations.map((location) => (
                             <LocationMarker key={location.id}
