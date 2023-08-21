@@ -15,7 +15,7 @@ const formValidation = Yup.object({
         .max(50, "Max 50 characters")
         .required("Required"),
     description: Yup.string()
-        .max(3000, "Max 3000 characters")
+        .max(5000, "Max 5000 characters")
         .nullable()
 });
 

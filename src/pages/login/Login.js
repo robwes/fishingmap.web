@@ -22,7 +22,7 @@ function Login() {
     }
 
     return (
-        <div className='login'>
+        <div className='login page'>
             <LoginForm
                 onSubmit={handleSubmit}
             />

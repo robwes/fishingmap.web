@@ -44,7 +44,6 @@
 @media(min-width: 900px) {
 
     .slide-in-panel {
-
         &.default {
             position: relative;
             transition: none;
@@ -59,7 +58,7 @@
             z-index: 99;
             transition: none;
             transform: translateX(0);
-            padding: 3em 1.5em 2em;
+            padding: 3em 1.5em 1.5em;
             box-shadow: 0 0 10px rgba(0, 0, 0, .3);
             border-radius: 8px;
             width: 395px;
@@ -70,3 +69,14 @@
         }
     }
 }
+
+@media(min-width: 1600px) {
+    .slide-in-panel {
+        &.floating {
+            top: 3em;
+            left: 2em;
+            padding: 3.25em 2.25em 1.5em;
+            width: 455px;
+        }
+    }
+} 

@@ -42,7 +42,6 @@ function Locations() {
     }, [locations])
 
     const handleSearch = async ({ search, species, distance }, { setSubmitting }) => {
-        debugger;
         const matchingLocations = await locationService.getLocations(search, species, distance, currentLocation);
         setLocations(matchingLocations);
     }

@@ -5,7 +5,7 @@ import './LandingPage.scss';
 
 function LandingPage() {
     return (
-        <div className='landing-page'>
+        <div className='landing-page page'>
             <div className='landing-container'>
                 <div className='left'>
                     <h1 className='landing-title'>
@@ -14,7 +14,7 @@ function LandingPage() {
                         Uusimaa
                     </h1>
                     <p className='landing-subtitle'>
-                        This fishing map makes fishing in Uusimaa <b>simple and easy</b>.
+                        This fishing map makes <b>fishing</b> in Uusimaa <b>simple and easy</b>.
                         Find all the information that you need for each location.
                         Fish species, permits, rules and restrictions.
                     </p>
