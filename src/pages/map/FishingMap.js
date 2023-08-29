@@ -119,7 +119,8 @@ function FishingMap() {
                     ref={circleRef}
                     radius={searchRadius}
                     options={searchCircleOptions}
-                    center={searchCenter} />
+                    center={searchCenter}
+                />
                 <MarkerClusterer options={clustererOptions}>
                     {(clusterer) =>
                         locations.map((location) => (

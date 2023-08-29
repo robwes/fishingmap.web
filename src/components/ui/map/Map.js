@@ -39,9 +39,9 @@ function Map({children, center, zoom, mapStyle, onLoad, onUnmount, ...props}) {
                     position: 3 // google.maps.ControlPosition.TOP_RIGHT
                 },
                 zoomControlOptions: {
-                    position: 3 //google.maps.ControlPosition.TOP_RIGHT
+                    position: 9 //google.maps.ControlPosition.RIGHT_BOTTOM
                 },
-                gestureHandling: "cooperative"
+                gestureHandling: "greedy"      
             }}
             {...props}
         >
