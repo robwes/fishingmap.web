@@ -1,0 +1,14 @@
+.card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-size: 1rem;
+    padding: .75em 1.5em 1em;
+    overflow: hidden;
+}
+
+@media(min-width: 600px) {
+    .card-body {
+        font-size: .875rem;
+    }
+}

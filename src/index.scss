@@ -35,7 +35,9 @@ body {
 
 p {
 	margin: 0;
-	padding: .5em .75em;
+	padding: 0;
+	letter-spacing: .5px;
+	overflow: hidden;
 }
 
 img {
@@ -83,7 +85,8 @@ ul {
 /* Utility */
 
 .page {
-	min-height: calc(100vh - (var(--header-height) + var(--footer-height)));
+	//min-height: calc(100vh - (var(--header-height) + var(--footer-height)));
+	min-height: 70vh;
 }
 
 .pull-right {

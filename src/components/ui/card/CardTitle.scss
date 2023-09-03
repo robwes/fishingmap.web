@@ -1,0 +1,13 @@
+.card-title {
+    font-size: 1.625rem;
+    text-align: center;
+    margin: 0 0 .5em 0;
+    padding-bottom: .5em;
+    border-bottom: 1px solid var(--clr-primary);
+}
+
+@media(min-width: 600px) {
+    .card-title {
+        font-size: 1.5rem; 
+    }
+}

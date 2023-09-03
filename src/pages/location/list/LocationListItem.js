@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LocationSpeciesItem from '../../../components/ui/location/LocationSpeciesItem';
+import CardImage from '../../../components/ui/card/CardImage';
+import CardBody from '../../../components/ui/card/CardBody';
+import CardTitle from '../../../components/ui/card/CardTitle';
+import InlineCard from '../../../components/ui/card/InlineCard';
 import lake from '../../../assets/images/lake.png';
 import './LocationListItem.scss';
 
@@ -17,27 +21,21 @@ function LocationListItem({ location }) {
 
     return (
         <Link to={`/locations/${id}`}>
-            <div className="location-list-item">
-                <div className="location-list-item-image-container">
-                    <img src={getImagesSrc()} alt="The lake" className="location-list-item-image" />
-                </div>
-                <div className="location-list-item-main">
-                    <h3 className="location-list-item-title">
-                        {name}
-                    </h3>
-                    <p className="location-list-item-text">{description}</p>
-                    <div className="location-list-item-footer">
-                        <div className='location-species-list'>
-                            {species.map(s => (
-                                <LocationSpeciesItem
-                                    key={s.id}
-                                    species={s}
-                                />
-                            ))}
-                        </div>
+            <InlineCard className="location-list-item">
+                <CardImage src={getImagesSrc()} alt={name} />
+                <CardBody>
+                    <CardTitle>{name}</CardTitle>
+                    <p>{description}</p>
+                    <div className='location-species-list'>
+                        {species.map(s => (
+                            <LocationSpeciesItem
+                                key={s.id}
+                                species={s}
+                            />
+                        ))}
                     </div>
-                </div>
-            </div>
+                </CardBody>
+            </InlineCard>
         </Link>
     )
 }

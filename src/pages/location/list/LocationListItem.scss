@@ -1,75 +1,12 @@
 .location-list-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    border-radius: 5px;
-    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.15);
-    background: var(--clr-bg-light);
-
-    .location-list-item-image {
-        height: 190px;
-        border-radius: 5px 5px 0 0;
-        object-fit: cover;
-        width: 100%;
-    }
-
-    .location-list-item-main {
-        display: flex;
-        flex-direction: column;
-        font-size: 1rem;
-        padding: .75em 1.5em 1em;
-        overflow: hidden;
-    }
-
-    .location-list-item-title {
-        font-size: 1.625rem;
-        text-align: center;
-        margin: 0 0 .5em 0;
-        padding-bottom: .5em;
-        border-bottom: 1px solid var(--clr-primary);
-    }
-
-    .location-list-item-text {
-        margin: 0 0 1em;
-        padding: 0;
-        letter-spacing: .5px;
-        height: 100%;
+    .card-body p {
         max-height: 90px;
-        overflow: hidden;
     }
 
     .location-species-list {
+        margin-top: 1em;
         display: flex;
         flex-wrap: wrap;
         gap: 1em;
-    }
-}
-
-@media(min-width: 600px) {
-    .location-list-item {
-        flex-direction: row;
-        justify-content: space-between;
-        height: 192px;
-
-        .location-list-item-image-container {
-            width: 30%;
-        }
-
-        .location-list-item-image {
-            height: 100%;
-            min-height: 150px;
-            border-radius: 5px 0 0 5px;
-            object-fit: cover;
-        }
-
-        .location-list-item-main {
-            width: 70%;
-            font-size: .875rem;
-        }
-
-        .location-list-item-title {
-            margin-top: .5em;
-            font-size: 1.5rem;
-        }
     }
 }

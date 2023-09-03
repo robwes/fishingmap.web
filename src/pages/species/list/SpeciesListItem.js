@@ -1,5 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Card from '../../../components/ui/card/Card';
+import CardImage from '../../../components/ui/card/CardImage';
+import CardTitle from '../../../components/ui/card/CardTitle';
+import CardBody from '../../../components/ui/card/CardBody';
 import fish from '../../../assets/images/fish.png';
 import './SpeciesListItem.scss';
 
@@ -16,15 +20,13 @@ function SpeciesListItem({ species }) {
 
     return (
         <Link to={`/species/${id}`}>
-            <div className="species-list-item">
-                <div>
-                    <img src={getImagesSrc()} alt="The fish" className="species-list-item-image" />
-                </div>
-                <div className="species-list-item-main">
-                    <h3 className="species-list-item-title">{name}</h3>
-                    <p className="species-list-item-text">{description}</p>
-                </div>
-            </div>
+            <Card className="species-list-item">
+                <CardImage src={getImagesSrc()} alt={name} />
+                <CardBody>
+                    <CardTitle>{name}</CardTitle>
+                    <p>{description}</p>
+                </CardBody>
+            </Card>
         </Link>
     )
 }
