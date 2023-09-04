@@ -9,7 +9,15 @@ const defaultMapStyle = {
 
 const libraries = ["drawing"];
 
-function Map({children, center, zoom, mapStyle, onLoad, onUnmount, ...props}) {
+function Map({
+    children, 
+    center, 
+    zoom, 
+    mapStyle, 
+    mapTypeId = "roadmap",
+    onLoad, 
+    onUnmount, 
+    ...props}) {
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -41,6 +49,7 @@ function Map({children, center, zoom, mapStyle, onLoad, onUnmount, ...props}) {
                 zoomControlOptions: {
                     position: 9 //google.maps.ControlPosition.RIGHT_BOTTOM
                 },
+                mapTypeId: mapTypeId,
                 gestureHandling: "greedy"      
             }}
             {...props}

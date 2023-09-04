@@ -11,8 +11,8 @@
 	--radius-input: 8px;
 	--padding-input-x: 1em;
 	--padding-input-y: .8em;
-	--header-height: 5.8625rem;
-	--footer-height: 7.7rem;
+	--header-height: 93.8px;
+	--footer-height: 87.2px;
 }
 
 *,
@@ -85,8 +85,7 @@ ul {
 /* Utility */
 
 .page {
-	//min-height: calc(100vh - (var(--header-height) + var(--footer-height)));
-	min-height: 70vh;
+	min-height: calc(100vh - (var(--header-height) + var(--footer-height)));
 }
 
 .pull-right {

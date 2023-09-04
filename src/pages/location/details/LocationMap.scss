@@ -7,7 +7,10 @@
 	.location-directions {
 		position: absolute;
 		font-size: 1rem;
-		left: 1em;
-		bottom: 1em;
+		left: 10px;
+		bottom: 24px;
+		color: var(--clr-primary-dark);
+		border: 1px solid;
+		box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
 	}
 }

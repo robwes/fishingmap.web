@@ -3,9 +3,9 @@ import { Data } from '@react-google-maps/api';
 import LinkButtonPrimaryOutline from '../../../components/ui/buttons/LinkButtonPrimaryOutline';
 import Map from '../../../components/ui/map/Map';
 import geoUtils from '../../../utils/geoUtils';
-import './LocationMap.scss';
 import { useCurrentUser } from '../../../context/CurrentUserContext';
 import PositionMarker from '../../../components/ui/map/PositionMarker';
+import './LocationMap.scss';
 
 const mapStyle = {
     width: '100%',
@@ -19,9 +19,9 @@ function LocationMap({ location }) {
 
     const handleDataLoad = data => {
         data.setStyle({
-            fillColor: "#4285f4",
-            strokeColor: "#4285f4",
-            strokeWeight: 5
+            fillOpacity: 0.0,
+            strokeColor: "#3972ce",
+            strokeWeight: 4
         });
         const geometry = geoUtils.multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry));
         data.addGeoJson(geometry);
