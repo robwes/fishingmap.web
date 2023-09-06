@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import Form from "../form/Form";
+import { Formik, Form } from 'formik';
 import MapInput from '../form/MapInput';
 import ButtonBar from '../buttons/ButtonBar';
 import ButtonSecondary from '../buttons/ButtonSecondary';
@@ -82,48 +82,82 @@ function LocationForm({ location, speciesOptions, permitOptions, mapOptions, onS
         await onDelete();
     }
 
-    const getFormButtons = () => {
+    const getFormButtons = (isDisabled) => {
         if (location) {
             return <>
-                <ButtonSecondary onClick={onDeleteClick}>Delete</ButtonSecondary>
-                <ButtonSuccess type="submit">Save</ButtonSuccess>
+                <ButtonSecondary onClick={onDeleteClick} disabled={isDisabled}>Delete</ButtonSecondary>
+                <ButtonSuccess type="submit" disabled={isDisabled}>Save</ButtonSuccess>
             </>;
         }
 
-        return <ButtonSuccess type="submit">Add</ButtonSuccess>;
+        return <ButtonSuccess type="submit" disabled={isDisabled}>Add</ButtonSuccess>;
     }
 
     return (
-        <Form
+        <Formik
             initialValues={getInitialValues()}
             validationSchema={formValidation}
-            onSubmit={onFormSubmitted}
-        >
-            <div className="location-form">
-                <div className='left'>
-                    <LocationFormCard
-                        speciesOptions={speciesOptions}
-                        permitOptions={permitOptions}
-                    />
-                </div>
-                <div className='right'>
-                    <MapInput
-                        className="location-form-position"
-                        name="geometry"
-                        options={mapOptions}
-                    />
-                    <ArticleInput
-                        className='location-form-description'
-                        label='Information'
-                        name='description'
-                        rows={15}
-                    />
-                    <ButtonBar>
-                        {getFormButtons()}
-                    </ButtonBar>
-                </div>
-            </div>
-        </Form>
+            onSubmit={onFormSubmitted}>
+            {({ isSubmitting }) => (
+                <Form className="location-form">
+                    <div className='left'>
+                        <LocationFormCard
+                            speciesOptions={speciesOptions}
+                            permitOptions={permitOptions}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+                    <div className='right'>
+                        <MapInput
+                            className="location-form-position"
+                            name="geometry"
+                            options={mapOptions}
+                            disabled={isSubmitting}
+                        />
+                        <ArticleInput
+                            className='location-form-description'
+                            label='Information'
+                            name='description'
+                            rows={15}
+                            disabled={isSubmitting}
+                        />
+                        <ButtonBar>
+                            {getFormButtons(isSubmitting)}
+                        </ButtonBar>
+                    </div>
+                </Form>
+            )}
+        </Formik>
+        // <Form
+        //     initialValues={getInitialValues()}
+        //     validationSchema={formValidation}
+        //     onSubmit={onFormSubmitted}
+        // >
+        //     <div className="location-form">
+        //         <div className='left'>
+        //             <LocationFormCard
+        //                 speciesOptions={speciesOptions}
+        //                 permitOptions={permitOptions}
+        //             />
+        //         </div>
+        //         <div className='right'>
+        //             <MapInput
+        //                 className="location-form-position"
+        //                 name="geometry"
+        //                 options={mapOptions}
+        //             />
+        //             <ArticleInput
+        //                 className='location-form-description'
+        //                 label='Information'
+        //                 name='description'
+        //                 rows={15}
+        //             />
+        //             <ButtonBar>
+        //                 {getFormButtons()}
+        //             </ButtonBar>
+        //         </div>
+        //     </div>
+        // </Form>
     )
 }
 

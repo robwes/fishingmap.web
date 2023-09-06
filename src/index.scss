@@ -1,12 +1,14 @@
 :root {
 	--clr-primary: #4285f4;
 	--clr-primary-dark: #3972ce;
+	--clr-primary-disabled: #a3c2fa;
 	--clr-secondary: #FAFAFA;
 	--clr-secondary-dark: #f1f1f1;
 	--clr-secondary-text: #505050;
 	--clr-body: #1c1e21;
 	--clr-bg-body: #f0f2f5;
 	--clr-input-border: #9e9e9e;
+	--clr-input-disabled: #f2f2f2;
 	--clr-bg-light: #fff;
 	--radius-input: 8px;
 	--padding-input-x: 1em;
@@ -174,6 +176,13 @@ ul {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    width: 100%;
 }
 
 @media(min-width: 600px) {

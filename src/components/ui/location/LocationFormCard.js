@@ -5,7 +5,7 @@ import DragAndDropImage from '../form/DragAndDropImage';
 import ArticleInput from '../form/ArticleInput';
 import './LocationFormCard.scss';
 
-function LocationFormCard({ speciesOptions, permitOptions }) {
+function LocationFormCard({ speciesOptions, permitOptions, disabled = false }) {
 
     return (
         <div className="location-form-card">
@@ -14,22 +14,27 @@ function LocationFormCard({ speciesOptions, permitOptions }) {
                 name="images"
                 maxNrOfFiles={5}
                 className="location-form-card-image"
+                disabled={disabled}
+
             />
             <div className="location-form-card-body">
                 <Input
                     label="Name"
                     name="name"
                     type="text"
+                    disabled={disabled}
                 />
                 <MultiSelect
                     label="Species"
                     name="species"
                     options={speciesOptions}
+                    disabled={disabled}
                 />
                 <MultiSelect
                     label="Permits"
                     name="permits"
                     options={permitOptions}
+                    disabled={disabled}
                 />
             </div>
             <ArticleInput
@@ -37,6 +42,7 @@ function LocationFormCard({ speciesOptions, permitOptions }) {
                 label='Rules'
                 name='rules'
                 rows={15}
+                disabled={disabled}
             />
         </div>
     )

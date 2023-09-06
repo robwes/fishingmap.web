@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import Form from '../form/Form';
+import { Formik, Form } from 'formik';
 import DragAndDropImage from '../form/DragAndDropImage';
 import Input from '../form/Input';
 import TextArea from '../form/TextArea';
@@ -26,7 +26,6 @@ function SpeciesForm({ species, onSubmit, onDelete }) {
     useEffect(() => {
         (async () => {
             if (species && species.images) {
-
                 const images = [];
 
                 for (let image of species.images) {
@@ -58,11 +57,11 @@ function SpeciesForm({ species, onSubmit, onDelete }) {
         await onDelete();
     }
 
-    const getFormButtons = () => {
+    const getFormButtons = (isDisabled) => {
         if (species) {
             return <>
-                <ButtonSecondary onClick={onDeleteClick}>Delete</ButtonSecondary>
-                <ButtonSuccess type="submit">Save</ButtonSuccess>
+                <ButtonSecondary onClick={onDeleteClick} disabled={isDisabled}>Delete</ButtonSecondary>
+                <ButtonSuccess type="submit" disabled={isDisabled}>Save</ButtonSuccess>
             </>;
         }
 
@@ -70,36 +69,40 @@ function SpeciesForm({ species, onSubmit, onDelete }) {
     }
 
     return (
-        <Form
+        <Formik
             initialValues={getInitialValues()}
             validationSchema={formValidation}
-            onSubmit={onSubmit}
-        >
-            <div className="species-form">
-                <DragAndDropImage
-                    text="Add some images"
-                    className="species-form-image"
-                    name="images"
-                    maxNrOfFiles={4}
-                />
-                <div className="right">
-                    <Input
-                        label="Name"
-                        name="name"
-                        type="text"
+            onSubmit={onSubmit}>
+            {({ isSubmitting }) => (
+                <Form className='species-form'>
+                    <DragAndDropImage
+                        text="Add some images"
+                        className="species-form-image"
+                        name="images"
+                        maxNrOfFiles={4}
+                        disabled={isSubmitting}
                     />
-                    <TextArea
-                        label="Description"
-                        name="description"
-                        type="textarea"
-                        rows="10"
-                    />
-                    <ButtonBar>
-                        {getFormButtons()}
-                    </ButtonBar>
-                </div>
-            </div>
-        </Form>
+                    <div className="right">
+                        <Input
+                            label="Name"
+                            name="name"
+                            type="text"
+                            disabled={isSubmitting}
+                        />
+                        <TextArea
+                            label="Description"
+                            name="description"
+                            type="textarea"
+                            rows="10"
+                            disabled={isSubmitting}
+                        />
+                        <ButtonBar>
+                            {getFormButtons(isSubmitting)}
+                        </ButtonBar>
+                    </div>
+                </Form>
+            )}
+        </Formik>
     )
 }
 

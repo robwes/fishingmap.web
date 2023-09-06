@@ -42,7 +42,7 @@ function EditPermit() {
     const handleDelete = async ($event) => {
         $event.preventDefault();
         if (window.confirm(`Are you sure you want to delete ${permit.name}?`)) {
-            await permitService.deleteSpecies(permit.id);
+            await permitService.deletePermit(permit.id);
             navigate(`/permits`);
         }
     }

@@ -1,16 +1,20 @@
 import React from 'react';
-import Form from "../form/Form";
 import SearchBar from '../form/SearchBar';
+import { Formik, Form } from 'formik';
 
 function SpeciesFilter({ onSubmit }) {
     return (
-        <Form
+        <Formik
             onSubmit={onSubmit}
             initialValues={{
                 search: ""
             }}>
-            <SearchBar name="search" />
-        </Form>
+            {({ isSubmitting }) => (
+                <Form>
+                    <SearchBar name="search" disabled={isSubmitting} />
+                </Form>
+            )}
+        </Formik>
     );
 }
 

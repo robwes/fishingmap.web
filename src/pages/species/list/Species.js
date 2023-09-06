@@ -3,8 +3,8 @@ import { speciesService } from '../../../services/speciesService';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import SpeciesListItem from './SpeciesListItem';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
-import SpeciesFilter from '../../../components/ui/species/SpeciesFilter';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
+import SearchFilter from '../../../components/ui/searchFilter/SearchFilter';
 import './Species.scss';
 
 function Species() {
@@ -37,6 +37,7 @@ function Species() {
         const pagedSpecies = species.slice(offset, offset + pageLimit);
 
         setPagedSpecies(pagedSpecies);
+        window.scrollTo(0, 0);
     };
 
     const handleSearch = async ({search}) => {
@@ -54,7 +55,7 @@ function Species() {
                 <h1 className="page-title">Species</h1>
                 <div className="species-search">
                     <SlideInPanel>
-                        <SpeciesFilter onSubmit={handleSearch} />
+                        <SearchFilter onSubmit={handleSearch} />
                     </SlideInPanel>
                 </div>
 

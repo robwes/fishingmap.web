@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Form from "../form/Form";
 import SearchBar from '../form/SearchBar';
 import MultiSelect from '../form/MultiSelect';
 import FormRange from '../form/Range';
@@ -7,6 +6,7 @@ import ButtonPrimary from '../buttons/ButtonPrimary';
 import ButtonSecondary from '../buttons/ButtonSecondary';
 import ButtonBar from '../buttons/ButtonBar';
 import { speciesService } from '../../../services/speciesService';
+import { Formik, Form } from 'formik';
 
 function LocationFilter({ onSubmit, onReset, onDistanceChange }) {
 
@@ -41,41 +41,46 @@ function LocationFilter({ onSubmit, onReset, onDistanceChange }) {
 
     return (
         <div className="filter-form">
-            <Form
+            <Formik
                 initialValues={{
                     search: "",
                     distance: "0",
                     species: []
                 }}
-                onSubmit={formSubmitted}
-            >
-                <SearchBar
-                    name="search"
-                />
+                onSubmit={formSubmitted}>
+                {({ isSubmitting }) => (
+                    <Form>
+                        <SearchBar
+                            name="search"
+                            disabled={isSubmitting}
+                        />
 
-                <MultiSelect
-                    label="Species"
-                    name="species"
-                    options={speciesOptions}
-                />
+                        <MultiSelect
+                            label="Species"
+                            name="species"
+                            options={speciesOptions}
+                            disabled={isSubmitting}
+                        />
 
-                <FormRange
-                    label="Distance (km)"
-                    name="distance"
-                    unit="km"
-                    onChange={onDistanceChange}
-                />
+                        <FormRange
+                            label="Distance (km)"
+                            name="distance"
+                            unit="km"
+                            onChange={onDistanceChange}
+                            disabled={isSubmitting}
+                        />
 
-                <ButtonBar>
-                    <ButtonSecondary onClick={onReset} type="reset">
-                        <i className="fas fa-times"></i>&nbsp;Clear
-                    </ButtonSecondary>
-                    <ButtonPrimary type="submit">
-                        <i className="fas fa-search"></i>&nbsp;Search
-                    </ButtonPrimary>
-                </ButtonBar>
-
-            </Form>
+                        <ButtonBar>
+                            <ButtonSecondary onClick={onReset} type="reset" disabled={isSubmitting}>
+                                <i className="fas fa-times"></i>&nbsp;Clear
+                            </ButtonSecondary>
+                            <ButtonPrimary type="submit" disabled={isSubmitting}>
+                                <i className="fas fa-search"></i>&nbsp;Search
+                            </ButtonPrimary>
+                        </ButtonBar>
+                    </Form>
+                )}
+            </Formik>
         </div>
     )
 }

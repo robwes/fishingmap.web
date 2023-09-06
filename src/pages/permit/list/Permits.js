@@ -37,6 +37,7 @@ function Permits() {
         const pagedPermits = permits.slice(offset, offset + pageLimit);
 
         setPagedPermits(pagedPermits);
+        window.scrollTo(0, 0);
     };
 
     const handleSearch = async ({ search }) => {

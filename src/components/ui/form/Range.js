@@ -3,7 +3,16 @@ import { useField } from 'formik';
 import Label from './Label';
 import './Range.scss';
 
-function Range({ label, name, value = 0, min = 0, max = 100, zeroIsInfinity = true, onChange, ...props }) {
+function Range({ 
+    label, 
+    name, 
+    value = 0, 
+    min = 0, 
+    max = 100, 
+    zeroIsInfinity = true, 
+    disabled = false,
+    onChange, 
+    ...props }) {
 
     // eslint-disable-next-line
     const [field, meta, helpers] = useField({ name, type: "range"})
@@ -43,6 +52,7 @@ function Range({ label, name, value = 0, min = 0, max = 100, zeroIsInfinity = tr
                 type="range"
                 min={min}
                 max={max}
+                disabled={disabled}
                 {...field}
                 />
             <div className="range-value">

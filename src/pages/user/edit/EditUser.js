@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import Input from '../../../components/ui/form/Input';
-import Form from '../../../components/ui/form/Form';
+import { Formik, Form } from 'formik';
 import authService from '../../../services/authService';
 import userService from '../../../services/userService';
 import Collapse from '../../../components/ui/collapse/Collapse';
@@ -89,7 +89,43 @@ function EditUser() {
                     </div>
                     <div className='right'>
                         <div className='form-card user-info'>
-                            <Form
+                            <Formik
+                                initialValues={{
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    email: user.email
+                                }}
+                                validationSchema={userDetailsValidation}
+                                onSubmit={handleUserDetailsSubmit}>
+                                {({ isSubmitting }) => (
+                                    <Form>
+                                        <Input
+                                            label="First name"
+                                            name="firstName"
+                                            type="text"
+                                            disabled={isSubmitting}
+                                        />
+                                        <Input
+                                            label="Last name"
+                                            name="lastName"
+                                            type="text"
+                                            disabled={isSubmitting}
+                                        />
+                                        <Input
+                                            label="Email"
+                                            name="email"
+                                            type="email"
+                                            disabled={isSubmitting}
+                                        />
+                                        <ButtonSecondary
+                                            type="submit"
+                                            disabled={isSubmitting}>
+                                            Update
+                                        </ButtonSecondary>
+                                    </Form>
+                                )}
+                            </Formik>
+                            {/* <Form
                                 initialValues={{
                                     firstName: user.firstName,
                                     lastName: user.lastName,
@@ -114,12 +150,48 @@ function EditUser() {
                                     type="email"
                                 />
                                 <ButtonSecondary type="submit">Update</ButtonSecondary>
-                            </Form>
+                            </Form> */}
                         </div>
 
                         <div className='form-card user-password'>
                             <Collapse label="Change password">
-                                <Form
+                                <Formik
+                                    initialValues={{
+                                        currentPassword: "",
+                                        newPassword: "",
+                                        confirmPassword: ""
+                                    }}
+                                    validationSchema={userPasswordValidation}
+                                    onSubmit={handleUserPasswordSubmit}>
+                                    {({ isSubmitting }) => (
+                                        <Form>
+                                            <Input
+                                                label="Password"
+                                                name="currentPassword"
+                                                type="password"
+                                                disabled={isSubmitting}
+                                            />
+                                            <Input
+                                                label="New password"
+                                                name="newPassword"
+                                                type="password"
+                                                disabled={isSubmitting}
+                                            />
+                                            <Input
+                                                label="Confirm password"
+                                                name="confirmPassword"
+                                                type="password"
+                                                disabled={isSubmitting}
+                                            />
+                                            <ButtonSecondary
+                                                type="submit"
+                                                disabled={isSubmitting}>
+                                                Change password
+                                            </ButtonSecondary>
+                                        </Form>
+                                    )}
+                                </Formik>
+                                {/* <Form
                                     initialValues={{
                                         currentPassword: "",
                                         newPassword: "",
@@ -143,7 +215,7 @@ function EditUser() {
                                         type="password"
                                     />
                                     <ButtonSecondary type="submit">Change password</ButtonSecondary>
-                                </Form>
+                                </Form> */}
                             </Collapse>
                         </div>
                     </div>

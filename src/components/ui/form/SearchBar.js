@@ -2,9 +2,9 @@ import React from 'react';
 import { useField } from 'formik';
 import './SearchBar.scss';
 
-function SearchBar({className, ...props}) {
+function SearchBar({className, disabled = false, ...props}) {
     const [field] = useField({ type: "text", ...props });
-
+    
     const getCssClasses = () => {
         return "search-bar" + (className ? ` ${className}` : "");
     }
@@ -14,11 +14,13 @@ function SearchBar({className, ...props}) {
             <input
                 className="search-input"
                 placeholder="Search..."
+                disabled={disabled}
                 {...field}
                 {...props} />
             <button
                 type="submit"
-                className="search-submit">
+                className="search-submit"
+                disabled={disabled}>
                 <i className="fas fa-search"></i>
             </button>
         </div>

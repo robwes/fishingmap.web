@@ -49,7 +49,7 @@ const customStyles = {
     })
 }
 
-function MultiSelect({ label, options, ...props }) {
+function MultiSelect({ label, options, disabled = false, ...props }) {
     const [field, meta, helpers] = useField(props);
     const { setTouched, setValue } = helpers;
 
@@ -57,6 +57,7 @@ function MultiSelect({ label, options, ...props }) {
         <div className="multi-select">
             <Label htmlFor={props.id || props.name}>{label}</Label>
             <Select
+                isDisabled={disabled}
                 value={field.value}
                 styles={customStyles}
                 onChange={setValue}

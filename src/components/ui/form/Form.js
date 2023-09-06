@@ -1,29 +1,12 @@
 import React from 'react';
-import { Formik, Form as FormikForm } from 'formik';
+import { Form } from 'formik';
 import './Form.scss';
 
-function Form({children, className, initialValues, validationSchema, onSubmit}) {
-    
-    const getCssClasses = () => {
-        let cssClasses = "form";
-        if (className) {
-            cssClasses += ` ${className}`;
-        }
-
-        return cssClasses;
-    }
-    
+function Form({ children, ...props }) {
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-            enableReinitialize={true}
-        >
-            <FormikForm className={getCssClasses()}>
-                {children}
-            </FormikForm>
-        </Formik>
+        <Form {...props}>
+            {children}
+        </Form>
     )
 }
 

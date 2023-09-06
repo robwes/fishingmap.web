@@ -59,6 +59,7 @@ function Locations() {
         const currentLocations = locations.slice(offset, offset + pageLimit);
 
         setPagedLocations(currentLocations);
+        window.scrollTo(0, 0);
     };
 
     return (

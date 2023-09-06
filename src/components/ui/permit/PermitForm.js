@@ -1,6 +1,6 @@
 import React from 'react';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import Form from '../form/Form';
 import Input from '../form/Input';
 import ButtonBar from '../buttons/ButtonBar';
 import ButtonSecondary from '../buttons/ButtonSecondary';
@@ -29,45 +29,49 @@ function PermitForm({ permit, onSubmit, onDelete }) {
         return initialValues;
     }
 
-    const getButtons = () => {
+    const getButtons = (isDisabled) => {
         if (!permit) {
-            return <ButtonSuccess type="submit">Add</ButtonSuccess>;
+            return <ButtonSuccess type="submit" disabled={isDisabled}>Add</ButtonSuccess>;
         } else {
             return <>
-                <ButtonSecondary onClick={onDelete}>Delete</ButtonSecondary>
-                <ButtonSuccess type="submit">Save</ButtonSuccess>
+                <ButtonSecondary onClick={onDelete} disabled={isDisabled}>Delete</ButtonSecondary>
+                <ButtonSuccess type="submit" disabled={isDisabled}>Save</ButtonSuccess>
             </>;
         }
     }
 
     return (
-        <Form
-            className="permit-form"
+        <Formik
             initialValues={getInitialValues()}
             validationSchema={formValidation}
             onSubmit={onSubmit}>
-            <img
-                className='permit-image'
-                src={permitImage}
-                alt='Permit icon'
-            />
-            <div className='right'>
-                <Input
-                    label="Name"
-                    name="name"
-                    type="text"
-                />
-
-                <Input
-                    label="Url"
-                    name="url"
-                    type="text"
-                />
-                <ButtonBar>
-                    {getButtons()}
-                </ButtonBar>
-            </div>
-        </Form>
+            {({ isSubmitting }) => (
+                <Form className="permit-form">
+                    <img
+                        className='permit-image'
+                        src={permitImage}
+                        alt='Permit icon'
+                    />
+                    <div className='right'>
+                        <Input
+                            label="Name"
+                            name="name"
+                            type="text"
+                            disabled={isSubmitting}
+                        />
+                        <Input
+                            label="Url"
+                            name="url"
+                            type="text"
+                            disabled={isSubmitting}
+                        />
+                        <ButtonBar>
+                            {getButtons(isSubmitting)}
+                        </ButtonBar>
+                    </div>
+                </Form>
+            )}
+        </Formik>
     )
 }
 

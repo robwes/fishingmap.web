@@ -60,7 +60,7 @@ function FishingMap() {
         }
     }
 
-    const handleSearch = async ({ search, species, distance }, { setSubmitting, resetForm }) => {
+    const handleSearch = async ({ search, species, distance }, { isSubmitting, setSubmitting, resetForm }) => {
         const searchOrigin = {
             latitude: circleRef.current.state.circle.center.lat(),
             longitude: circleRef.current.state.circle.center.lng()

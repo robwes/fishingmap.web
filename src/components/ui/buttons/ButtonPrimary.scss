@@ -6,4 +6,8 @@
     &:focus {
         background: var(--clr-primary-dark);
     }
+
+    &:disabled {
+        background: var(--clr-primary-disabled);
+    }
 }

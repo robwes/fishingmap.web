@@ -1,34 +1,43 @@
 import React from 'react';
 import ButtonSuccess from '../../components/ui/buttons/ButtonSuccess';
-import Form from '../../components/ui/form/Form';
 import Input from '../../components/ui/form/Input';
+import { Formik, Form } from 'formik';
 import './LoginForm.scss';
 
-function LoginForm({initialValues, onSubmit}) {
+function LoginForm({ initialValues, onSubmit }) {
 
     const initialFormValues = initialValues ? initialValues : { username: "", password: "" };
 
     return (
         <div className='login-form'>
             <h3 className='login-form-title'>Log in</h3>
-            <Form
+            <Formik
                 initialValues={initialFormValues}
-                onSubmit={onSubmit}
-            >
-                <Input
-                    label="Username"
-                    name="username"
-                    type="text"
-                    placeholder="Username..."
-                />
-                <Input
-                    label="Password"
-                    name="password"
-                    type="password"
-                    placeholder="Password..."
-                />
-                <ButtonSuccess type="submit">Log in</ButtonSuccess>
-            </Form>
+                onSubmit={onSubmit}>
+                {({ isSubmitting }) => (
+                    <Form>
+                        <Input
+                            label="Username"
+                            name="username"
+                            type="text"
+                            placeholder="Username..."
+                            disabled={isSubmitting}
+                        />
+                        <Input
+                            label="Password"
+                            name="password"
+                            type="password"
+                            placeholder="Password..."
+                            disabled={isSubmitting}
+                        />
+                        <ButtonSuccess
+                            type="submit"
+                            disabled={isSubmitting}>
+                            Log in
+                        </ButtonSuccess>
+                    </Form>
+                )}
+            </Formik>
         </div>
     )
 }
