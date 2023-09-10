@@ -14,7 +14,6 @@ function Map({
     center, 
     zoom, 
     mapStyle, 
-    mapTypeId = "roadmap",
     onLoad, 
     onUnmount, 
     ...props}) {
@@ -49,7 +48,6 @@ function Map({
                 zoomControlOptions: {
                     position: 9 //google.maps.ControlPosition.RIGHT_BOTTOM
                 },
-                mapTypeId: mapTypeId,
                 gestureHandling: "greedy"      
             }}
             {...props}
