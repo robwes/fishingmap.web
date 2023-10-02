@@ -43,7 +43,12 @@ function LocationMap({ location }) {
                 center={{ lat: location.position.latitude, lng: location.position.longitude }}
                 zoom={12}
                 mapStyle={mapStyle}>
-                <PositionMarker position={currentLocation} />
+                <PositionMarker
+                    position={{
+                        lat: currentLocation.latitude,
+                        lng: currentLocation.longitude
+                    }}
+                />
                 <Data
                     onLoad={handleDataLoad}
                 />
