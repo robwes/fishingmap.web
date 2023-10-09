@@ -13,7 +13,7 @@ function Species() {
     const [pagedSpecies, setPagedSpecies] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const pageLimit = 8;
+    const pageLimit = 10;
     const pageNeighbours = 1;
 
     useEffect(() => {
