@@ -1,6 +1,7 @@
 .permits {
+    display: grid;
+
     .slide-in-panel.open {
-        margin-left: -2.5%;
         width: 105%;
     }
 
@@ -12,6 +13,10 @@
         max-width: 745px;
         margin-bottom: 1.5em;
     }
+
+    .pagination {
+        align-self: end;
+    }
 }
 
 @media (min-width: 600px) {
@@ -22,6 +27,9 @@
 
 @media (min-width: 900px) {
     .permits {
+        .page-title {
+            order: -1;
+        }
 
         .slide-in-panel {
             width: 40%;

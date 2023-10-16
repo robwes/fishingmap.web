@@ -52,19 +52,17 @@ function Permits() {
             {isLoading && <FloatingSpinner />}
 
             <div className='container center-content'>
-                <h1 className='page-title'>Permits</h1>
                 <SlideInPanel>
                     <SearchFilter onSubmit={handleSearch} />
                 </SlideInPanel>
-
+                <h1 className='page-title'>Permits</h1>
                 <div className='permits-list'>
                     {pagedPermits.map(p => (
                         <PermitListItem key={p.id} permit={p} />
                     ))}
                 </div>
-
-                <Pagination totalRecords={permits.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
             </div>
+            <Pagination totalRecords={permits.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
         </div>
     )
 }

@@ -1,5 +1,5 @@
 .species {
-	display: flex;
+	display: grid;
 
     .page-title {
         display: none;
@@ -14,7 +14,11 @@
         display: grid;
         gap: 2em;
         width: 100%;
-        margin: 3em 0 5em;
+        margin: 3em 0;
+    }
+
+    .pagination {
+        align-self: end;
     }
 }
 
@@ -23,7 +27,7 @@
 		background: linear-gradient(90deg, var(--clr-bg-body) 60%, rgba(0,0,0, .05) 40%);
 
         .item-grid {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         }
 	}
 }
@@ -35,7 +39,7 @@
         }
 
         .species-search {
-            width: 50%;
+            width: 40%;
         }
     }
 }

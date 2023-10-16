@@ -1,3 +1,24 @@
 .fishing-map {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+@media(min-width: 900px) {
+    .fishing-map {
+        flex-direction: row;
+
+        .slide-in-panel {
+            width: 300px;
+        }
+
+        .left {
+            padding: 3.5em 1.5em;
+            box-shadow: 0 1px 4px rgba(0,0,0,.15);
+            z-index: 1;
+        }
+
+        .right {
+            flex-grow: 1;
+        }
+    }
 }
