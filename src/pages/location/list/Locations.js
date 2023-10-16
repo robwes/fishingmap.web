@@ -63,10 +63,10 @@ function Locations() {
     };
 
     return (
-        <div className="container page">
+        <div className="locations page">
             {isLoading && <FloatingSpinner />}
 
-            <div className="locations">
+            <div className="container">
                 <div className="left">
                     <SlideInPanel>
                         <LocationFilter 

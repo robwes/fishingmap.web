@@ -95,42 +95,45 @@ function FishingMap() {
         <div className="fishing-map page">
             {isLoading && <FloatingSpinner />}
 
-            <SlideInPanel isFloating={true}>
-                <LocationFilter
-                    onSubmit={handleSearch}
-                    onReset={handleReset}
-                    onDistanceChange={handleDistanceChange} />
-            </SlideInPanel>
-
-            <Map
-                center={startCenter}
-                zoom={8}
-                onLoad={handleMapLoad}
-                onUnmount={handleMapUnMount}>
-                {currentLocation && (
-                    <PositionMarker
-                        position={{
-                            lat: currentLocation.latitude,
-                            lng: currentLocation.longitude
-                        }}
+            <div className='left'>
+                <SlideInPanel>
+                    <LocationFilter
+                        onSubmit={handleSearch}
+                        onReset={handleReset}
+                        onDistanceChange={handleDistanceChange} />
+                </SlideInPanel>
+            </div>
+            <div className='right'>
+                <Map
+                    center={startCenter}
+                    zoom={8}
+                    onLoad={handleMapLoad}
+                    onUnmount={handleMapUnMount}>
+                    {currentLocation && (
+                        <PositionMarker
+                            position={{
+                                lat: currentLocation.latitude,
+                                lng: currentLocation.longitude
+                            }}
+                        />
+                    )}
+                    <Circle
+                        ref={circleRef}
+                        radius={searchRadius}
+                        options={searchCircleOptions}
+                        center={searchCenter}
                     />
-                )}
-                <Circle
-                    ref={circleRef}
-                    radius={searchRadius}
-                    options={searchCircleOptions}
-                    center={searchCenter}
-                />
-                <MarkerClusterer options={clustererOptions}>
-                    {(clusterer) =>
-                        locations.map((location) => (
-                            <LocationMarker key={location.id}
-                                location={location}
-                                clusterer={clusterer} />
-                        ))
-                    }
-                </MarkerClusterer>
-            </Map>
+                    <MarkerClusterer options={clustererOptions}>
+                        {(clusterer) =>
+                            locations.map((location) => (
+                                <LocationMarker key={location.id}
+                                    location={location}
+                                    clusterer={clusterer} />
+                            ))
+                        }
+                    </MarkerClusterer>
+                </Map>
+            </div>
         </div>
     )
 }

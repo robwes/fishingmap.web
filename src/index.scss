@@ -14,7 +14,7 @@
 	--padding-input-x: 1em;
 	--padding-input-y: .8em;
 	--header-height: 93.8px;
-	--footer-height: 87.2px;
+	--footer-height: 92.2px;
 }
 
 *,
@@ -201,6 +201,6 @@ form {
 @media(min-width: 900px) {
 	.container {
 		width: 90%;
-		max-width: 1350px;
+		max-width: 1500px;
 	}
 }

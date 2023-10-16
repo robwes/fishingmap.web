@@ -128,36 +128,6 @@ function LocationForm({ location, speciesOptions, permitOptions, mapOptions, onS
                 </Form>
             )}
         </Formik>
-        // <Form
-        //     initialValues={getInitialValues()}
-        //     validationSchema={formValidation}
-        //     onSubmit={onFormSubmitted}
-        // >
-        //     <div className="location-form">
-        //         <div className='left'>
-        //             <LocationFormCard
-        //                 speciesOptions={speciesOptions}
-        //                 permitOptions={permitOptions}
-        //             />
-        //         </div>
-        //         <div className='right'>
-        //             <MapInput
-        //                 className="location-form-position"
-        //                 name="geometry"
-        //                 options={mapOptions}
-        //             />
-        //             <ArticleInput
-        //                 className='location-form-description'
-        //                 label='Information'
-        //                 name='description'
-        //                 rows={15}
-        //             />
-        //             <ButtonBar>
-        //                 {getFormButtons()}
-        //             </ButtonBar>
-        //         </div>
-        //     </div>
-        // </Form>
     )
 }
 

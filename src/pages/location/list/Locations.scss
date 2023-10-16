@@ -1,9 +1,16 @@
 .locations {
-	display: flex;
-	flex-direction: column;
+    display: grid;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
 
     .right {
-        margin-top: 3em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 3.5em;
     }
 
     .item-list {
@@ -11,6 +18,7 @@
         flex-direction: column;
         gap: 2em;
         width: 100%;
+        max-width: 800px;
         margin-bottom: 3em;
     }
 
@@ -18,33 +26,26 @@
         margin-left: -2.5%;
         width: 105%;
     }
-}
 
-@media(min-width: 600px) {
-
-    .locations {
-        .item-list {
-            max-width: 800px;
-        }
+    .pagination {
+        align-self: end;
     }
-
 }
 
 @media(min-width: 900px) {
-	
     .locations {
-		flex-direction: row;
-		gap: 3em;
+        .container {
+            flex-direction: row;
+            gap: 3em;
+        }
 
         .left {
-            width: 30%;
-            max-width: 320px;
-            margin-top: 3em; 
+            width: 300px;
+            margin-top: 3.5em;
         }
-    
+
         .right {
             flex-grow: 1;
         }
-	}
-    
+    }
 }

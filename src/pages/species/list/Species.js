@@ -64,9 +64,8 @@ function Species() {
                         <SpeciesListItem key={s.id} species={s} />
                     ))}
                 </div>
-
-                <Pagination totalRecords={species.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
             </div>
+            <Pagination totalRecords={species.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
         </div>
     )
 }
