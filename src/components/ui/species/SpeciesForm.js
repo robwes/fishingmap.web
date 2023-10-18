@@ -71,6 +71,7 @@ function SpeciesForm({ species, onSubmit, onDelete }) {
     return (
         <Formik
             initialValues={getInitialValues()}
+            enableReinitialize={true}
             validationSchema={formValidation}
             onSubmit={onSubmit}>
             {({ isSubmitting }) => (

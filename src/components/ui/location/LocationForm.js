@@ -96,6 +96,7 @@ function LocationForm({ location, speciesOptions, permitOptions, mapOptions, onS
     return (
         <Formik
             initialValues={getInitialValues()}
+            enableReinitialize={true}
             validationSchema={formValidation}
             onSubmit={onFormSubmitted}>
             {({ isSubmitting }) => (
