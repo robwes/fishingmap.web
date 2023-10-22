@@ -17,6 +17,10 @@
 		gap: 2em;
 	}
 
+	.location-map {
+		height: 500px;
+	}
+
 	.location-description {
 		border-radius: 5px;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
@@ -33,6 +37,10 @@
 
 		.right {
 			width: 65%;
+		}
+
+		.location-map {
+			height: 650px;
 		}
 	}
 }

@@ -9,7 +9,7 @@ import './LocationMap.scss';
 
 const mapStyle = {
     width: '100%',
-    height: '650px'
+    height: '100%'
 };
 
 function LocationMap({ location }) {
