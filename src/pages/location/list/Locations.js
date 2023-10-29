@@ -22,7 +22,7 @@ function Locations() {
 
     useEffect(() => {
         (async () => {
-            const l = await locationService.getLocations();
+            const l = await locationService.getLocationsSummary();
             if (l) {
                 setLocations(l);
             }
@@ -42,12 +42,12 @@ function Locations() {
     }, [locations])
 
     const handleSearch = async ({ search, species, distance }, { setSubmitting }) => {
-        const matchingLocations = await locationService.getLocations(search, species, distance, currentLocation);
+        const matchingLocations = await locationService.getLocationsSummary(search, species, distance, currentLocation);
         setLocations(matchingLocations);
     }
 
     const handleReset = async () => {
-        const locations = await locationService.getLocations();
+        const locations = await locationService.getLocationsSummary();
         if (locations) {
             setLocations(locations);
         }

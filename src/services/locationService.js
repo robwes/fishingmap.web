@@ -1,27 +1,65 @@
 const baseUrl = `${process.env.REACT_APP_BASE_URL}/api/locations`;
 
+const getSearchQueryString = (search, sIds, radius, radiusOrigin) => {
+    const searchParams = new URLSearchParams();
+
+    if (search) {
+        searchParams.append("search", search);
+    }
+
+    if (sIds.length > 0) {
+        sIds.forEach(sId => searchParams.append("sIds", sId));
+    }
+
+    if (radius && radiusOrigin) {
+        searchParams.append("orgLat", radiusOrigin.latitude);
+        searchParams.append("orgLng", radiusOrigin.longitude);
+        searchParams.append("radius", radius);
+    }
+
+    return searchParams.toString();
+}
+
 export const locationService = {
     getLocations: async (search = "", sIds = [], radius = "", radiusOrigin = null) => {
         try {
-
             let requestUrl = baseUrl;
-            if (search || sIds.length > 0 || radius) {
-                const searchParams = new URLSearchParams();
+            const searchParams = getSearchQueryString(search, sIds, radius, radiusOrigin);
+            if (searchParams) {
+                requestUrl += `?${searchParams}`;
+            }
 
-                if (search) {
-                    searchParams.append("search", search);
-                }
+            const response = await fetch(requestUrl);
+            return await response.json();
+        } catch (e) {
+            console.log(e);
+        }
 
-                if (sIds.length > 0) {
-                    sIds.forEach(sId => searchParams.append("sIds", sId));
-                }
+        return [];
+    },
 
-                if (radius && radiusOrigin) {
-                    searchParams.append("orgLat", radiusOrigin.latitude);
-                    searchParams.append("orgLng", radiusOrigin.longitude);
-                    searchParams.append("radius", radius);
-                }
+    getLocationMarkers: async (search = "", sIds = [], radius = "", radiusOrigin = null) => {
+        try {
+            let requestUrl = `${baseUrl}/markers`;
+            const searchParams = getSearchQueryString(search, sIds, radius, radiusOrigin);
+            if (searchParams) {
+                requestUrl += `?${searchParams}`;
+            }
 
+            const response = await fetch(requestUrl);
+            return await response.json();
+        } catch (e) {
+            console.log(e);
+        }
+
+        return [];
+    },
+
+    getLocationsSummary: async (search = "", sIds = [], radius = "", radiusOrigin = null) => {
+        try {
+            let requestUrl = `${baseUrl}/summary`;
+            const searchParams = getSearchQueryString(search, sIds, radius, radiusOrigin);
+            if (searchParams) {
                 requestUrl += `?${searchParams}`;
             }
 
@@ -48,7 +86,7 @@ export const locationService = {
     createLocation: async (location) => {
         try {
             const formData = new FormData();
-            
+
             formData.append("name", location.name ?? "");
             formData.append("description", location.description ?? "");
             formData.append("species", JSON.stringify(location.species ?? []));
@@ -68,7 +106,7 @@ export const locationService = {
                 credentials: 'include',
                 body: formData
             });
-            
+
             return await response.json();
         } catch (e) {
             console.log(e);
@@ -80,7 +118,7 @@ export const locationService = {
     updateLocation: async (id, location) => {
         try {
             const formData = new FormData();
-            
+
             formData.append("name", location.name ?? "");
             formData.append("description", location.description ?? "");
             formData.append("species", JSON.stringify(location.species ?? []));

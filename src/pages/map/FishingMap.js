@@ -45,7 +45,7 @@ function FishingMap() {
 
     useEffect(() => {
         (async () => {
-            const l = await locationService.getLocations();
+            const l = await locationService.getLocationMarkers();
             if (l) {
                 setLocations(l);
             }
@@ -54,7 +54,7 @@ function FishingMap() {
     }, []);
 
     const handleReset = async () => {
-        const locations = await locationService.getLocations();
+        const locations = await locationService.getLocationMarkers();
         if (locations) {
             setLocations(locations);
         }
@@ -65,7 +65,7 @@ function FishingMap() {
             latitude: circleRef.current.state.circle.center.lat(),
             longitude: circleRef.current.state.circle.center.lng()
         };
-        const matchingLocations = await locationService.getLocations(search, species, distance, searchOrigin);
+        const matchingLocations = await locationService.getLocationMarkers(search, species, distance, searchOrigin);
         if (matchingLocations) {
             setLocations(matchingLocations);
         }
