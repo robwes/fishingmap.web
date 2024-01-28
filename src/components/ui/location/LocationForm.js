@@ -64,7 +64,7 @@ function LocationForm({ location, speciesOptions, permitOptions, mapOptions, onS
         }
     };
 
-    const onFormSubmitted = async ({ species, permits, geometry, ...rest }, formikBag) => {
+    const onFormSubmitted = async ({ species = [], permits = [], geometry, ...rest }, formikBag) => {
         const location = {
             species: species.map(s => ({ id: s.value, name: s.label })),
             permits: permits.map(p => ({ id: p.value, name: p.label })),
