@@ -1,6 +1,7 @@
 .location-info-window {
     max-width: 300px;
-    padding-bottom: .5em;
+    margin-top: 2.75em;
+    margin-bottom: .5em;
 
     .location-info-window-title {
         text-align: center;
@@ -16,4 +17,9 @@
         justify-content: center;
         padding: .25em 0;
     }
+}
+
+.gm-style-iw-chr {
+    position: absolute;
+    right: 0
 }
