@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { Map as GoogleMap } from '@vis.gl/react-google-maps';
 
 const defaultMapStyle = {
     width: '100%',
@@ -7,22 +7,12 @@ const defaultMapStyle = {
     minHeight: '550px'
 };
 
-const libraries = ["drawing"];
-
-function Map({
-    children, 
-    center, 
-    zoom, 
-    mapStyle, 
-    onLoad, 
-    onUnmount, 
-    ...props}) {
-
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
-        libraries: libraries
-    });
+const Map = ({
+    children,
+    center,
+    zoom,
+    mapStyle
+}) => {
 
     const getMapStyle = () => {
         if (mapStyle) {
@@ -32,29 +22,21 @@ function Map({
         return defaultMapStyle;
     }
 
-    return isLoaded ? (
+    return (
         <GoogleMap
-            mapContainerStyle={getMapStyle()}
-            onLoad={onLoad}
-            onUnmount={onUnmount}
-            center={center}
-            zoom={zoom}
-            options={{
-                fullscreenControl: false,
-                streetViewControl: false,
-                mapTypeControlOptions: {
-                    position: 3 // google.maps.ControlPosition.TOP_RIGHT
-                },
-                zoomControlOptions: {
-                    position: 9 //google.maps.ControlPosition.RIGHT_BOTTOM
-                },
-                gestureHandling: "greedy"      
-            }}
-            {...props}
+            mapId={process.env.REACT_APP_MAP_ID}
+            style={getMapStyle()}
+            defaultCenter={center}
+            defaultZoom={zoom}
+            fullscreenControl={false}
+            streetViewControl={false}
+            mapTypeControlOptions={{ position: 3 }}
+            zoomControlOptions={{ position: 9 }}
+            gestureHandling={'greedy'}
         >
             {children}
         </GoogleMap>
-    ) : <></>
-}
+    );
+};
 
-export default Map
+export default Map;
