@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Data } from '@react-google-maps/api';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useMap } from '@vis.gl/react-google-maps';
 import { useField } from 'formik';
 import Map from '../map/Map';
 import Label from './Label';
@@ -9,133 +9,147 @@ import geoUtils from '../../../utils/geoUtils';
 import './MapInput.scss';
 
 const mapStyle = {
-	width: '100%',
-	height: '650px'
+    width: '100%',
+    height: '650px'
 };
 
 function MapInput({ label, options, className, ...props }) {
 
-	// eslint-disable-next-line
-	const [field, meta, helpers] = useField(props);
+    const map = useMap();
 
-	const { value } = meta;
-	const { setValue, setError } = helpers;
+    // eslint-disable-next-line
+    const [field, meta, helpers] = useField(props);
 
-	const [dataLayer, setDataLayer] = useState(null);
-	const [isDragging, setIsDragging] = useState(false);
+    const { value } = meta;
+    const { setValue, setError } = helpers;
 
-	useEffect(() => {
-		if (dataLayer && value) {
-			dataLayer.addGeoJson(value);
+    const [dataLayer, setDataLayer] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
 
-			const boundingBox = geoUtils.getBoundingBox(value);
-			if (boundingBox) {
-				dataLayer.getMap().fitBounds(boundingBox);
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dataLayer])
+    useEffect(() => {
+        if (!dataLayer) {
+            return;
+        }
+        if (value) {
+            dataLayer.addGeoJson(value);
 
-	const handleLoad = data => {
-		data.setStyle({
-			fillColor: "#4285f4",
-			strokeColor: "#4285f4",
-			strokeWeight: 5,
-			draggable: false,
-			editable: true
-		});
+            const boundingBox = geoUtils.getBoundingBox(value);
+            if (boundingBox) {
+                dataLayer.getMap().fitBounds(boundingBox);
+            }
+        }
 
-		const topLeftPos = window.google ? window.google.maps.ControlPosition.TOP_LEFT : 1;
-		data.setControlPosition(topLeftPos);
-		data.setControls(["Polygon"]);
-		data.setDrawingMode("Polygon");
+        dataLayer.addListener("mousedown", handleMouseDown);
+        dataLayer.addListener("mouseup", handleMouseUp);
+        dataLayer.addListener("addfeature", handleAddFeature);
+        dataLayer.addListener("dblclick", handleRemoveFeature);
+        dataLayer.addListener("setgeometry", handleSetGeometry);
 
-		setDataLayer(data);
-	}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dataLayer])
 
-	const handleAddFeature = event => {
-		dataLayer.setDrawingMode(null);
+    useEffect(() => {
+        if (!map) {
+            return;
+        }
 
-		dataLayer.toGeoJson(geoJson => {
-			setValue(geoJson);
-		});
-	}
+        const data = map.data;
+        data.setStyle({
+            fillColor: "#4285f4",
+            strokeColor: "#4285f4",
+            strokeWeight: 5,
+            draggable: false,
+            editable: true
+        });
 
-	const handleImport = geoJson => {
-		dataLayer.forEach(feature => {
-			dataLayer.remove(feature);
-		});
-		dataLayer.addGeoJson(geoJson);
-		
-		const boundingBox = geoUtils.getBoundingBox(geoJson);
-		if (boundingBox) {
-			dataLayer.getMap().fitBounds(boundingBox);
-		}
-	}
+        const topLeftPos = window.google ? window.google.maps.ControlPosition.TOP_LEFT : 1;
+        data.setControlPosition(topLeftPos);
+        data.setControls(["Polygon"]);
+        data.setDrawingMode("Polygon");
 
-	const handleImportError = errorMessage => {
-		setError(errorMessage);
-	}
+        setDataLayer(data);
+    }, [map]);
 
-	const handleMouseDown = event => {
-		setIsDragging(true);
-	}
+    const handleAddFeature = event => {
+        dataLayer.setDrawingMode(null);
 
-	const handleMouseUp = event => {
-		setIsDragging(false);
-	}
+        dataLayer.toGeoJson(geoJson => {
+            setValue(geoJson);
+        });
+    }
 
-	const handleRemoveFeature = event => {
-		dataLayer.remove(event.feature);
+    const handleImport = geoJson => {
+        dataLayer.forEach(feature => {
+            dataLayer.remove(feature);
+        });
+        dataLayer.addGeoJson(geoJson);
 
-		dataLayer.toGeoJson(geoJson => {
-			setValue(geoJson);
-		});
-	}
+        const boundingBox = geoUtils.getBoundingBox(geoJson);
+        if (boundingBox) {
+            dataLayer.getMap().fitBounds(boundingBox);
+        }
+    }
 
-	const handleSetGeometry = event => {
-		if (!isDragging) {
-			dataLayer.toGeoJson(geoJson => {
-				setValue(geoJson);
-			});
-		}
-	}
+    const handleImportError = errorMessage => {
+        setError(errorMessage);
+    }
 
-	return (
-		<div className={className}>
+    const handleMouseDown = event => {
+        setIsDragging(true);
+    }
 
-			{label &&
-				<Label htmlFor={props.id || props.name}>{label}</Label>
-			}
+    const handleMouseUp = event => {
+        setIsDragging(false);
+    }
 
-			<div className="map-input">
-				<ImportGeoJson
-					onImport={handleImport}
-					onError={handleImportError}
-				/>
-				<Map
-					center={options.center}
-					zoom={options.zoom}
-					mapStyle={mapStyle}
-					fullscreenControl={false}
-					streetViewControl={false}
-					{...props}
-				>
-					<Data
-						onLoad={handleLoad}
-						onAddFeature={handleAddFeature}
-						onSetGeometry={handleSetGeometry}
-						onMouseDown={handleMouseDown}
-						onMouseUp={handleMouseUp}
-						onDblClick={handleRemoveFeature}
-					/>
-				</Map>
-			</div>
-			{meta.error ? (
-				<Error message={meta.error} />
-			) : null}
-		</div>
-	)
+    const handleRemoveFeature = event => {
+        dataLayer.remove(event.feature);
+
+        dataLayer.toGeoJson(geoJson => {
+            setValue(geoJson);
+        });
+    }
+
+    const handleSetGeometry = useCallback((event) => {
+        if (!isDragging) {
+            dataLayer.toGeoJson(geoJson => {
+                setValue(geoJson);
+            });
+        }
+      }, [dataLayer, isDragging, setValue]);
+
+    // const handleSetGeometry = event => {
+    //     if (!isDragging) {
+    //         dataLayer.toGeoJson(geoJson => {
+    //             setValue(geoJson);
+    //         });
+    //     }
+    // }
+
+    return (
+        <div className={className}>
+
+            {label &&
+                <Label htmlFor={props.id || props.name}>{label}</Label>
+            }
+
+            <div className="map-input">
+                <ImportGeoJson
+                    onImport={handleImport}
+                    onError={handleImportError}
+                />
+                <Map
+                    center={options.center}
+                    zoom={options.zoom}
+                    mapStyle={mapStyle}
+                    fullscreenControl={false}
+                    streetViewControl={false} />
+            </div>
+            {meta.error ? (
+                <Error message={meta.error} />
+            ) : null}
+        </div>
+    )
 }
 
 export default MapInput

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Data } from '@react-google-maps/api';
+import React, { useEffect } from 'react';
+import { useMap } from '@vis.gl/react-google-maps';
 import LinkButtonPrimaryOutline from '../../../components/ui/buttons/LinkButtonPrimaryOutline';
 import Map from '../../../components/ui/map/Map';
 import geoUtils from '../../../utils/geoUtils';
@@ -13,24 +13,33 @@ const mapStyle = {
 };
 
 function LocationMap({ location }) {
+    const map = useMap();
 
     // eslint-disable-next-line
     const [currentUser, updateCurrentUser, currentLocation] = useCurrentUser();
 
-    const handleDataLoad = data => {
+    // initialize the map
+    useEffect(() => {
+        if (!map) {
+            return;
+        }
+
+        const data = map.data;
         data.setStyle({
             fillOpacity: 0.0,
             strokeColor: "#3972ce",
             strokeWeight: 4
         });
+
         const geometry = geoUtils.multiPolygonFeatureToPolygonFeatureCollection(JSON.parse(location.geometry));
         data.addGeoJson(geometry);
 
         const boundingBox = geoUtils.getBoundingBox(geometry);
         if (boundingBox) {
-            data.getMap().fitBounds(boundingBox);
+            map.fitBounds(boundingBox);
         }
-    };
+        // eslint-disable-next-line
+    }, [map]);
 
     let directionsLink = "https://www.google.com/maps/dir/?api=1&destination=";
     if (location) {
@@ -38,7 +47,7 @@ function LocationMap({ location }) {
     }
 
     return (
-        <div className="location-map">
+        <div className='location-map'>
             <Map
                 center={{ lat: location.position.latitude, lng: location.position.longitude }}
                 zoom={12}
@@ -51,9 +60,6 @@ function LocationMap({ location }) {
                         }}
                     />
                 )}
-                <Data
-                    onLoad={handleDataLoad}
-                />
             </Map>
 
             <LinkButtonPrimaryOutline
@@ -64,7 +70,7 @@ function LocationMap({ location }) {
                 <i className="fas fa-directions"></i> Directions
             </LinkButtonPrimaryOutline>
         </div>
-    )
+    );
 }
 
-export default LocationMap
+export default LocationMap;

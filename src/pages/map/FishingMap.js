@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Circle, MarkerClusterer } from '@react-google-maps/api';
+import React, { useState, useEffect, useRef } from 'react';
+import { useMap } from '@vis.gl/react-google-maps';
 import { locationService } from '../../services/locationService';
-import LocationMarker from './LocationMarker';
 import Map from '../../components/ui/map/Map';
+import LocationClusterer from './LocationClusterer';
+import Circle from '../../components/ui/map/Circle';
 import PositionMarker from '../../components/ui/map/PositionMarker';
 import LocationFilter from '../../components/ui/location/LocationFilter';
 import SlideInPanel from '../../components/ui/slideInPanel/SlideInPanel';
@@ -21,7 +22,6 @@ const searchCircleOptions = {
     strokeOpacity: 0.8,
     strokeWeight: 2,
     fillOpacity: 0.35,
-    radius: 0,
     draggable: true
 };
 
@@ -33,7 +33,7 @@ const clustererOptions = {
 };
 
 function FishingMap() {
-    const [map, setMap] = useState();
+    const map = useMap();
     const [locations, setLocations] = useState([]);
     const [searchRadius, setSearchRadius] = useState(0);
     const [searchCenter, setSearchCenter] = useState(startCenter);
@@ -62,8 +62,8 @@ function FishingMap() {
 
     const handleSearch = async ({ search, species, distance }, { isSubmitting, setSubmitting, resetForm }) => {
         const searchOrigin = {
-            latitude: circleRef.current.state.circle.center.lat(),
-            longitude: circleRef.current.state.circle.center.lng()
+            latitude: circleRef.current.center.lat(),
+            longitude: circleRef.current.center.lng()
         };
         const matchingLocations = await locationService.getLocationMarkers(search, species, distance, searchOrigin);
         if (matchingLocations) {
@@ -82,15 +82,6 @@ function FishingMap() {
         }
     }
 
-    const handleMapLoad = useCallback((mapObject) => {
-        mapObject.panTo(startCenter);
-        setMap(mapObject);
-    }, []);
-
-    const handleMapUnMount = useCallback((map) => {
-        setMap(null);
-    }, []);
-
     return (
         <div className="fishing-map page">
             {isLoading && <FloatingSpinner />}
@@ -106,9 +97,7 @@ function FishingMap() {
             <div className='right'>
                 <Map
                     center={startCenter}
-                    zoom={8}
-                    onLoad={handleMapLoad}
-                    onUnmount={handleMapUnMount}>
+                    zoom={8}>
                     {currentLocation && (
                         <PositionMarker
                             position={{
@@ -117,21 +106,17 @@ function FishingMap() {
                             }}
                         />
                     )}
+
                     <Circle
                         ref={circleRef}
-                        radius={searchRadius}
-                        options={searchCircleOptions}
                         center={searchCenter}
+                        radius={searchRadius}
+                        circleOptions={searchCircleOptions}
                     />
-                    <MarkerClusterer options={clustererOptions}>
-                        {(clusterer) =>
-                            locations.map((location) => (
-                                <LocationMarker key={location.id}
-                                    location={location}
-                                    clusterer={clusterer} />
-                            ))
-                        }
-                    </MarkerClusterer>
+                    <LocationClusterer
+                        locations={locations}
+                        clustererOptions={clustererOptions}
+                    />
                 </Map>
             </div>
         </div>
