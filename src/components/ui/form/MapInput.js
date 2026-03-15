@@ -118,14 +118,6 @@ function MapInput({ label, options, className, ...props }) {
         }
       }, [dataLayer, isDragging, setValue]);
 
-    // const handleSetGeometry = event => {
-    //     if (!isDragging) {
-    //         dataLayer.toGeoJson(geoJson => {
-    //             setValue(geoJson);
-    //         });
-    //     }
-    // }
-
     return (
         <div className={className}>
 

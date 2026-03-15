@@ -11,7 +11,9 @@ const Map = ({
     children,
     center,
     zoom,
-    mapStyle
+    mapStyle,
+    onClick,
+    ...props
 }) => {
 
     const getMapStyle = () => {
@@ -33,6 +35,8 @@ const Map = ({
             mapTypeControlOptions={{ position: 3 }}
             zoomControlOptions={{ position: 9 }}
             gestureHandling={'greedy'}
+            onClick={onClick}
+            {...props}
         >
             {children}
         </GoogleMap>

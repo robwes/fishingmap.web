@@ -93,6 +93,7 @@ export const locationService = {
             formData.append("permits", JSON.stringify(location.permits ?? []));
 
             formData.append("geometry", location.geometry ?? "");
+            formData.append("navigationposition", location.navigationPosition ? JSON.stringify(location.navigationPosition) : "");
             formData.append("rules", location.rules ?? "");
 
             if (location.images) {
@@ -125,6 +126,7 @@ export const locationService = {
             formData.append("permits", JSON.stringify(location.permits ?? []));
 
             formData.append("geometry", location.geometry ?? "");
+            formData.append("navigationposition", location.navigationPosition ? JSON.stringify(location.navigationPosition) : "");
             formData.append("rules", location.rules ?? "");
 
             if (location.images) {
