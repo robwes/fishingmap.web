@@ -43,7 +43,11 @@ function LocationMap({ location }) {
 
     let directionsLink = "https://www.google.com/maps/dir/?api=1&destination=";
     if (location) {
-        directionsLink += encodeURIComponent(`${location.position.latitude},${location.position.longitude}`) + "&travelmode=driving";
+        if (location.navigationPosition) {
+            directionsLink += encodeURIComponent(`${location.navigationPosition.latitude},${location.navigationPosition.longitude}`) + "&travelmode=driving";
+        } else {
+            directionsLink += encodeURIComponent(`${location.position.latitude},${location.position.longitude}`) + "&travelmode=driving";
+        }
     }
 
     return (

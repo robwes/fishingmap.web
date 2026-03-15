@@ -29,18 +29,49 @@ const geoUtils = {
     },
 
     getBoundingBox: (geoJson) => {
-		const bbox = turf.bbox(geoJson);
+        const bbox = turf.bbox(geoJson);
 
-		if (bbox) {
-			return {
-				north: bbox[3],
-				south: bbox[1],
-				east: bbox[2],
-				west: bbox[0],
-			  }
-		}
+        if (bbox) {
+            return {
+                north: bbox[3],
+                south: bbox[1],
+                east: bbox[2],
+                west: bbox[0],
+            }
+        }
 
         return null;
+    },
+
+    // Refactor getGeometryCenter to be awaitable
+    getGeometryCenter: async (feature) => {
+        return new Promise((resolve, reject) => {
+            feature.toGeoJson((geoJsonFeature) => {
+                try {
+                    const geomType = geoJsonFeature.geometry.type;
+                    let center = null;
+
+                    switch (geomType) {
+                        case 'Point':
+                            center = geoJsonFeature.geometry.coordinates;
+                            break;
+                        case 'Polygon':
+                        case 'MultiPolygon':
+                            // Calculate the center using turf.centerOfMass or turf.centroid
+                            const centerFeature = turf.centerOfMass(geoJsonFeature);
+                            center = centerFeature.geometry.coordinates;
+                            break;
+                        default:
+                            // Handle other types or throw an error
+                            throw new Error('Unsupported geometry type');
+                    }
+
+                    resolve(center);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
     },
 
     isFeatureCollectionOfPolygons: (geoJson) => {
@@ -64,7 +95,7 @@ const geoUtils = {
 
             return true;
 
-        } catch(e) {
+        } catch (e) {
             console.error(e);
         }
 

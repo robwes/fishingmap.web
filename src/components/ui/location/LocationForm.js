@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
-import MapInput from '../form/MapInput';
 import ButtonBar from '../buttons/ButtonBar';
 import ButtonSecondary from '../buttons/ButtonSecondary';
 import ButtonSuccess from '../buttons/ButtonSuccess';
@@ -10,6 +9,7 @@ import ArticleInput from '../form/ArticleInput';
 import { fileService } from '../../../services/fileService';
 import geoUtils from '../../../utils/geoUtils';
 import './LocationForm.scss';
+import LocationGeometryInput from './LocationGeometryInput';
 
 const formValidation = Yup.object({
     name: Yup.string()
@@ -21,7 +21,8 @@ const formValidation = Yup.object({
     rules: Yup.string()
         .max(2000, "Max 2000 characters")
         .nullable(),
-    geometry: Yup.object().required("Required")
+    geometry: Yup.object().required("Geometry is required"),
+    navigationPosition: Yup.object().nullable(), // Not required
 });
 
 function LocationForm({ location, speciesOptions, permitOptions, mapOptions, onSubmit, onDelete }) {
@@ -109,11 +110,13 @@ function LocationForm({ location, speciesOptions, permitOptions, mapOptions, onS
                         />
                     </div>
                     <div className='right'>
-                        <MapInput
-                            className="location-form-position"
+                        <LocationGeometryInput
+                            label="Location Geometry"
                             name="geometry"
-                            options={mapOptions}
+                            navigationPositionName="navigationPosition"
+                            className="location-form-position"
                             disabled={isSubmitting}
+                            location={location}
                         />
                         <ArticleInput
                             className='location-form-description'

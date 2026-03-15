@@ -1,0 +1,25 @@
+.location-geometry-toolbar {
+    display: flex;
+    flex-direction: row;
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+
+    .button {
+        border: none;
+        border-radius: 0;
+        color: rgb(86, 86, 86);
+        font-weight: 700;
+        background-color: rgb(255, 255, 255);
+        padding: 0.5em 1.2em;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+        background-color: rgb(240, 240, 240);
+    }
+
+    .button:active,
+    .button.active {
+        color: #000;
+    }
+}
