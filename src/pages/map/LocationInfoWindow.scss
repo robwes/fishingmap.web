@@ -1,5 +1,5 @@
 .location-info-window {
-    width: 300px;
+    width: 100%;
     padding-bottom: .5em;
 
     .location-info-window-image-container {
@@ -43,6 +43,12 @@
 
 .gm-style .gm-style-iw-c {
     padding: 0 !important;
+    width: 280px !important;
+    max-width: calc(100vw - 32px) !important;
+
+    @media (min-width: 500px) {
+        width: 300px !important;
+    }
 }
 
 .gm-style .gm-style-iw-d {
