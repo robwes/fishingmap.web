@@ -35,8 +35,14 @@
     }
     
     .collapse-body {
-        display: none;
-        padding: .5em 0;
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.3s ease-out, padding 0.3s ease-out;
+        padding: 0;
+
+        .collapse-body-inner {
+            overflow: hidden;
+        }
     }
     
     &.open .collapse-header {
@@ -44,6 +50,7 @@
     }
     
     &.open .collapse-body {
-        display: block;
+        grid-template-rows: 1fr;
+        padding: .5em 0;
     }
 }

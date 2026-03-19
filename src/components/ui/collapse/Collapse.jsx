@@ -41,7 +41,9 @@ function Collapse({ children, className, label, open = false }) {
                 <label className="collapse-label">{label}</label>
             </div>
             <div className="collapse-body">
-                {children}
+                <div className="collapse-body-inner">
+                    {children}
+                </div>
             </div>
         </div>
     )

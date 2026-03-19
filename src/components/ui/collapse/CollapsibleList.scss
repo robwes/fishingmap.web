@@ -1,0 +1,54 @@
+.collapsible-list-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .collapsible-list-label {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--text-color, inherit);
+        text-align: center;
+        padding-top: 0.25em;
+        margin-bottom: 0.25em;
+    }
+
+    .collapsible-list-body {
+        max-height: 40px; /* Force to only fit 1 row */
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+
+        &.open {
+            max-height: 500px; /* Large enough to hold all items */
+        }
+    }
+
+    .collapsible-list {
+        /* Inner container padding isn't cropped until total height > 52px */
+    }
+
+    .collapsible-list-toggle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        background: transparent;
+        border: none;
+        padding: 0.5em 0 0.25em 0;
+        cursor: pointer;
+        color: var(--clr-primary, #333);
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: var(--clr-primary-light, rgba(0, 0, 0, 0.05));
+        }
+
+        .collapsible-list-icon {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+            
+            &.open {
+                transform: rotate(180deg);
+            }
+        }
+    }
+}

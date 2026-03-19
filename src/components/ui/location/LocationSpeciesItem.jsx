@@ -1,15 +1,13 @@
 import React from 'react';
-import LinkItem from '../linkItem/LinkItem';
+import './LocationSpeciesItem.scss';
 
 function LocationSpeciesItem({ species }) {
     return (
-        <LinkItem
-            item={{
-                icon: "fa-solid fa-fish",
-                text: species.name,
-            }}
-        />
+        <span className="location-species-item">
+            <i className="fa-solid fa-fish"></i>
+            {species.name}
+        </span>
     )
 }
 
-export default LocationSpeciesItem
+export default LocationSpeciesItem;

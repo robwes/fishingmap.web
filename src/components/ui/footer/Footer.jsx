@@ -5,7 +5,7 @@ function Footer() {
     return (
         <footer className='footer'>
             <p><strong>Fishing Map</strong></p>
-            <p>Copyright 2024</p>
+            <p>Copyright 2026</p>
         </footer>
     )
 }

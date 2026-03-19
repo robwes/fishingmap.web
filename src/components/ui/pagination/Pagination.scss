@@ -9,11 +9,11 @@
         border: 1px solid #dee2e6;
         padding: .5rem .75rem;
         text-decoration: none;
-        color: inherit;
+        color: var(--clr-primary-text);
     }
     
     .page-link.active {
-        background: #143774;
+        background: var(--clr-primary-text);
         color: white;
     }
 }

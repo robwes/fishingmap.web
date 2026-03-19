@@ -4,9 +4,10 @@ import './ImageCarousell.scss';
 function ImageCarousell({ images, className }) {
 
 	const [index, setIndex] = useState(0);
-	const currentImage = images[index];
 
-	const showNextImage = () => {
+	const showNextImage = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
 		if (index < images.length - 1) {
 			setIndex(index + 1);
 		} else {
@@ -14,7 +15,9 @@ function ImageCarousell({ images, className }) {
 		}
 	}
 
-	const showPreviousImage = () => {
+	const showPreviousImage = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
 		if (index > 0) {
 			setIndex(index - 1);
 		} else {
@@ -28,10 +31,16 @@ function ImageCarousell({ images, className }) {
 
 	return (
 		<div className={getCssClasses()}>
-			<img
-				src={currentImage.url}
-				alt={currentImage.description}
-			/>
+			<div 
+				className="image-carousell-track" 
+				style={{ transform: `translateX(-${index * 100}%)` }}
+			>
+				{images.map((img, i) => (
+					<div className="image-carousell-slide" key={i}>
+						<img src={img.url} alt={img.description} />
+					</div>
+				))}
+			</div>
 			{images.length > 1 && (
 				<>
 					<span className="image-carousell-next" onClick={showNextImage}>
