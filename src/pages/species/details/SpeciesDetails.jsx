@@ -47,15 +47,13 @@ function SpeciesDetails() {
             {isLoading && <FloatingSpinner />}
 
             {species && (
-                <div className="container center-content">
-                    <div className="species-details-card">
-                        <ImageCarousell images={getImages()} className="species-details-image" />
-                        <div className="species-details-info">
-                            <h1 className="center-text">{species.name}</h1>
-                            <p className="species-details-description">{species.description}</p>
-                        </div>
+                <article className="species-details-content">
+                    <div className="species-details-figure">
+                        <ImageCarousell images={getImages()} className="species-details-figure-image" />
                     </div>
-                </div>
+                    <h1 className="species-details-title">{species.name}</h1>
+                    <p className="species-details-description">{species.description}</p>
+                </article>
             )}
         </div>
     )

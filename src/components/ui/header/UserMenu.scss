@@ -5,25 +5,28 @@
     display: inline-block;
 
     .user-menu-toggle {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         cursor: pointer;
         border: 0;
         background: transparent;
         outline: none;
-        color: white;
+        color: #FFF;
+        padding: 0.5em 0.9em;
+        border-radius: 8px;
+        transition: background 120ms ease, color 120ms ease;
     }
 
     .user-menu-toggle:focus,
     .user-menu-toggle:hover {
-        color: rgba(255, 255, 255, 0.4);
-        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.15);
     }
 
     .user-menu-dropdown {
-        display: none;
+        display: flex;
+        flex-direction: column;
         position: absolute;
         z-index: 100;
-        top: 2.5em;
+        top: 3em;
         width: 60vw;
         right: 0;
         padding: .5em 0;
@@ -31,11 +34,14 @@
         background: #FFF;
         border-radius: 5px;
         box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 140ms ease-out, transform 140ms ease-out;
     }
 
     &.open .user-menu-dropdown {
-        display: flex;
-        flex-direction: column;
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .user-menu-list {
@@ -69,6 +75,7 @@
         padding: .5em;
         border: 0;
         outline: none;
+        text-align: center;
     }
 
     .dropdown-button:hover,

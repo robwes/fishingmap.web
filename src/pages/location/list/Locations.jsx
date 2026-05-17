@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import LocationListItem from './LocationListItem';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
@@ -11,14 +12,17 @@ import './Locations.scss';
 function Locations() {
 
     const [locations, setLocations] = useState([]);
-    const [pagedLocations, setPagedLocations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     // eslint-disable-next-line
     const [currentUser, setCurrentUser, currentLocation] = useCurrentUser();
 
     const pageLimit = 10;
     const pageNeighbours = 1;
+    const currentPage = parseInt(searchParams.get('page')) || 1;
+
+    const pagedLocations = locations.slice((currentPage - 1) * pageLimit, currentPage * pageLimit);
 
     useEffect(() => {
         (async () => {
@@ -30,35 +34,22 @@ function Locations() {
         })();
     }, [])
 
-    useEffect(() => {
-        if (locations?.length > 0) {
-            const pagedLocations = locations.slice(0, pageLimit);
-            setPagedLocations(pagedLocations);
-        }
-        else {
-            setPagedLocations([]);
-        }
-
-    }, [locations])
-
     const handleSearch = async ({ search, species, distance }, { setSubmitting }) => {
         const matchingLocations = await locationService.getLocationsSummary(search, species, distance, currentLocation);
+        setSearchParams({}, { replace: true });
         setLocations(matchingLocations);
     }
 
     const handleReset = async () => {
         const locations = await locationService.getLocationsSummary();
         if (locations) {
+            setSearchParams({}, { replace: true });
             setLocations(locations);
         }
     }
 
-    const handlePageChanged = (data) => {
-        const { currentPage, pageLimit } = data;
-        const offset = (currentPage - 1) * pageLimit;
-        const currentLocations = locations.slice(offset, offset + pageLimit);
-
-        setPagedLocations(currentLocations);
+    const handlePageChanged = (page) => {
+        setSearchParams(page > 1 ? { page } : {}, { replace: true });
         window.scrollTo(0, 0);
     };
 
@@ -69,9 +60,10 @@ function Locations() {
             <div className="container">
                 <div className="left">
                     <SlideInPanel>
-                        <LocationFilter 
+                        <LocationFilter
                         onSubmit={handleSearch}
-                        onReset={handleReset} />
+                        onReset={handleReset}
+                        resultCount={locations.length} />
                     </SlideInPanel>
                 </div>
                 <div className="right">
@@ -82,7 +74,7 @@ function Locations() {
                     </div>
                 </div>
             </div>
-            <Pagination totalRecords={locations.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
+            <Pagination totalRecords={locations.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} currentPage={currentPage} onPageChanged={handlePageChanged} />
         </div>
     )
 }

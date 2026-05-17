@@ -37,7 +37,6 @@ function LocationDetails() {
                     />
                     <Article
                         className="location-description"
-                        title="Information"
                         text={location.description}
                     />
                 </div>

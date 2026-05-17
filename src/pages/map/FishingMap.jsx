@@ -3,6 +3,7 @@ import { useMap } from '@vis.gl/react-google-maps';
 import { locationService } from '../../services/locationService';
 import Map from '../../components/ui/map/Map';
 import LocationClusterer from './LocationClusterer';
+import MapTypeControl from './MapTypeControl';
 import Circle from '../../components/ui/map/Circle';
 import PositionMarker from '../../components/ui/map/PositionMarker';
 import LocationFilter from '../../components/ui/location/LocationFilter';
@@ -86,18 +87,18 @@ function FishingMap() {
         <div className="fishing-map page">
             {isLoading && <FloatingSpinner />}
 
-            <div className='left'>
-                <SlideInPanel>
-                    <LocationFilter
-                        onSubmit={handleSearch}
-                        onReset={handleReset}
-                        onDistanceChange={handleDistanceChange} />
-                </SlideInPanel>
-            </div>
-            <div className='right'>
+            <SlideInPanel isFloating>
+                <LocationFilter
+                    onSubmit={handleSearch}
+                    onReset={handleReset}
+                    onDistanceChange={handleDistanceChange}
+                    resultCount={locations.length} />
+            </SlideInPanel>
+            <div className='map-area'>
                 <Map
                     center={startCenter}
                     zoom={8}>
+                    <MapTypeControl />
                     {currentLocation && (
                         <PositionMarker
                             position={{

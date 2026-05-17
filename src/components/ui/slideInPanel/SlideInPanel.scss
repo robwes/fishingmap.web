@@ -32,7 +32,7 @@
             transform: translateX(0);
             position: relative;
         }
-    
+
         &.open .slide-toggle {
             background: var(--clr-bg-body);
             box-shadow: none;
@@ -53,15 +53,16 @@
         }
     
         &.floating {
-            top: 2em;
+            top: 1em;
             left: 1em;
             z-index: 99;
             transition: none;
             transform: translateX(0);
-            padding: 3em 1.5em 1.5em;
-            box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+            padding: 2em 1.5em 1.5em;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
             border-radius: 8px;
-            width: 395px;
+            width: 350px;
         }
 
         .slide-toggle {
@@ -73,10 +74,9 @@
 @media(min-width: 1600px) {
     .slide-in-panel {
         &.floating {
-            top: 3em;
-            left: 2em;
-            padding: 3.25em 2.25em 1.5em;
-            width: 455px;
+            top: 1.5em;
+            left: 1.5em;
+            width: 360px;
         }
     }
-} 
+}
