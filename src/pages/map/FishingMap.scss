@@ -1,24 +1,24 @@
 .fishing-map {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    position: relative;
+
+    .map-area {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+    }
+
 }
 
-@media(min-width: 900px) {
-    .fishing-map {
-        flex-direction: row;
+@media(max-width: 899.99px) {
+    .fishing-map:has(.slide-in-panel.open) {
+        overflow-y: auto;
 
-        .slide-in-panel {
-            width: 300px;
-        }
-
-        .left {
-            padding: 3.5em 1.5em;
-            box-shadow: 0 1px 4px rgba(0,0,0,.15);
-            z-index: 1;
-        }
-
-        .right {
-            flex-grow: 1;
+        .map-area {
+            flex: 0 0 45vh;
+            min-height: 45vh;
         }
     }
 }

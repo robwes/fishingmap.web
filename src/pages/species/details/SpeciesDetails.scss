@@ -1,61 +1,45 @@
 .species-details {
-    display: flex;
-    
-    .species-details-card {
-        display: flex;
-        flex-direction: column;
-        gap: 2.5em;
-        margin: 3em 0;
+    .species-details-content {
+        max-width: 720px;
+        margin: 2em auto 3em;
+        padding: 0 1em;
     }
-    
-    .species-details-image {
-        border-radius: 5px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-        height: 240px;
+
+    .species-details-figure {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        background: var(--clr-bg-light);
+        border-radius: 12px;
         overflow: hidden;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
     }
-    
+
+    .species-details-title {
+        margin: 1em 0 0.5em;
+        text-align: center;
+    }
+
     .species-details-description {
-        padding: 0 1.5em;
         white-space: pre-line;
-    }
-    
-    .species-details-info {
-        background: white;
-        border-radius: 5px;
-        box-shadow: 0 1px 4px rgba(0,0,0,.15);
-        padding: 0 0 2em;
+        line-height: 1.65;
     }
 }
 
-@media(min-width: 800px) {
-	.species-details {
-		background: linear-gradient(90deg, var(--clr-bg-body) 85%, rgba(0,0,0, .05) 40%);
-
-        .species-details-card {
-            flex-direction: row;
-            margin: 4.5em 0;
-            // width: 960px;
-        }
-    
-        .species-details-image {
-            width: 300px;
-            height: 225px;
-            flex-shrink: 0;
-        }
-    
-        .species-details-info {
-            min-height: 350px;
-            flex-grow: 1;
-        }
-	}
-}
-
-@media(min-width: 1150px) {
+@media (min-width: 800px) {
     .species-details {
-        .species-details-image {
-            width: 360px;
-            height: 270px;
+        .species-details-content {
+            max-width: 760px;
+            margin: 3em auto 4em;
+            padding: 0;
+        }
+
+        .species-details-figure {
+            aspect-ratio: 16 / 10;
+        }
+
+        .species-details-title {
+            font-size: 2.75rem;
         }
     }
 }

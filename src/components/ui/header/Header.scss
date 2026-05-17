@@ -1,71 +1,80 @@
 .header {
     background: var(--clr-primary);
-    color: white;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 0 rgba(16, 24, 40, 0.02), 0 1px 3px rgba(16, 24, 40, 0.04);
     padding: 1em 0;
-    text-align: center;
 
     .container {
         position: relative;
         align-items: center;
+        gap: 1em;
+        padding: 0 1.5em;
     }
 
     .header-title-container {
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
-        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
     }
 
     .header-title {
-        font-family: 'Lora', serif;
-        font-size: 2.25rem;
-        margin: 0 0 5px;
-        font-weight: 400;
-        margin-top: 0;
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.005em;
+        line-height: 1;
+        margin: 0;
     }
 
     .header-subtitle {
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.4);
-        font-size: .75rem;
-        margin: 0;
+        font-family: 'Ubuntu', sans-serif;
+        font-weight: 500;
+        color: #fff6;
+        font-size: 0.5625rem;
+        margin: 0.3em 0 0;
         padding: 0;
         text-transform: uppercase;
-        letter-spacing: normal;
+        letter-spacing: 0.08em;
+        text-align: center;
     }
 
     .nav-list {
         list-style: none;
         padding: 0;
+        margin: 0;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        align-items: center;
+        gap: 0.25em;
     }
 
     .nav-list > li {
-        margin: .5em 0;
+        margin: 0;
     }
 
     .nav-link {
+        display: inline-block;
         text-decoration: none;
-        color: white;
-        font-weight: 700;
-        letter-spacing: 1px;
-        padding: .25em 0;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        padding: 0.5em 0.9em;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 120ms ease, color 120ms ease;
     }
 
     .nav-link:hover,
     .nav-link:focus {
-        color: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.15);
     }
 
-    .current-page {
-        border-bottom: 2px solid white;
-    }
-
+    .current-page,
     .current-page:hover,
     .current-page:focus {
-        color: rgba(255, 255, 255, 0.4);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+        color: var(--clr-primary);
+        background: #ffffff;
     }
 }
 
@@ -76,8 +85,8 @@
             flex-direction: row;
         }
 
-        .nav-list>li {
-            margin-left: 2em;
+        .nav-list > li {
+            margin: 0;
         }
     }
 

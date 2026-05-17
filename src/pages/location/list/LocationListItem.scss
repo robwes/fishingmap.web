@@ -1,11 +1,12 @@
 .location-list-item {
     .card-body p {
         max-height: 85px;
+        margin-bottom: 1.5em;
     }
 
     .location-species-list {
         max-height: 2em;
-        margin-top: 1.5em;
+        margin-top: auto;
         display: flex;
         flex-wrap: wrap;
         gap: 1em;

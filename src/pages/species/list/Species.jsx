@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { speciesService } from '../../../services/speciesService';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import SpeciesListItem from './SpeciesListItem';
@@ -10,11 +11,14 @@ import './Species.scss';
 function Species() {
 
     const [species, setSpecies] = useState([]);
-    const [pagedSpecies, setPagedSpecies] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const pageLimit = 10;
     const pageNeighbours = 1;
+    const currentPage = parseInt(searchParams.get('page')) || 1;
+
+    const pagedSpecies = species.slice((currentPage - 1) * pageLimit, currentPage * pageLimit);
 
     useEffect(() => {
         (async () => {
@@ -26,23 +30,15 @@ function Species() {
         })();
     }, []);
 
-    useEffect(() => {
-        const pagedSpecies = species.slice(0, pageLimit);
-        setPagedSpecies(pagedSpecies);
-    }, [species]);
-
-    const handlePageChanged = (data) => {
-        const { currentPage, pageLimit } = data;
-        const offset = (currentPage - 1) * pageLimit;
-        const pagedSpecies = species.slice(offset, offset + pageLimit);
-
-        setPagedSpecies(pagedSpecies);
+    const handlePageChanged = (page) => {
+        setSearchParams(page > 1 ? { page } : {}, { replace: true });
         window.scrollTo(0, 0);
     };
 
     const handleSearch = async ({search}) => {
         const species = await speciesService.getSpecies(search);
         if (species) {
+            setSearchParams({}, { replace: true });
             setSpecies(species);
         }
     };
@@ -65,7 +61,7 @@ function Species() {
                     ))}
                 </div>
             </div>
-            <Pagination totalRecords={species.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
+            <Pagination totalRecords={species.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} currentPage={currentPage} onPageChanged={handlePageChanged} />
         </div>
     )
 }

@@ -2,10 +2,11 @@ import React from 'react';
 import { Map as GoogleMap } from '@vis.gl/react-google-maps';
 
 const defaultMapStyle = {
-    width: '100%',
-    height: 'calc(100vh - (var(--header-height) + var(--footer-height)))',
-    minHeight: '550px'
+    position: 'absolute',
+    inset: 0
 };
+
+const zoomControlOptions = { position: 9 };
 
 const Map = ({
     children,
@@ -32,8 +33,8 @@ const Map = ({
             defaultZoom={zoom}
             fullscreenControl={false}
             streetViewControl={false}
-            mapTypeControlOptions={{ position: 3 }}
-            zoomControlOptions={{ position: 9 }}
+            mapTypeControl={false}
+            zoomControlOptions={zoomControlOptions}
             gestureHandling={'greedy'}
             onClick={onClick}
             {...props}

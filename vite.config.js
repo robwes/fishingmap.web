@@ -16,6 +16,16 @@ export default defineConfig({
     open: true
   },
   build: {
-    outDir: 'build'
+    outDir: 'build',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'maps': ['@vis.gl/react-google-maps', '@googlemaps/markerclusterer'],
+          'turf': ['@turf/turf', '@turf/jsts'],
+          'forms': ['formik', 'yup', 'react-select']
+        }
+      }
+    }
   }
 });

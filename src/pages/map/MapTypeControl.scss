@@ -1,0 +1,35 @@
+.map-type-control {
+    display: flex;
+    margin: 10px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, .3);
+    font-family: 'Roboto', Arial, sans-serif;
+    overflow: hidden;
+
+    button {
+        appearance: none;
+        border: 0;
+        background: #fff;
+        color: #666;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        transition: background-color 0.15s ease, color 0.15s ease;
+
+        &:hover {
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        &.active {
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
+        & + button {
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+        }
+    }
+}

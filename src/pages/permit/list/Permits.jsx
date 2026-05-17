@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { permitService } from '../../../services/permitService';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
@@ -10,11 +11,14 @@ import './Permits.scss';
 function Permits() {
 
     const [permits, setPermits] = useState([]);
-    const [pagedPermits, setPagedPermits] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const pageLimit = 8;
     const pageNeighbours = 1;
+    const currentPage = parseInt(searchParams.get('page')) || 1;
+
+    const pagedPermits = permits.slice((currentPage - 1) * pageLimit, currentPage * pageLimit);
 
     useEffect(() => {
         (async () => {
@@ -26,23 +30,15 @@ function Permits() {
         })();
     }, []);
 
-    useEffect(() => {
-        const pagedPermits = permits.slice(0, pageLimit);
-        setPagedPermits(pagedPermits);
-    }, [permits]);
-
-    const handlePageChanged = (data) => {
-        const { currentPage, pageLimit } = data;
-        const offset = (currentPage - 1) * pageLimit;
-        const pagedPermits = permits.slice(offset, offset + pageLimit);
-
-        setPagedPermits(pagedPermits);
+    const handlePageChanged = (page) => {
+        setSearchParams(page > 1 ? { page } : {}, { replace: true });
         window.scrollTo(0, 0);
     };
 
     const handleSearch = async ({ search }) => {
         const permits = await permitService.getPermits(search);
         if (permits) {
+            setSearchParams({}, { replace: true });
             setPermits(permits);
         }
     };
@@ -62,7 +58,7 @@ function Permits() {
                     ))}
                 </div>
             </div>
-            <Pagination totalRecords={permits.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} onPageChanged={handlePageChanged} />
+            <Pagination totalRecords={permits.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} currentPage={currentPage} onPageChanged={handlePageChanged} />
         </div>
     )
 }

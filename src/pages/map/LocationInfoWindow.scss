@@ -45,6 +45,7 @@
     padding: 0 !important;
     width: 280px !important;
     max-width: calc(100vw - 32px) !important;
+    max-height: none !important;
 
     @media (min-width: 500px) {
         width: 300px !important;
@@ -52,8 +53,8 @@
 }
 
 .gm-style .gm-style-iw-d {
-    overflow: hidden !important;
-    max-height: max-content !important;
+    overflow: visible !important;
+    max-height: none !important;
 }
 
 .gm-style-iw-chr {

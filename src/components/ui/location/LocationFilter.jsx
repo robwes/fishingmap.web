@@ -3,12 +3,11 @@ import SearchBar from '../form/SearchBar';
 import MultiSelect from '../form/MultiSelect';
 import FormRange from '../form/Range';
 import ButtonPrimary from '../buttons/ButtonPrimary';
-import ButtonSecondary from '../buttons/ButtonSecondary';
-import ButtonBar from '../buttons/ButtonBar';
 import { speciesService } from '../../../services/speciesService';
 import { Formik, Form } from 'formik';
+import './LocationFilter.scss';
 
-function LocationFilter({ onSubmit, onReset, onDistanceChange }) {
+function LocationFilter({ onSubmit, onReset, onDistanceChange, resultCount }) {
 
     const [species, setSpecies] = useState([]);
 
@@ -70,14 +69,25 @@ function LocationFilter({ onSubmit, onReset, onDistanceChange }) {
                             disabled={isSubmitting}
                         />
 
-                        <ButtonBar>
-                            <ButtonSecondary onClick={onReset} type="reset" disabled={isSubmitting}>
-                                <i className="fas fa-times"></i>&nbsp;Clear
-                            </ButtonSecondary>
-                            <ButtonPrimary type="submit" disabled={isSubmitting}>
-                                <i className="fas fa-search"></i>&nbsp;Search
-                            </ButtonPrimary>
-                        </ButtonBar>
+                        <div className="filter-actions">
+                            <button
+                                type="reset"
+                                className="reset-link"
+                                onClick={onReset}
+                                disabled={isSubmitting}>
+                                <i className="fas fa-rotate-left"></i>&nbsp;Reset
+                            </button>
+                            <div className="filter-actions-end">
+                                {resultCount !== undefined && (
+                                    <span className="filter-result-count">
+                                        {resultCount.toLocaleString()} {resultCount === 1 ? 'location' : 'locations'}
+                                    </span>
+                                )}
+                                <ButtonPrimary type="submit" disabled={isSubmitting}>
+                                    <i className="fas fa-search"></i>&nbsp;Search
+                                </ButtonPrimary>
+                            </div>
+                        </div>
                     </Form>
                 )}
             </Formik>
