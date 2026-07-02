@@ -1,5 +1,13 @@
-function useLocation() {
+/**
+ * Wraps the browser geolocation API in a promise. Named useGeolocation —
+ * not useLocation — to avoid shadowing react-router-dom's useLocation.
+ */
+function useGeolocation() {
 
+    /**
+     * Resolves the device's current position, rejecting on denial/timeout.
+     * @returns {Promise<{latitude: number, longitude: number}>}
+     */
     function getLocation() {
         return new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(
@@ -20,4 +28,4 @@ function useLocation() {
     return [getLocation];
 }
 
-export default useLocation;
+export default useGeolocation;

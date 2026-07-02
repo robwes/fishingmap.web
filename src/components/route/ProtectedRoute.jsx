@@ -6,23 +6,23 @@ function ProtectedRoute({ redirectPath = "/", requiredRoles = [], children }) {
 
 	const [currentUser] = useCurrentUser();
 
+	/**
+	 * Checks whether the current user may access the route. `requiredRoles`
+	 * contains role name strings, while `currentUser.roles` holds role
+	 * objects ({id, name}), so membership is matched on `role.name`.
+	 * @returns {boolean} True when access is allowed.
+	 */
 	const isAllowed = () => {
-		if (currentUser) {
-			if (requiredRoles.length < 1) {
-				return true;
-			} 
-			else if (currentUser.roles) {
-				const { roles } = currentUser;
-				
-				for (let i = 0; i < roles.length; i++) {
-					if (requiredRoles.includes(roles[i])) {
-						return true;
-					}
-				}
-			}
+		if (!currentUser) {
+			return false;
 		}
 
-		return false;
+		if (requiredRoles.length < 1) {
+			return true;
+		}
+
+		const roles = currentUser.roles ?? [];
+		return roles.some(role => requiredRoles.includes(role.name));
 	}
 
 	if (!isAllowed()) {

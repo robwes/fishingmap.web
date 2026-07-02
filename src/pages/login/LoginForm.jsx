@@ -1,6 +1,7 @@
 import React from 'react';
 import ButtonSuccess from '../../components/ui/buttons/ButtonSuccess';
 import Input from '../../components/ui/form/Input';
+import Error from '../../components/ui/form/Error';
 import { Formik, Form } from 'formik';
 import './LoginForm.scss';
 
@@ -14,7 +15,7 @@ function LoginForm({ initialValues, onSubmit }) {
             <Formik
                 initialValues={initialFormValues}
                 onSubmit={onSubmit}>
-                {({ isSubmitting }) => (
+                {({ isSubmitting, status }) => (
                     <Form>
                         <Input
                             label="Username"
@@ -30,6 +31,11 @@ function LoginForm({ initialValues, onSubmit }) {
                             placeholder="Password..."
                             disabled={isSubmitting}
                         />
+                        {status && (
+                            <div className="login-form-error">
+                                <Error message={status} />
+                            </div>
+                        )}
                         <ButtonSuccess
                             type="submit"
                             disabled={isSubmitting}>
