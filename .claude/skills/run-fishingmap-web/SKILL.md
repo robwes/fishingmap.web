@@ -69,12 +69,30 @@ MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL="*" \
 
 ```
 Usage: node driver.mjs <path> <screenshot.png> [options]
-  --geo=<lat>,<lng>   Mock geolocation (also grants the permission)
-  --width=<px>        Viewport width (default 1280)
-  --height=<px>       Viewport height (default 800)
-  --wait=<ms>         Extra settle time after networkidle (default 500)
-  --click=<selector>  Click a selector before the wait+screenshot (repeatable)
+  --geo=<lat>,<lng>       Mock geolocation (also grants the permission)
+  --width=<px>            Viewport width (default 1280)
+  --height=<px>           Viewport height (default 800)
+  --wait=<ms>             Extra settle time after networkidle (default 500)
+  --fill=<sel>=<value>    Fill an input before clicks (repeatable)
+  --set-files=<sel>=<p>   Set a file input's files (repeatable; upload flows)
+  --click=<selector>      Click a selector before the wait+screenshot (repeatable)
+  --seed-user             Fake Administrator in sessionStorage (route gate)
+  --mock-auth=abort|401   Sever or 401 all /api/auth/* calls (see below)
+  --accept-dialogs        Auto-accept window.confirm (delete flows)
 ```
+
+### Testing auth-gated pages without credentials
+
+Add/edit routes are gated client-side on a truthy `currentUser`. The recipe:
+
+- `--seed-user --mock-auth=abort` — the seeded user passes the route gate,
+  and aborting `/api/auth/*` makes the session re-validation return
+  `'unknown'`, which **keeps** the seeded user (a real whoami would 401 and
+  sign it out). Backend mutations still 401 for real — no data can change —
+  which is exactly what makes failure-path UI (toasts, inline errors) safely
+  drivable.
+- `--mock-auth=401` alone — exercises rejection paths: failed login message,
+  stale-session sign-out.
 
 Prints `TITLE`, final `URL`, any `CONSOLE-ERROR`/`PAGE-ERROR` lines, and the
 screenshot path. Exits 1 only on navigation failure — console errors don't
@@ -98,6 +116,16 @@ MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL="*" \
 # Mobile breakpoint — open the slide-in filter panel
 MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL="*" \
   node .claude/skills/run-fishingmap-web/driver.mjs /locations /tmp/mobile.png --width=600 --height=900 --click=".slide-toggle"
+
+# Auth-gated page: location edit -> Media panel, session kept via abort
+MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL="*" \
+  node .claude/skills/run-fishingmap-web/driver.mjs /locations/37/edit /tmp/edit.png \
+  --seed-user --mock-auth=abort --click=".edit-location-sidebar .edit-nav-item:nth-child(2)"
+
+# Failed login flow end-to-end (fill + submit against mocked 401)
+MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL="*" \
+  node .claude/skills/run-fishingmap-web/driver.mjs /login /tmp/login-fail.png --mock-auth=401 \
+  --fill='input[name="username"]=x' --fill='input[name="password"]=y' --click='button[type="submit"]' --wait=1200
 ```
 
 ## Run (human path)
@@ -138,8 +166,26 @@ test file without replacing it.
   Scope the selector to the toolbar you actually want, e.g.
   `.locations-toolbar .ms-control`.
 - **Geolocation always errors in this headless context** unless `--geo` is
-  passed — every page that calls `useLocation` logs `CONSOLE-ERROR:
+  passed — every page that calls `useGeolocation` logs `CONSOLE-ERROR:
   GeolocationPositionError` to the console. This is expected and non-fatal:
-  the app is built to degrade gracefully (no distance pill, sort dropdown
-  falls back to Name-only). Don't treat that console error alone as a
-  failure; only investigate if the visible UI is actually broken.
+  the app is built to degrade gracefully (distance filter disabled with a
+  hint, sort dropdown falls back to Name-only). Don't treat that console
+  error alone as a failure; only investigate if the visible UI is broken.
+- **Don't trust curl for backend liveness.** Git Bash's curl can report
+  `https://localhost:7299` unreachable (TLS/loopback quirk) while the
+  browser reaches it fine. If you need to know whether the backend is up,
+  check from the browser context (or playwright-core's `request` with
+  `ignoreHTTPSErrors: true`), not curl.
+- **`npm install <anything>` prunes `--no-save` packages.** Installing a new
+  dependency removes the unsaved `playwright-core`; the driver then fails
+  with `ERR_MODULE_NOT_FOUND`. Re-run
+  `npm install --no-save playwright-core` after any dependency change.
+- **Google Maps pages never reach `networkidle`** in headless (raster tile
+  streaming), so the driver logs `NAVIGATION-ERROR: Timeout` on `/map` and
+  detail pages with maps. The page has actually loaded — the screenshot and
+  TITLE/URL lines are still produced; judge by those, and expect a
+  `Vector Map ... Falling back to Raster` console error (harmless, WebGL is
+  unavailable headless).
+- **Anonymous page loads log two whoami 401s** in dev (`Failed to load
+  resource ... 401`) — the session re-validation runs twice under
+  StrictMode. Expected; absent in production builds.

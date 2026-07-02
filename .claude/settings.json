@@ -1,0 +1,10 @@
+{
+    "permissions": {
+        "allow": [
+            "Bash(node .claude/skills/run-fishingmap-web/driver.mjs *)",
+            "Bash(npm run lint)",
+            "Bash(npx vitest run *)",
+            "Bash(curl -sf http://localhost:3000/ *)"
+        ]
+    }
+}
