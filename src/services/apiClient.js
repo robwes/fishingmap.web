@@ -10,7 +10,55 @@
  * `fetch` itself only rejects on network errors, so every helper checks
  * `response.ok` to make sure an HTTP error (401/403/500...) is never
  * mistaken for a success.
+ *
+ * Sessions are kept alive transparently: the access token cookie expires
+ * after an hour, so on a 401 the helpers refresh the auth cookies via
+ * `/api/auth/refresh` (which rotates the long-lived refresh token) and retry
+ * the request once. A 401 that survives the refresh means the session is
+ * really gone and is handed to the caller unchanged.
  */
+
+let refreshPromise = null;
+
+/**
+ * Rotates the auth cookies through the backend refresh endpoint. Concurrent
+ * callers share one in-flight request — rotating the same refresh token
+ * twice looks like token theft to the backend, which answers by revoking
+ * the whole session.
+ * @returns {Promise<boolean>} True when the session was refreshed.
+ */
+const refreshSession = () => {
+    refreshPromise ??= fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/refresh`, {
+        method: 'POST',
+        credentials: 'include'
+    })
+        .then(response => response.ok)
+        .catch(() => false)
+        .finally(() => { refreshPromise = null; });
+
+    return refreshPromise;
+};
+
+/**
+ * fetch wrapper that refreshes an expired session: on a 401 the auth
+ * cookies are refreshed and the request retried once. Anything else —
+ * including a 401 that survives the refresh — passes through unchanged.
+ * @param {string} url - The absolute URL to request.
+ * @param {RequestInit} [options] - Options passed through to fetch.
+ * @returns {Promise<Response>} The response of the original or retried request.
+ */
+const fetchWithRefresh = async (url, options) => {
+    const response = await fetch(url, options);
+    if (response.status !== 401) {
+        return response;
+    }
+
+    if (!await refreshSession()) {
+        return response;
+    }
+
+    return await fetch(url, options);
+};
 
 /**
  * Performs a fetch and parses the JSON response body. Throws when the
@@ -20,7 +68,7 @@
  * @returns {Promise<any>} The parsed JSON body.
  */
 const requestJson = async (url, options) => {
-    const response = await fetch(url, options);
+    const response = await fetchWithRefresh(url, options);
 
     if (!response.ok) {
         throw new Error(`${options?.method ?? 'GET'} ${url} failed with status ${response.status}`);
@@ -105,7 +153,7 @@ export const apiClient = {
      */
     requestResult: async (url, options = undefined) => {
         try {
-            const response = await fetch(url, options);
+            const response = await fetchWithRefresh(url, options);
             if (response.ok) {
                 return { ok: true, status: response.status, body: await response.json() };
             }
@@ -126,7 +174,7 @@ export const apiClient = {
      */
     requestOk: async (url, options = {}) => {
         try {
-            const response = await fetch(url, { credentials: 'include', ...options });
+            const response = await fetchWithRefresh(url, { credentials: 'include', ...options });
             if (!response.ok) {
                 console.log(`${options.method ?? 'GET'} ${url} failed with status ${response.status}`);
             }
