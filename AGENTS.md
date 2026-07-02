@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
+Single source of project guidance for AI coding agents working in this repository. Claude Code imports this file via `CLAUDE.md`; Codex and other agents read it directly. **Edit this file, not CLAUDE.md.**
 
 ## Commands
 
@@ -37,6 +37,8 @@ Auth state lives in `CurrentUserContext` (`src/context/CurrentUserContext.jsx`):
 - The provider also kicks off a geolocation lookup via `useGeolocation` (`src/hooks/useGeolocation.js` — deliberately not named `useLocation`, which would shadow react-router's hook) and exposes `currentLocation` as the third value in the context tuple `[currentUser, updateCurrentUser, currentLocation]`.
 
 Auth itself is **cookie-based**: every fetch that needs identity passes `credentials: 'include'`. There are no tokens in JS-accessible storage.
+
+`currentUser.roles` is an array of role objects (`[{id, name}]`), not strings — checking membership needs `.some(r => r.name === 'Administrator')`, not `.includes(...)`. The admin role name is **`Administrator`**, not `Admin`; the backend (`[Authorize(Roles = "Administrator")]`) and frontend role checks must match it exactly, or the check silently always fails.
 
 ### Page / domain structure
 
@@ -85,6 +87,18 @@ Formik + Yup for add/edit flows. `AddLocation` is a four-step wizard (`src/pages
 ### Styling
 
 SCSS modules per component, imported alongside the JSX. Vite is configured to use the modern Sass compiler API (`api: 'modern-compiler'` in `vite.config.js`). Global styles in `src/index.scss`.
+
+Default to **`rem` for `font-size`** and **`em` for `padding`/`margin`/`gap`**, so spacing scales with local font-size while font-size stays anchored to the root (see `src/index.scss`'s `.mt-1`–`.mt-6` scale). `px` is fine when a value is genuinely fixed (hairline borders, icon sizing) — this is a default, not a hard rule.
+
+### Implementing design handoffs
+
+When implementing a Claude Design (claude.ai/design) handoff bundle, trust its *structural* changes (markup, layout direction, color usage, new components) but treat its *numeric* tokens skeptically — cross-check against the current SCSS first. Handoff specs have drifted from the live app before (e.g. a handoff spec'd `56px` for a control the app already built at `55px`); prefer the existing app value over a cosmetic-but-arbitrary delta unless the user specifically called out that value as the thing to change.
+
+## Code style
+
+- `if` blocks always use braces with the body on a new line — never a single-line inline `if (x) doThing();`.
+- Add a JSDoc comment above non-trivial named functions and const-assigned arrow functions (handlers, helpers, async operations) describing what they do and their `@param`s. Skip trivial one-liners where the name already says everything.
+- Prefer splitting UI into smaller, focused components whenever a piece of markup is reusable or makes the parent noticeably easier to read. Co-locate the new component in the same folder as the single parent that uses it; only move it to `src/components/ui/` once it is used in more than one place.
 
 ## Deployment
 
