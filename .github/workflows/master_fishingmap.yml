@@ -34,10 +34,12 @@ jobs:
       - name: Test
         run: npm run test --if-present
 
-      # Only the production build is deployed. The Azure Web App serves from
-      # the build/ subfolder (the SPA rewrite web.config ships inside it via
-      # public/), so the folder prefix is recreated on download below —
-      # sources and node_modules never leave the runner.
+      # Only the production build is deployed — sources and node_modules never
+      # leave the runner. The artifact holds the CONTENTS of build/ (upload
+      # strips the folder prefix), and the deploy job downloads them to the
+      # package root so index.html and the SPA-rewrite web.config (shipped via
+      # public/) land directly in wwwroot. Deploying them nested under build/
+      # serves a 403 at the site root — verified 2026-07-03.
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -56,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-          path: build
+          path: .
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
