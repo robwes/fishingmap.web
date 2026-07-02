@@ -15,6 +15,16 @@ export default defineConfig({
     strictPort: true,
     open: true
   },
+  test: {
+    // Deterministic env for service tests (import.meta.env.VITE_* is read
+    // at module load).
+    env: {
+      VITE_BASE_URL: 'http://api.test',
+      VITE_IMAGES_URL: 'http://api.test/api/images',
+      VITE_MAPS_API_KEY: 'test-maps-key',
+      VITE_MAP_ID: 'test-map-id'
+    }
+  },
   build: {
     outDir: 'build',
     rollupOptions: {
