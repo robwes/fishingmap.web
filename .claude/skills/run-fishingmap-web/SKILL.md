@@ -39,8 +39,28 @@ VITE_MAP_ID=...
 The app calls a live backend at `VITE_BASE_URL` for real data (locations,
 species, etc). Without it running, pages still render their shell — the
 services layer swallows fetch errors and returns `null`/`[]` — but lists will
-be empty. For a real data screenshot, the backend (separate C# repo) needs to
-be running at that origin.
+be empty. For a real data screenshot, the backend needs to be running at that
+origin.
+
+## Starting the backend
+
+The backend is the sibling repo `C:/Users/rober/source/repos/fishingmap.server`
+(ASP.NET Core; its own full recipe lives in
+`fishingmap.server/.claude/skills/run-fishingmap-server/SKILL.md`). Essentials:
+
+```bash
+# already running? (self-signed dev cert → -k required)
+curl -sk -o /dev/null -w "%{http_code}" --max-time 3 https://localhost:7299/api/locations
+# 200 → up; 000 → start it (run_in_background, not &):
+dotnet run --project C:/Users/rober/source/repos/fishingmap.server/FishingMap.API
+# ready when /api/locations answers 200 (~5-10 s)
+```
+
+Stop it (only if you started it): `netstat -ano | grep ":7299" | grep LISTENING`
+then `taskkill //PID <pid> //F` (double slashes in Git Bash). Startup touches
+the real dev SQL database (normal dev flow). Admin credentials are NOT the
+seeded defaults — ask the user if an admin flow is needed, and note login is
+rate-limited to 5 attempts/min.
 
 ## Build
 
@@ -171,11 +191,12 @@ test file without replacing it.
   the app is built to degrade gracefully (distance filter disabled with a
   hint, sort dropdown falls back to Name-only). Don't treat that console
   error alone as a failure; only investigate if the visible UI is broken.
-- **Don't trust curl for backend liveness.** Git Bash's curl can report
-  `https://localhost:7299` unreachable (TLS/loopback quirk) while the
-  browser reaches it fine. If you need to know whether the backend is up,
-  check from the browser context (or playwright-core's `request` with
-  `ignoreHTTPSErrors: true`), not curl.
+- **curl needs `-k` for backend liveness.** Git Bash's curl rejects the
+  backend's self-signed dev cert, which looks like "unreachable" —
+  `curl -sk https://localhost:7299/...` works reliably (verified July 2026,
+  dozens of probes). If curl still says down but pages show data, fall back
+  to checking from the browser context (playwright-core's `request` with
+  `ignoreHTTPSErrors: true`).
 - **`npm install <anything>` prunes `--no-save` packages.** Installing a new
   dependency removes the unsaved `playwright-core`; the driver then fails
   with `ERR_MODULE_NOT_FOUND`. Re-run

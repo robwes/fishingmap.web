@@ -21,7 +21,7 @@ Vite reads `.env.development.local` (dev) and `.env.production` (build). All fou
 
 ## Architecture
 
-This is the React frontend for **fishingmap.fi**, a map of fishing locations in Uusimaa, Finland. The app talks to a separate backend API (the C# repo at `VITE_BASE_URL`); this codebase contains no server code.
+This is the React frontend for **fishingmap.fi**, a map of fishing locations in Uusimaa, Finland. The app talks to a separate backend API (the C# repo at `C:/Users/rober/source/repos/fishingmap.server`, served locally at `VITE_BASE_URL` = https://localhost:7299); this codebase contains no server code. To start the backend for real data, see "Starting the backend" in `.claude/skills/run-fishingmap-web/SKILL.md`.
 
 ### Routing & auth
 
