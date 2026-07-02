@@ -8,8 +8,7 @@ function UserMenu({ user, open }) {
 
 	const [isOpen, setIsOpen] = useState(open ?? false);
 
-	// eslint-disable-next-line
-	const [_, setCurrentUser] = useCurrentUser();
+	const [, setCurrentUser] = useCurrentUser();
 
 	const toggleUserMenu = (event) => {
 		event.preventDefault();

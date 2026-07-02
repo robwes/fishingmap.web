@@ -4,7 +4,7 @@ import UserMenu from './UserMenu';
 import { useCurrentUser } from '../../../context/CurrentUserContext';
 import './Header.scss';
 
-function Header(props) {
+function Header() {
 
     const { pathname } = useLocation();
     const [currentUser] = useCurrentUser();

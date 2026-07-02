@@ -1,6 +1,209 @@
 .edit-species {
-    .edit-species-container {
-        max-width: 760px;
-        padding-bottom: 3em;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    // ── Header ───────────────────────────────────────────────
+    .edit-species-header {
+        padding: 1.125em 2em 0.875em;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        background: var(--clr-bg-body);
+    }
+
+    .edit-species-back {
+        background: none;
+        border: none;
+        color: var(--clr-primary);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0;
+        margin-bottom: 6px;
+
+        &:hover { color: var(--clr-primary-dark); }
+    }
+
+    .edit-species-header-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .edit-species-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--clr-body);
+    }
+
+    .edit-species-subtitle {
+        font-size: 0.8125rem;
+        color: var(--clr-secondary-text);
+        margin: 2px 0 0;
+    }
+
+    // ── Layout ───────────────────────────────────────────────
+    .edit-species-body {
+        display: flex;
+        flex: 1;
+    }
+
+    // ── Sidebar ──────────────────────────────────────────────
+    .edit-species-sidebar {
+        width: 220px;
+        flex-shrink: 0;
+        padding: 1em 0.75em;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        border-right: 1px solid rgba(0, 0, 0, 0.07);
+        background: var(--clr-bg-body);
+    }
+
+    .edit-species-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 12px;
+        border-radius: 7px;
+        border: none;
+        background: transparent;
+        color: var(--clr-body);
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 300;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        transition: background 100ms ease;
+
+        &:hover { background: rgba(0, 0, 0, 0.04); }
+
+        &.active {
+            background: var(--clr-primary-light);
+            color: var(--clr-primary-text);
+            font-weight: 600;
+        }
+    }
+
+    .edit-species-nav-icon {
+        width: 15px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .edit-species-nav-label-short { display: none; }
+
+    // ── Content panel ────────────────────────────────────────
+    .edit-species-panel {
+        flex: 1;
+        background: #fff;
+        padding: 1.375em 1.75em;
+        overflow-y: auto;
+    }
+
+    .edit-species-panel-heading {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1.25em;
+        color: var(--clr-primary);
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--clr-body);
+        }
+    }
+
+    // ── Shared field styles ───────────────────────────────────
+    .edit-species-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 1.125em;
+    }
+
+    .edit-species-save-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        padding-top: 0.875em;
+        margin-top: 0.375em;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .edit-species-saved {
+        font-size: 0.75rem;
+        color: #00A361;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .edit-species-error {
+        font-size: 0.75rem;
+        color: #dc2626;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    // ── Mobile ───────────────────────────────────────────────
+    @media (max-width: 700px) {
+        .edit-species-header {
+            padding: 0.875em 1em 0.75em;
+        }
+
+        .edit-species-body {
+            flex-direction: column;
+        }
+
+        .edit-species-sidebar {
+            width: 100%;
+            flex-direction: row;
+            padding: 0;
+            gap: 0;
+            border-right: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-species-nav-item {
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px 4px;
+            border-radius: 0;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+
+            &.active {
+                background: transparent;
+                color: var(--clr-primary);
+                border-bottom-color: var(--clr-primary);
+                font-weight: 700;
+            }
+        }
+
+        .edit-species-nav-icon { width: auto; font-size: 1rem; }
+        .edit-species-nav-label { display: none; }
+        .edit-species-nav-label-short { display: block; }
+
+        .edit-species-panel {
+            padding: 1em;
+        }
+
+        .edit-species-panel-heading {
+            justify-content: center;
+
+            h2 { font-size: 1.25rem; }
+        }
     }
 }

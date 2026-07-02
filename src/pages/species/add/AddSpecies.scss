@@ -1,6 +1,196 @@
 .add-species {
+    padding-bottom: 3em;
+
     .add-species-container {
+        width: 95%;
         max-width: 760px;
-        padding-bottom: 3em;
+        margin: 0 auto;
+        padding: 2em 0 3em;
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
+    }
+
+    .asp-back {
+        background: none;
+        border: none;
+        color: var(--clr-primary);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0;
+
+        &:hover { color: var(--clr-primary-dark); }
+    }
+
+    .asp-heading {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--clr-body);
+    }
+
+    .asp-form {
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
+    }
+
+    // ── Card ─────────────────────────────────────────────────
+    .asp-card {
+        background: var(--clr-bg-light);
+        border-radius: 5px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        padding: 2em 2.5em 2.5em;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+    }
+
+    .asp-card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--clr-body);
+        margin: 0;
+        padding-bottom: 0.4em;
+        border-bottom: 1px solid var(--clr-primary);
+    }
+
+    .asp-card-desc {
+        font-size: 0.875rem;
+        color: var(--clr-secondary-text);
+        margin-top: 0.5em;
+        line-height: 1.55;
+    }
+
+    .asp-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25em;
+    }
+
+    .asp-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .asp-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--clr-secondary-text);
+    }
+
+    .asp-required { color: #dc2626; }
+
+    .asp-input {
+        width: 100%;
+        padding: 0.8em 1em;
+        border: 1px solid var(--clr-input-border);
+        border-radius: var(--radius-input);
+        font: inherit;
+        font-size: 1rem;
+        background: #fff;
+        color: var(--clr-body);
+        outline: 0;
+
+        &:focus {
+            border-color: var(--clr-primary);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+        }
+    }
+
+    .asp-textarea {
+        @extend .asp-input;
+        resize: vertical;
+    }
+
+    .asp-error {
+        font-size: 0.8125rem;
+        color: #dc2626;
+        margin: 0;
+    }
+
+    // ── Photo grid ───────────────────────────────────────────
+    .asp-photo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5em;
+    }
+
+    .asp-photo-thumb {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        border-radius: 5px;
+        overflow: hidden;
+        background: #eee;
+
+        img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    }
+
+    .asp-photo-remove {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.55);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 0.625rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: inherit;
+
+        &:hover { background: rgba(0, 0, 0, 0.8); }
+    }
+
+    .asp-photo-add {
+        aspect-ratio: 4 / 3;
+        border-radius: 5px;
+        border: 2px dashed var(--clr-input-border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25em;
+        cursor: pointer;
+        color: #bbb;
+        background: #fafafa;
+        transition: border-color 0.15s, color 0.15s, background 0.15s;
+
+        i    { font-size: 1.25rem; }
+        span { font-size: 0.75rem; }
+
+        &:hover,
+        &.drag-over {
+            border-color: var(--clr-primary);
+            color: var(--clr-primary);
+            background: var(--clr-primary-light);
+        }
+    }
+
+    // ── Footer ───────────────────────────────────────────────
+    .asp-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.75em;
+    }
+
+    // ── Mobile ───────────────────────────────────────────────
+    @media (max-width: 700px) {
+        .asp-card { padding: 1.25em 1.25em 1.75em; }
+        .asp-card-title { font-size: 1.2rem; text-align: center; }
+        .asp-card-desc { text-align: center; }
+        .asp-photo-grid { grid-template-columns: 1fr; }
+        .asp-photo-thumb, .asp-photo-add { aspect-ratio: 16 / 9; }
+        .asp-heading { font-size: 1.4rem; }
     }
 }

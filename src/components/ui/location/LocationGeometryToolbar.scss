@@ -1,25 +1,32 @@
 .location-geometry-toolbar {
     display: flex;
-    flex-direction: row;
-    border-radius: 2px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+    flex-direction: column;
+    gap: 3px;
 
-    .button {
-        border: none;
-        border-radius: 0;
-        color: rgb(86, 86, 86);
-        font-weight: 700;
-        background-color: rgb(255, 255, 255);
-        padding: 0.5em 1.2em;
-    }
+    .toolbar-button {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border: 1px solid var(--clr-input-border);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--clr-body);
+        cursor: pointer;
+        transition: background 120ms ease;
 
-    .button:hover,
-    .button:focus-visible {
-        background-color: rgb(240, 240, 240);
-    }
+        &:hover {
+            background: var(--clr-secondary-dark);
+        }
 
-    .button:active,
-    .button.active {
-        color: #000;
+        &.active {
+            background: var(--clr-primary);
+            color: #fff;
+            border-color: var(--clr-primary);
+        }
     }
 }

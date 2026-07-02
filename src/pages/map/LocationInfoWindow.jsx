@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import LocationSpeciesItem from '../../components/ui/location/LocationSpeciesItem';
 import { InfoWindow } from '@vis.gl/react-google-maps';
 import { locationService } from '../../services/locationService';
+import { fileService } from '../../services/fileService';
 import ImageCarousell from '../../components/ui/imageCarousell/ImageCarousell';
 import lake from '../../assets/images/lake.png';
 import CollapsibleList from '../../components/ui/collapse/CollapsibleList';
 import './LocationInfoWindow.scss';
-import LinkItem from '../../components/ui/linkItem/LinkItem';
 
 const LocationInfoWindow = ({ location, onClose }) => {
     const [locationData, setLocationData] = useState(null);
@@ -36,7 +36,7 @@ const LocationInfoWindow = ({ location, onClose }) => {
         if (locationData && locationData.images && locationData.images.length > 0) {
             locationData.images.forEach(image => {
                 images.push({
-                    url: `${import.meta.env.VITE_IMAGES_URL}/${image.path}`,
+                    url: fileService.getImageUrl(image.path),
                     description: locationData.name
                 });
             });

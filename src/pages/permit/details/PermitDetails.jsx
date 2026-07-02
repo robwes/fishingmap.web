@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { permitService } from '../../../services/permitService';
 import PermitCard from './PermitCard';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
+import NotFoundMessage from '../../../components/ui/notFound/NotFoundMessage';
 import './PermitDetails.scss';
 
 function PermitDetails() {
@@ -26,6 +27,13 @@ function PermitDetails() {
             {isLoading && <FloatingSpinner />}
 
             <div className='container center-content'>
+                {!isLoading && !permit && (
+                    <NotFoundMessage
+                        message="This permit could not be loaded. It may have been removed."
+                        linkTo="/permits"
+                        linkText="Back to permits"
+                    />
+                )}
                 {permit && <PermitCard permit={permit} />}
             </div>
         </div>

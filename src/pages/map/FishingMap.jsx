@@ -26,13 +26,6 @@ const searchCircleOptions = {
     draggable: true
 };
 
-const clustererOptions = {
-    gridSize: 50,
-    averageCenter: true,
-    minimumClusterSize: 8,
-    ignoreHidden: true
-};
-
 function FishingMap() {
     const map = useMap();
     const [locations, setLocations] = useState([]);
@@ -41,8 +34,7 @@ function FishingMap() {
     const [isLoading, setIsLoading] = useState(true);
     const circleRef = useRef();
 
-    // eslint-disable-next-line
-    const [currentUser, updateCurrentUser, currentLocation] = useCurrentUser();
+    const [, , currentLocation] = useCurrentUser();
 
     useEffect(() => {
         (async () => {
@@ -61,7 +53,7 @@ function FishingMap() {
         }
     }
 
-    const handleSearch = async ({ search, species, distance }, { isSubmitting, setSubmitting, resetForm }) => {
+    const handleSearch = async ({ search, species, distance }) => {
         const searchOrigin = {
             latitude: circleRef.current.center.lat(),
             longitude: circleRef.current.center.lng()
@@ -114,10 +106,7 @@ function FishingMap() {
                         radius={searchRadius}
                         circleOptions={searchCircleOptions}
                     />
-                    <LocationClusterer
-                        locations={locations}
-                        clustererOptions={clustererOptions}
-                    />
+                    <LocationClusterer locations={locations} />
                 </Map>
             </div>
         </div>

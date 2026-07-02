@@ -1,0 +1,38 @@
+.range-input {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    > label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--clr-secondary-text);
+    }
+
+    input[type="range"] {
+        width: 100%;
+        accent-color: var(--clr-primary);
+    }
+
+    .range-input-value {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--clr-body);
+    }
+
+    .range-input-hint {
+        font-size: 0.6875rem;
+        color: var(--clr-secondary-text);
+    }
+
+    &.is-disabled {
+        input[type="range"] {
+            cursor: not-allowed;
+        }
+
+        > label,
+        .range-input-value {
+            opacity: 0.5;
+        }
+    }
+}

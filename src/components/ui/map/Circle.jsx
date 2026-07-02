@@ -1,5 +1,4 @@
 /*global google*/
-/* eslint-disable complexity */
 import {
     useContext,
     useEffect,
@@ -56,7 +55,6 @@ function useCircle(props) {
     const map = useContext(GoogleMapsContext)?.map;
 
     // create circle instance and add to the map once the map is available
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (!map) {
             if (map === undefined)

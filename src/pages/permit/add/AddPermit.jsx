@@ -2,20 +2,29 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { permitService } from '../../../services/permitService';
 import PermitForm from '../../../components/ui/permit/PermitForm';
+import { useToast } from '../../../context/ToastContext';
 import './AddPermit.scss';
 
 function AddPermit() {
 
     const navigate = useNavigate();
+    const showToast = useToast();
 
-    const handleSubmit = async (values, { setSubmitting }) => {
-        var response = await permitService.createPermit({
+    /**
+     * Creates the permit and navigates to it, or shows an error toast when
+     * the request was rejected.
+     * @param {{name: string, url: string}} values - The submitted form values.
+     */
+    const handleSubmit = async (values) => {
+        const response = await permitService.createPermit({
             name: values.name,
             url: values.url
         });
 
         if (response) {
             navigate(`/permits/${response.id}`);
+        } else {
+            showToast('Failed to add the permit. Please try again.');
         }
     }
 

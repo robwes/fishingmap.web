@@ -66,46 +66,36 @@ function Pagination({ totalRecords, pageLimit, pageNeighbours, currentPage, onPa
         }
     }
 
-    const handleClick = page => evt => {
-        evt.preventDefault();
-        gotoPage(page);
-    }
-
-    const handleMoveLeft = evt => {
-        evt.preventDefault();
-        gotoPage(currentPage - 1);
-    }
-
-    const handleMoveRight = evt => {
-        evt.preventDefault();
-        gotoPage(currentPage + 1);
-    }
-
     const pages = fetchPageNumbers();
 
     return (
         <ul className="pagination">
-            {pages.map((page, index) => {
+            {pages.map(page => {
 
                 if (page === LEFT_PAGE) return (
-                    <li key={index} className="page-item">
-                        <a className="page-link" href="/#" aria-label="Previous" onClick={handleMoveLeft}>
+                    <li key={page} className="page-item">
+                        <button type="button" className="page-link" aria-label="Previous" onClick={() => gotoPage(currentPage - 1)}>
                             <i className="fas fa-chevron-left" aria-hidden="true"></i>
-                        </a>
+                        </button>
                     </li>
                 );
 
                 if (page === RIGHT_PAGE) return (
-                    <li key={index} className="page-item">
-                        <a className="page-link" href="/#" aria-label="Next" onClick={handleMoveRight}>
+                    <li key={page} className="page-item">
+                        <button type="button" className="page-link" aria-label="Next" onClick={() => gotoPage(currentPage + 1)}>
                             <i className="fas fa-chevron-right" aria-hidden="true"></i>
-                        </a>
+                        </button>
                     </li>
                 );
 
                 return (
-                    <li key={index} className="page-item">
-                        <a className={`page-link${currentPage === page ? ' active' : ''}`} href="/#" onClick={handleClick(page)}>{page}</a>
+                    <li key={page} className="page-item">
+                        <button
+                            type="button"
+                            className={`page-link${currentPage === page ? ' active' : ''}`}
+                            aria-current={currentPage === page ? 'page' : undefined}
+                            onClick={() => gotoPage(page)}
+                        >{page}</button>
                     </li>
                 );
             })}

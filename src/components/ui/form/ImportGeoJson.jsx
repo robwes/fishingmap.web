@@ -11,15 +11,26 @@ function ImportGeoJson({onImport, onError}) {
         fileInputRef.current.click();
     };
 
+    /**
+     * Reads the chosen file and hands its content to the parser. Guards
+     * against a cancelled/cleared file dialog (no file selected) and resets
+     * the input value so choosing the same file again re-triggers onChange.
+     * @param {React.ChangeEvent<HTMLInputElement>} event
+     */
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+
         const reader = new FileReader();
-        
+
         reader.onload = () => {
             parseFileContent(reader.result);
         };
 
         reader.readAsText(file);
+        event.target.value = '';
     };
 
     const parseFileContent = (result) => {
@@ -34,7 +45,7 @@ function ImportGeoJson({onImport, onError}) {
             const polygons = filterPolygons(geoJson);
             onImport(polygons);
         } 
-        catch (e) {
+        catch {
             onError("Failed to read file content");
         }
     }
@@ -52,7 +63,7 @@ function ImportGeoJson({onImport, onError}) {
         <div className='import-geojson'>
             <Button
                 onClick={handleImportClick}>
-                Import
+                <i className="fas fa-file-import" /> Import
             </Button>
             <input
                 className='import-geojson-file'

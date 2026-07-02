@@ -3,7 +3,7 @@ import { useMap } from '@vis.gl/react-google-maps';
 import { MarkerClusterer as GoogleMapsMarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
 import LocationMarker from './LocationMarker';
 
-const LocationClusterer = ({ locations, clustererOptions }) => {
+const LocationClusterer = ({ locations }) => {
     const map = useMap();
     const clusterer = useRef(null);
 

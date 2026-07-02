@@ -1,64 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React from 'react';
 import { permitService } from '../../../services/permitService';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
-import SearchFilter from '../../../components/ui/searchFilter/SearchFilter';
+import SearchInput from '../../../components/ui/form/SearchInput';
 import PermitListItem from './PermitListItem';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
+import useUrlFilters from '../../../hooks/useUrlFilters';
+import useDebouncedQuery from '../../../hooks/useDebouncedQuery';
 import './Permits.scss';
 
+const PAGE_LIMIT = 8;
+const PAGE_NEIGHBOURS = 1;
+
 function Permits() {
+    const { searchParams, patchParams, currentPage, goToPage } = useUrlFilters();
 
-    const [permits, setPermits] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const search = searchParams.get('q') ?? '';
 
-    const pageLimit = 8;
-    const pageNeighbours = 1;
-    const currentPage = parseInt(searchParams.get('page')) || 1;
+    const { data: permits, isLoading } = useDebouncedQuery(
+        () => permitService.getPermits(search),
+        [search],
+        { initial: [] }
+    );
 
-    const pagedPermits = permits.slice((currentPage - 1) * pageLimit, currentPage * pageLimit);
+    const pagedPermits = permits.slice((currentPage - 1) * PAGE_LIMIT, currentPage * PAGE_LIMIT);
 
-    useEffect(() => {
-        (async () => {
-            const p = await permitService.getPermits();
-            if (p) {
-                setPermits(p);
-            }
-            setIsLoading(false);
-        })();
-    }, []);
-
-    const handlePageChanged = (page) => {
-        setSearchParams(page > 1 ? { page } : {}, { replace: true });
-        window.scrollTo(0, 0);
-    };
-
-    const handleSearch = async ({ search }) => {
-        const permits = await permitService.getPermits(search);
-        if (permits) {
-            setSearchParams({}, { replace: true });
-            setPermits(permits);
-        }
-    };
+    const onSearch = (value) => patchParams({ q: value, page: '' });
 
     return (
         <div className='permits page'>
             {isLoading && <FloatingSpinner />}
 
+            <SlideInPanel>
+                <SearchInput
+                    value={search}
+                    onChange={onSearch}
+                    placeholder="Search permits…"
+                    ariaLabel="Search permits"
+                />
+            </SlideInPanel>
+
             <div className='container center-content'>
-                <SlideInPanel>
-                    <SearchFilter onSubmit={handleSearch} />
-                </SlideInPanel>
                 <h1 className='page-title'>Permits</h1>
+
                 <div className='permits-list'>
                     {pagedPermits.map(p => (
                         <PermitListItem key={p.id} permit={p} />
                     ))}
                 </div>
             </div>
-            <Pagination totalRecords={permits.length} pageLimit={pageLimit} pageNeighbours={pageNeighbours} currentPage={currentPage} onPageChanged={handlePageChanged} />
+
+            <Pagination
+                totalRecords={permits.length}
+                pageLimit={PAGE_LIMIT}
+                pageNeighbours={PAGE_NEIGHBOURS}
+                currentPage={currentPage}
+                onPageChanged={goToPage}
+            />
         </div>
     )
 }

@@ -17,19 +17,19 @@ const customStyles = {
         boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
         borderRadius: ".5em"
     }),
-    menu: (provided, state) => ({
+    menu: (provided) => ({
         ...provided,
         overflow: "hidden"
     }),
-    menuList: (provided, state) => ({
+    menuList: (provided) => ({
         ...provided,
         padding: 0
     }),
-    valueContainer: (provided, state) => ({
+    valueContainer: (provided) => ({
         ...provided,
         padding: ".5em 1em"
     }),
-    multiValue: (provided, state) => ({
+    multiValue: (provided) => ({
         ...provided,
         marginLeft: 0,
         background: "#00ADFF",
@@ -39,11 +39,11 @@ const customStyles = {
         paddingRight: ".2em",
         marginRight: ".5em"
     }),
-    multiValueLabel: (provided, state) => ({
+    multiValueLabel: (provided) => ({
         ...provided,
         color: "white"
     }),
-    multiValueRemove: (provided, state) => ({
+    multiValueRemove: (provided) => ({
         ...provided,
         color: "white",
     })

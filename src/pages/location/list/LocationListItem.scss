@@ -1,4 +1,62 @@
 .location-list-item {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(16, 24, 40, 0.16);
+    }
+
+    .location-list-item-figure {
+        position: relative;
+        width: 100%;
+        height: 190px;
+        flex-shrink: 0;
+        overflow: hidden;
+        border-radius: 5px 5px 0 0;
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+    }
+
+    .location-list-item-placeholder {
+        width: 100%;
+        height: 100%;
+        background: var(--clr-primary-light);
+        display: grid;
+        place-items: center;
+
+        i {
+            font-size: 3.1rem;
+            color: var(--clr-primary);
+            opacity: 0.55;
+        }
+    }
+
+    .location-list-item-distance {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4em;
+        padding: 0.35em 0.75em;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.94);
+        color: var(--clr-primary-text);
+        font-size: 0.8rem;
+        font-weight: 500;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+        white-space: nowrap;
+
+        i {
+            color: var(--clr-primary);
+            font-size: 0.75rem;
+        }
+    }
+
     .card-body p {
         max-height: 85px;
         margin-bottom: 1.5em;
@@ -10,5 +68,15 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1em;
+    }
+}
+
+@media(min-width: 600px) {
+    .location-list-item {
+        .location-list-item-figure {
+            width: 30%;
+            height: 100%;
+            border-radius: 5px 0 0 5px;
+        }
     }
 }

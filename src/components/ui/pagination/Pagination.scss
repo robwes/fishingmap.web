@@ -15,6 +15,9 @@
         padding: 0 0.625em;
         border: 1px solid var(--clr-secondary-dark);
         border-radius: 0.5em;
+        background: transparent;
+        font: inherit;
+        cursor: pointer;
         text-decoration: none;
         color: var(--clr-primary-text);
         transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;

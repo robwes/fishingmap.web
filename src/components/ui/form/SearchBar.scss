@@ -15,21 +15,17 @@
         border: 2px solid var(--clr-primary);
     }
     
-    .search-input {
+    .search-bar-input {
         font-size: inherit;
         border: 0;
-        padding: .25em 1em;
+        padding: 0 1em;
         flex-grow: 1;
         outline: 0;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 100%;
         background: #FFF;
+        min-width: 0;
     }
 
-    .search-input:disabled {
+    .search-bar-input:disabled {
         background: var(--clr-input-disabled);
     }
     

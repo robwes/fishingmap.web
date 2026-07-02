@@ -1,0 +1,30 @@
+.add-location {
+    // ── Map step ─────────────────────────────────────────────
+    .ws-map-area {
+        position: relative;
+        height: 480px;
+        border-radius: 5px;
+        overflow: hidden;
+
+        .location-geometry-editor {
+            height: 480px;
+        }
+    }
+
+    .ws-map-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        font-size: 0.875rem;
+        color: var(--clr-secondary-text);
+    }
+
+    .ws-field-error {
+        font-size: 0.8125rem;
+        color: #dc2626;
+        display: flex;
+        align-items: center;
+        gap: 0.35em;
+        margin-top: 0.25em;
+    }
+}

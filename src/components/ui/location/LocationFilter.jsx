@@ -3,6 +3,7 @@ import SearchBar from '../form/SearchBar';
 import MultiSelect from '../form/MultiSelect';
 import FormRange from '../form/Range';
 import ButtonPrimary from '../buttons/ButtonPrimary';
+import ResetButton from '../buttons/ResetButton';
 import { speciesService } from '../../../services/speciesService';
 import { Formik, Form } from 'formik';
 import './LocationFilter.scss';
@@ -70,13 +71,7 @@ function LocationFilter({ onSubmit, onReset, onDistanceChange, resultCount }) {
                         />
 
                         <div className="filter-actions">
-                            <button
-                                type="reset"
-                                className="reset-link"
-                                onClick={onReset}
-                                disabled={isSubmitting}>
-                                <i className="fas fa-rotate-left"></i>&nbsp;Reset
-                            </button>
+                            <ResetButton type="reset" onClick={onReset} disabled={isSubmitting} />
                             <div className="filter-actions-end">
                                 {resultCount !== undefined && (
                                     <span className="filter-result-count">

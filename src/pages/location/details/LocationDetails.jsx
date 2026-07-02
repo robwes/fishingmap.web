@@ -5,6 +5,7 @@ import { locationService } from '../../../services/locationService';
 import LocationMap from './LocationMap';
 import Article from '../../../components/ui/article/Article';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
+import NotFoundMessage from '../../../components/ui/notFound/NotFoundMessage';
 import './LocationDetails.scss';
 
 function LocationDetails() {
@@ -26,6 +27,13 @@ function LocationDetails() {
     return (
         <div className="location-details page">
             {isLoading && <FloatingSpinner />}
+            {!isLoading && !location && (
+                <NotFoundMessage
+                    message="This location could not be loaded. It may have been removed."
+                    linkTo="/locations"
+                    linkText="Back to locations"
+                />
+            )}
             {location && <>
                 <div className='left'>
                     <LocationCard location={location} />

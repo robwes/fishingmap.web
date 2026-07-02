@@ -20,23 +20,7 @@
         color: var(--clr-secondary-text);
     }
 
-    .reset-link {
-        background: transparent;
-        border: 0;
-        cursor: pointer;
-        padding: 0.25em 0.5em;
-        font-family: inherit;
-        font-size: 0.875rem;
-        color: var(--clr-secondary-text);
-        outline: 0;
-    }
-
-    .reset-link:hover,
-    .reset-link:focus {
-        color: var(--clr-primary);
-    }
-
-    .reset-link:disabled {
+    .reset-button:disabled {
         opacity: 0.5;
         cursor: default;
     }

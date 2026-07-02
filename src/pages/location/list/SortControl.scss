@@ -1,0 +1,39 @@
+.sort-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.sort-select {
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    font-size: 0.9rem;
+    height: 40px;
+    padding: 0 2.2em 0 0.9em;
+    background: #fff;
+    color: var(--clr-body);
+    border: 1px solid var(--clr-input-border);
+    border-radius: var(--radius-input);
+    cursor: pointer;
+
+    &:hover {
+        border-color: var(--clr-primary);
+    }
+
+    &:focus {
+        outline: 0;
+        border-color: var(--clr-primary);
+    }
+}
+
+.sort-control .chev {
+    position: absolute;
+    right: 0.85em;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--clr-secondary-text);
+    font-size: 0.75rem;
+}

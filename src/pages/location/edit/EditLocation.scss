@@ -1,6 +1,259 @@
 .edit-location {
-    width: 95%;
-	max-width: 1500px;
-	margin: 0 auto;
-	padding: 2.5em 0;
+    display: flex;
+    flex-direction: column;
+
+    // ── Page header ──────────────────────────────────────────
+    .elp-header {
+        padding: 1.125em 2em 0.875em;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        background: var(--clr-bg-body);
+    }
+
+    .elp-back-link {
+        background: none;
+        border: none;
+        color: var(--clr-primary);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25em;
+        padding: 0;
+        margin-bottom: 0.375em;
+
+        i { font-size: 0.5625rem; }
+
+        &:hover { text-decoration: underline; }
+    }
+
+    .elp-header-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75em;
+    }
+
+    .elp-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--clr-body);
+    }
+
+    .elp-subtitle {
+        font-size: 0.8125rem;
+        color: var(--clr-secondary-text);
+        margin: 0.125em 0 0;
+        letter-spacing: normal;
+    }
+
+    // ── Two-column layout ────────────────────────────────────
+    .edit-location-layout {
+        display: flex;
+        flex: 1;
+    }
+
+    // ── Sidebar ──────────────────────────────────────────────
+    .edit-location-sidebar {
+        width: 220px;
+        flex-shrink: 0;
+        padding: 1em 0.75em;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        border-right: 1px solid rgba(0, 0, 0, 0.07);
+        background: var(--clr-bg-body);
+    }
+
+    .edit-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5625em;
+        padding: 0.5625em 0.75em;
+        border-radius: 7px;
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 300;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        color: var(--clr-body);
+
+        &.active {
+            background: var(--clr-primary-light);
+            color: var(--clr-primary-text);
+            font-weight: 600;
+        }
+
+        &.locked {
+            color: #bbb;
+            cursor: default;
+        }
+
+        &:hover:not(.active):not(.locked) {
+            background: rgba(0, 0, 0, 0.04);
+        }
+    }
+
+    .edit-nav-icon {
+        width: 15px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .edit-nav-label {
+        flex: 1;
+    }
+
+    .edit-nav-label-short {
+        display: none;
+    }
+
+    .edit-nav-lock {
+        font-size: 0.625rem;
+        opacity: 0.4;
+    }
+
+    // ── Content panel ────────────────────────────────────────
+    .edit-location-panel {
+        flex: 1;
+        background: #fff;
+        padding: 1.375em 1.75em;
+        overflow-y: auto;
+    }
+
+    .edit-panel-heading {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        margin-bottom: 1.25em;
+    }
+
+    .edit-panel-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--clr-body);
+    }
+
+    .edit-admin-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25em;
+        background: #f3f3f3;
+        color: #999;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        padding: 0.125em 0.5625em;
+        font-size: 0.6875rem;
+        font-weight: 500;
+
+        i { font-size: 0.5625rem; }
+    }
+
+    // ── Shared: form fields wrapper ──────────────────────────
+    .edit-panel-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 1.125em;
+    }
+
+    // ── Shared: save row ─────────────────────────────────────
+    .edit-save-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.625em;
+        padding-top: 0.875em;
+        margin-top: 0.375em;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .edit-saved-confirmation {
+        font-size: 0.75rem;
+        color: #00A361;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3125em;
+    }
+
+    .edit-save-error {
+        font-size: 0.75rem;
+        color: #dc2626;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3125em;
+    }
+
+    // ── Mobile: sidebar → horizontal tab strip ────────────────
+    @media (max-width: 700px) {
+        .elp-header {
+            padding: 0.875em 1em 0.75em;
+        }
+
+        .edit-location-layout {
+            flex-direction: column;
+        }
+
+        .edit-location-sidebar {
+            width: 100%;
+            flex-direction: row;
+            padding: 0;
+            gap: 0;
+            border-right: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-nav-item {
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px 4px;
+            border-radius: 0;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+
+            &.active {
+                background: transparent;
+                color: var(--clr-primary);
+                border-bottom-color: var(--clr-primary);
+                font-weight: 700;
+            }
+        }
+
+        .edit-nav-icon {
+            width: auto;
+            font-size: 1rem;
+        }
+
+        .edit-nav-lock {
+            display: none;
+        }
+
+        .edit-nav-label {
+            display: none;
+        }
+
+        .edit-nav-label-short {
+            display: block;
+            flex: 0;
+        }
+
+        .edit-location-panel {
+            padding: 2em 1em 1em 1em;
+        }
+
+        .edit-panel-heading {
+            justify-content: center;
+        }
+
+        .edit-panel-title {
+            font-size: 1.25rem;
+        }
+    }
 }

@@ -1,9 +1,13 @@
 .button {
-	display: block;
-	width: fit-content;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4em;
 	line-height: normal;
-	font-size: inherit;
-	padding: .7em 1.8em;
+	font-size: 1rem;
+	font-weight: 500;
+	font-family: inherit;
+	padding: 0.7em 1.4em;
 	border: 0;
 	border-radius: var(--radius-input);
 	cursor: pointer;

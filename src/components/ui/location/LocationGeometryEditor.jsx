@@ -70,7 +70,9 @@ const LocationGeometryEditor = ({
 
     const dataLayer = useData(
         (event) => {
-            // handleAddFeature
+            // handleAddFeature — dataLayer is safe to close over here: the
+            // callback only fires from map events, long after it's assigned.
+            // eslint-disable-next-line react-hooks/immutability
             if (dataLayer) {
                 checkAndDispatchGeometry(dataLayer);
             }
@@ -124,7 +126,7 @@ const LocationGeometryEditor = ({
         setSelectedFeature(null);
     }, [selectedFeature, dataLayer, checkAndDispatchGeometry, onNavigationPositionChanged]);
 
-    const handleSelectNavigationPosition = useCallback(event => {
+    const handleSelectNavigationPosition = useCallback(() => {
         setSelectedFeature(navigationPositionFeature);
     }, [navigationPositionFeature]);
 

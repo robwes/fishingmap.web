@@ -12,7 +12,7 @@ function SearchBar({className, disabled = false, ...props}) {
     return (
         <div className={getCssClasses()}>
             <input
-                className="search-input"
+                className="search-bar-input"
                 placeholder="Search..."
                 disabled={disabled}
                 {...field}

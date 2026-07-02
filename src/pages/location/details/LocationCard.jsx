@@ -6,6 +6,7 @@ import LocationSpeciesItem from '../../../components/ui/location/LocationSpecies
 import LocationPermitItem from './LocationPermitItem';
 import CollapsibleArticlePrimary from '../../../components/ui/collapse/CollapsibleArticlePrimary';
 import lake from '../../../assets/images/lake.png';
+import { fileService } from '../../../services/fileService';
 import './LocationCard.scss';
 
 function LocationCard({ location }) {
@@ -16,7 +17,7 @@ function LocationCard({ location }) {
         if (location && location.images.length > 0) {
             location.images.forEach(image => {
                 images.push({
-                    url: `${import.meta.env.VITE_IMAGES_URL}/${image.path}`,
+                    url: fileService.getImageUrl(image.path),
                     description: location.name
                 });
             });

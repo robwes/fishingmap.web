@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { permitService } from '../../../services/permitService';
 import PermitForm from '../../../components/ui/permit/PermitForm';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
+import { useToast } from '../../../context/ToastContext';
 import './EditPermit.scss';
 
 function EditPermit() {
@@ -12,6 +13,7 @@ function EditPermit() {
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
+    const showToast = useToast();
 
     useEffect(() => {
         (async () => {
@@ -25,8 +27,13 @@ function EditPermit() {
     }, []);
 
 
-    const handleSubmit = async (values, { setSubmitting }) => {
-        var response = await permitService.updatePermit(
+    /**
+     * Saves the permit and navigates back to it, or shows an error toast
+     * when the request was rejected.
+     * @param {{name: string, url: string}} values - The submitted form values.
+     */
+    const handleSubmit = async (values) => {
+        const response = await permitService.updatePermit(
             permit.id,
             {
                 id: permit.id,
@@ -36,14 +43,25 @@ function EditPermit() {
 
         if (response) {
             navigate(`/permits/${response.id}`);
+        } else {
+            showToast('Failed to save the permit. Please try again.');
         }
     }
 
+    /**
+     * Deletes the permit after confirmation. Only navigates away when the
+     * server actually confirmed the delete.
+     * @param {React.MouseEvent} $event
+     */
     const handleDelete = async ($event) => {
         $event.preventDefault();
         if (window.confirm(`Are you sure you want to delete ${permit.name}?`)) {
-            await permitService.deletePermit(permit.id);
-            navigate(`/permits`);
+            const deleted = await permitService.deletePermit(permit.id);
+            if (deleted) {
+                navigate(`/permits`);
+            } else {
+                showToast('Failed to delete the permit. Please try again.');
+            }
         }
     }
 

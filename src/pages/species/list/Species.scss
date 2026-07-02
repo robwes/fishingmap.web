@@ -1,45 +1,88 @@
 .species {
-	display: grid;
+    .slide-in-panel {
+        display: flex;
+        flex-direction: column;
+    }
 
-    .page-title {
+    .container {
+        // Clears the slide-in panel's toggle button, which peeks in over the
+        // top of the page (the panel itself takes no space in normal flow).
+        padding-top: 4.5em;
+    }
+
+    // ── Header row (Add species button, right-aligned) ───────
+    .species-list-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1em;
+    }
+
+    // ── Slim search bar (desktop only, see media query below) ─
+    .species-toolbar {
         display: none;
     }
 
-    .slide-in-panel.open {
-        margin-left: -2.5%;
-        width: 105%;
+    .species-count-row {
+        display: flex;
+        align-items: center;
+        margin: 0 0 1.25em;
     }
 
+    .species-result-count {
+        font-size: 0.9rem;
+        color: var(--clr-secondary-text);
+        white-space: nowrap;
+
+        b {
+            color: var(--clr-body);
+            font-weight: 500;
+        }
+    }
+
+    // ── Grid ─────────────────────────────────────────────────
     .item-grid {
         display: grid;
         gap: 2em;
-        width: 100%;
-        margin: 3em 0;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        margin-bottom: 3em;
     }
 
-    .pagination {
-        align-self: end;
-    }
-}
+    .species-empty {
+        text-align: center;
+        padding: 4em 1em;
+        color: var(--clr-secondary-text);
 
-@media(min-width: 600px) {
-	.species {
-		background: linear-gradient(90deg, var(--clr-bg-body) 60%, rgba(0,0,0, .05) 40%);
-
-        .item-grid {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        }
-	}
-}
-
-@media(min-width: 900px) {
-	.species {
-        .page-title {
+        i {
+            font-size: 2rem;
+            color: var(--clr-input-border);
             display: block;
+            margin-bottom: 0.6em;
         }
 
-        .species-search {
-            width: 40%;
+        b {
+            color: var(--clr-body);
+        }
+    }
+}
+
+@media (min-width: 900px) {
+    .species {
+        .slide-in-panel {
+            display: none;
+        }
+
+        .container {
+            padding-top: 1em;
+        }
+
+        .species-toolbar {
+            display: flex;
+            margin-bottom: 1.5em;
+
+            .search-input {
+                flex: 1 1 280px;
+                max-width: 440px;
+            }
         }
     }
 }

@@ -1,0 +1,18 @@
+.reset-button {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    color: var(--clr-secondary-text);
+    padding: 0.5em 0.25em;
+
+    &:hover, &:focus {
+        color: var(--clr-primary);
+    }
+}

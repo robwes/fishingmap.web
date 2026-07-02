@@ -1,9 +1,43 @@
 .species-list-item {
     max-height: 400px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(16, 24, 40, 0.16);
+    }
+
+    .sli-scientific {
+        font-style: italic;
+        color: var(--clr-secondary-text);
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    // Default-image tile shown when the species has no uploaded photo.
+    .species-list-item-placeholder {
+        height: 190px;
+        width: 100%;
+        border-radius: 5px 5px 0 0;
+        background: var(--clr-primary-light);
+        display: grid;
+        place-items: center;
+
+        i {
+            font-size: 3.1rem;
+            color: var(--clr-primary);
+            opacity: 0.55;
+            transform: rotate(-8deg);
+        }
+    }
 }
 
 @media(min-width: 600px) {
     .species-list-item {
         height: 400px;
+
+        .species-list-item-placeholder {
+            height: 47.5%;
+        }
     }
 }

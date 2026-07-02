@@ -7,6 +7,7 @@ import authService from '../../../services/authService';
 import userService from '../../../services/userService';
 import Collapse from '../../../components/ui/collapse/Collapse';
 import ButtonSecondary from '../../../components/ui/buttons/ButtonSecondary';
+import { useToast } from '../../../context/ToastContext';
 import './EditUser.scss';
 
 const userDetailsValidation = Yup.object({
@@ -42,6 +43,7 @@ function EditUser() {
 
     const { id } = useParams();
     const [user, setUser] = useState();
+    const showToast = useToast();
 
     useEffect(() => {
         (async () => {
@@ -52,6 +54,12 @@ function EditUser() {
         })();
     }, [])
 
+    /**
+     * Saves the user's name/email details, toasting the outcome (the page
+     * previously gave no feedback either way).
+     * @param {Object} values - The submitted form values.
+     * @param {Object} actions - Formik helpers.
+     */
     const handleUserDetailsSubmit = async (values, actions) => {
         const userDetails = {
             firstName: values.firstName,
@@ -62,11 +70,18 @@ function EditUser() {
         const updatedUser = await userService.updateUserDetails(id, userDetails);
         if (updatedUser) {
             setUser(updatedUser);
+            showToast('Details updated.', 'success');
         } else {
             actions.resetForm();
+            showToast('Failed to update your details. Please try again.');
         }
     };
 
+    /**
+     * Changes the user's password, toasting the outcome.
+     * @param {Object} values - The submitted form values.
+     * @param {Object} actions - Formik helpers.
+     */
     const handleUserPasswordSubmit = async (values, actions) => {
         const userPasswordUpdate = {
             currentPassword: values.currentPassword,
@@ -76,6 +91,9 @@ function EditUser() {
         const result = await userService.updateUserPassword(id, userPasswordUpdate);
         if (result) {
             actions.resetForm();
+            showToast('Password changed.', 'success');
+        } else {
+            showToast('Failed to change the password. Check your current password and try again.');
         }
     };
 
