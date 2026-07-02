@@ -14,24 +14,35 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
+          cache: 'npm'
 
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
-      
+      - name: npm install
+        run: npm install
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Test
+        run: npm run test --if-present
+
+      # Only the production build is deployed. The Azure Web App serves from
+      # the build/ subfolder (the SPA rewrite web.config ships inside it via
+      # public/), so the folder prefix is recreated on download below —
+      # sources and node_modules never leave the runner.
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: build/
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,9 +53,10 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: node-app
+          path: build
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
