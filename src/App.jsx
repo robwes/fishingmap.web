@@ -13,6 +13,7 @@ import AddSpecies from './pages/species/add/AddSpecies';
 import EditSpecies from './pages/species/edit/EditSpecies';
 import EditLocation from './pages/location/edit/EditLocation';
 import { CurrentUserProvider } from './context/CurrentUserContext';
+import { ToastProvider } from './context/ToastContext';
 import Login from './pages/login/Login';
 import ProtectedRoute from './components/route/ProtectedRoute';
 import EditUser from './pages/user/edit/EditUser';
@@ -29,16 +30,17 @@ function App() {
 		<Router>
 			<div className="App">
 				<CurrentUserProvider>
+					<ToastProvider>
 					<Header />
 					<ScrollToTop />
 					<APIProvider apiKey={import.meta.env.VITE_MAPS_API_KEY}>
 						<Routes>
-							<Route exact path="/locations" element={<Locations />} />
-							<Route exact path="/locations/:id" element={<LocationDetails />} />
-							<Route exact path="/species" element={<Species />} />
-							<Route exact path="/species/:id" element={<SpeciesDetails />} />
-							<Route exact path="/permits" element={<Permits />} />
-							<Route exact path="/permits/:id" element={<PermitDetails />} />
+							<Route path="/locations" element={<Locations />} />
+							<Route path="/locations/:id" element={<LocationDetails />} />
+							<Route path="/species" element={<Species />} />
+							<Route path="/species/:id" element={<SpeciesDetails />} />
+							<Route path="/permits" element={<Permits />} />
+							<Route path="/permits/:id" element={<PermitDetails />} />
 
 							<Route element={<ProtectedRoute />}>
 								<Route path="/locations/add" element={<AddLocation />} />
@@ -60,6 +62,7 @@ function App() {
 					</APIProvider>
 
 					<Footer />
+					</ToastProvider>
 				</CurrentUserProvider>
 			</div>
 		</Router>
