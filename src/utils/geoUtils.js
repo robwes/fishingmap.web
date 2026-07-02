@@ -43,7 +43,13 @@ const geoUtils = {
         return null;
     },
 
-    // Refactor getGeometryCenter to be awaitable
+    /**
+     * Resolves the center point of a google.maps.Data feature's geometry —
+     * the coordinates themselves for a Point, the turf center of mass for
+     * (Multi)Polygons.
+     * @param {google.maps.Data.Feature} feature - Feature exposing toGeoJson.
+     * @returns {Promise<Array<number>>} [lng, lat] center coordinates.
+     */
     getGeometryCenter: async (feature) => {
         return new Promise((resolve, reject) => {
             feature.toGeoJson((geoJsonFeature) => {
@@ -56,11 +62,11 @@ const geoUtils = {
                             center = geoJsonFeature.geometry.coordinates;
                             break;
                         case 'Polygon':
-                        case 'MultiPolygon':
-                            // Calculate the center using turf.centerOfMass or turf.centroid
+                        case 'MultiPolygon': {
                             const centerFeature = turf.centerOfMass(geoJsonFeature);
                             center = centerFeature.geometry.coordinates;
                             break;
+                        }
                         default:
                             // Handle other types or throw an error
                             throw new Error('Unsupported geometry type');
