@@ -4,6 +4,16 @@
     overflow: hidden;
     position: relative;
 
+    .slide-in-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9em;
+    }
+
+    .map-filter {
+        display: none;
+    }
+
     .map-area {
         position: relative;
         flex: 1;
@@ -19,6 +29,65 @@
         .map-area {
             flex: 0 0 45vh;
             min-height: 45vh;
+        }
+    }
+}
+
+@media(min-width: 900px) {
+    .fishing-map {
+        .slide-in-panel {
+            display: none;
+        }
+
+        // Inline toolbar row above the map. Deliberately matches the
+        // Locations List toolbar so the filter looks and aligns the same
+        // across both pages: grey page background (no band/border) and the
+        // plain .container (width 90%, max 1500px, centred) — no extra
+        // horizontal padding, so the search bar starts at the same x-offset
+        // as the Locations toolbar.
+        .map-filter {
+            display: block;
+            background: var(--clr-bg-body);
+            padding: 1em 0;
+
+            .container {
+                display: flex;
+                align-items: center;
+                flex-wrap: nowrap;
+                gap: 0.75em;
+            }
+
+            .search-input {
+                flex: 1 1 0;
+                min-width: 140px;
+                max-width: 380px;
+            }
+
+            .multi-select-input {
+                flex: 0 0 280px;
+            }
+
+            .range-input {
+                flex: 0 0 280px;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+
+                > label {
+                    white-space: nowrap;
+                }
+
+                input[type="range"] {
+                    flex: 1;
+                    min-width: 60px;
+                }
+
+                .range-input-value {
+                    white-space: nowrap;
+                    min-width: 52px;
+                    text-align: center;
+                }
+            }
         }
     }
 }

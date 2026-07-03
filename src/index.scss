@@ -205,9 +205,15 @@ form {
 
 }
 
-@media(min-width: 900px) {
+@media(min-width: 600px) {
 	.container {
 		width: 90%;
+	}
+}
+
+@media(min-width: 900px) {
+	.container {
+		width: 80%;
 		max-width: 1500px;
 	}
 }

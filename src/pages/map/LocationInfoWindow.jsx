@@ -5,7 +5,7 @@ import { InfoWindow } from '@vis.gl/react-google-maps';
 import { locationService } from '../../services/locationService';
 import { fileService } from '../../services/fileService';
 import ImageCarousell from '../../components/ui/imageCarousell/ImageCarousell';
-import lake from '../../assets/images/lake.png';
+import LocationImagePlaceholder from '../../components/ui/location/LocationImagePlaceholder';
 import CollapsibleList from '../../components/ui/collapse/CollapsibleList';
 import './LocationInfoWindow.scss';
 
@@ -31,23 +31,14 @@ const LocationInfoWindow = ({ location, onClose }) => {
     }, [location.id]);
 
     const getImages = () => {
-        const images = [];
-
         if (locationData && locationData.images && locationData.images.length > 0) {
-            locationData.images.forEach(image => {
-                images.push({
-                    url: fileService.getImageUrl(image.path),
-                    description: locationData.name
-                });
-            });
-        } else {
-            images.push({
-                url: lake,
-                description: "Default location image"
-            });
+            return locationData.images.map(image => ({
+                url: fileService.getImageUrl(image.path),
+                description: locationData.name
+            }));
         }
 
-        return images;
+        return [];
     };
 
     const getSpecies = () => {
@@ -55,6 +46,8 @@ const LocationInfoWindow = ({ location, onClose }) => {
             <LocationSpeciesItem key={s.id} species={s} />
         ));
     }
+
+    const images = getImages();
 
     return (
         <InfoWindow
@@ -65,10 +58,12 @@ const LocationInfoWindow = ({ location, onClose }) => {
             <div className='location-info-window'>
                 <Link to={`/locations/${location.id}`}>
                     <div className="location-info-window-image-container">
-                        {locationData ? (
-                            <ImageCarousell images={getImages()} className="location-info-window-image" />
-                        ) : (
+                        {!locationData ? (
                             <div className="location-info-window-image-placeholder">Loading...</div>
+                        ) : images.length > 0 ? (
+                            <ImageCarousell images={images} className="location-info-window-image" />
+                        ) : (
+                            <LocationImagePlaceholder />
                         )}
                     </div>
                     <h3 className='location-info-window-title'>

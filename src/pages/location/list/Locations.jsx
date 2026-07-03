@@ -32,6 +32,11 @@ function Locations() {
     const distance = parseInt(searchParams.get('distance')) || 0;
     const sortParam = searchParams.get('sort');
 
+    // The distance filter is meaningless without an origin (and its slider is
+    // hidden then), so ignore any lingering `distance` param when we have no
+    // location — it must not reach the backend or count as an active filter.
+    const effectiveDistance = currentLocation ? distance : 0;
+
     // Species options for the filter dropdowns.
     useEffect(() => {
         (async () => {
@@ -48,8 +53,8 @@ function Locations() {
     // currentLocation is passed unconditionally so the backend can
     // annotate/sort by distance even with no distance limit set.
     const { data: locations, isLoading } = useDebouncedQuery(
-        () => locationService.getLocationsSummary(search, speciesIds, distance, currentLocation),
-        [search, JSON.stringify(speciesIds), distance, currentLocation],
+        () => locationService.getLocationsSummary(search, speciesIds, effectiveDistance, currentLocation),
+        [search, JSON.stringify(speciesIds), effectiveDistance, currentLocation],
         { initial: [] }
     );
 
@@ -64,25 +69,28 @@ function Locations() {
 
     const pagedLocations = sortedLocations.slice((currentPage - 1) * PAGE_LIMIT, currentPage * PAGE_LIMIT);
 
+    // Hide the count until the first fetch resolves so the page doesn't flash
+    // "0 spots" on entry. Re-queries keep the previous data, so the count stays
+    // visible while filtering.
+    const showCount = !isLoading || sortedLocations.length > 0;
+
     const onSearch = (value) => patchParams({ q: value, page: '' });
     const onSpeciesChange = (ids) => patchParams({ sIds: ids, page: '' });
     const onDistanceCommit = (value) => patchParams({ distance: value || '', page: '' });
     const onSortChange = (value) => patchParams({ sort: value });
     const onReset = () => patchParams({ q: '', sIds: [], distance: '', page: '' });
 
-    const hasActiveFilters = !!search || speciesIds.length > 0 || distance > 0;
+    const hasActiveFilters = !!search || speciesIds.length > 0 || effectiveDistance > 0;
 
     // The distance filter needs an origin: without geolocation the backend
-    // ignores the radius, so show the control disabled with an explanation
-    // instead of a slider that silently does nothing.
+    // ignores the radius, so the slider is only rendered once we have the
+    // user's location (see the `currentLocation &&` guards below).
     const distanceFilterProps = {
         value: distance,
         onCommit: onDistanceCommit,
         min: 0,
         max: 100,
         unit: 'km',
-        disabled: !currentLocation,
-        hint: currentLocation ? undefined : 'Allow location access to filter by distance',
     };
 
     return (
@@ -103,7 +111,7 @@ function Locations() {
                     onChange={onSpeciesChange}
                     placeholder="Any species…"
                 />
-                <RangeInput label="Distance (km)" {...distanceFilterProps} />
+                {currentLocation && <RangeInput label="Distance (km)" {...distanceFilterProps} />}
                 {hasActiveFilters && <ResetButton onClick={onReset} />}
             </SlideInPanel>
 
@@ -129,13 +137,15 @@ function Locations() {
                         onChange={onSpeciesChange}
                         placeholder="Species…"
                     />
-                    <RangeInput label="Distance" {...distanceFilterProps} />
+                    {currentLocation && <RangeInput label="Distance" {...distanceFilterProps} />}
                     {hasActiveFilters && <ResetButton onClick={onReset} />}
                 </div>
 
                 <div className="loc-count-row">
                     <span className="loc-count-text">
-                        <b>{sortedLocations.length}</b> {sortedLocations.length === 1 ? 'spot' : 'spots'}
+                        {showCount && (
+                            <><b>{sortedLocations.length}</b> {sortedLocations.length === 1 ? 'spot' : 'spots'}</>
+                        )}
                     </span>
                     {currentLocation && (
                         <SortControl

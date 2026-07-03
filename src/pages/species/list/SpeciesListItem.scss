@@ -15,18 +15,20 @@
     }
 
     // Default-image tile shown when the species has no uploaded photo.
+    // flex-shrink: 0 keeps it at the image height instead of being compressed
+    // by the card's max-height (the real <img> holds its height on its own).
     .species-list-item-placeholder {
         height: 190px;
         width: 100%;
+        flex-shrink: 0;
         border-radius: 5px 5px 0 0;
-        background: var(--clr-primary-light);
+        background: var(--clr-primary);
         display: grid;
         place-items: center;
 
         i {
             font-size: 3.1rem;
-            color: var(--clr-primary);
-            opacity: 0.55;
+            color: #fff;
             transform: rotate(-8deg);
         }
     }

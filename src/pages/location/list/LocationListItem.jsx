@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LocationSpeciesItem from '../../../components/ui/location/LocationSpeciesItem';
+import LocationImagePlaceholder from '../../../components/ui/location/LocationImagePlaceholder';
 import CardImage from '../../../components/ui/card/CardImage';
 import CardBody from '../../../components/ui/card/CardBody';
 import CardTitle from '../../../components/ui/card/CardTitle';
@@ -20,11 +21,7 @@ function LocationListItem({ location }) {
                 <div className="location-list-item-figure">
                     {photo
                         ? <CardImage src={photo} alt={name} />
-                        : (
-                            <div className="location-list-item-placeholder">
-                                <i className="fas fa-water" aria-hidden="true" />
-                            </div>
-                        )}
+                        : <LocationImagePlaceholder />}
                     {distance != null && (
                         <span className="location-list-item-distance">
                             <i className="fas fa-location-dot" />{distance} km

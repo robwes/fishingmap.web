@@ -44,39 +44,14 @@
 @media(min-width: 900px) {
 
     .slide-in-panel {
-        &.default {
-            position: relative;
-            transition: none;
-            transform: translateX(0);
-            box-shadow: none;
-            padding: 0;
-        }
-    
-        &.floating {
-            top: 1em;
-            left: 1em;
-            z-index: 99;
-            transition: none;
-            transform: translateX(0);
-            padding: 2em 1.5em 1.5em;
-            background: #fff;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
-            border-radius: 8px;
-            width: 350px;
-        }
+        position: relative;
+        transition: none;
+        transform: translateX(0);
+        box-shadow: none;
+        padding: 0;
 
         .slide-toggle {
             display: none;
-        }
-    }
-}
-
-@media(min-width: 1600px) {
-    .slide-in-panel {
-        &.floating {
-            top: 1.5em;
-            left: 1.5em;
-            width: 360px;
         }
     }
 }

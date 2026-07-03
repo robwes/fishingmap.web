@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import './SlideInPanel.scss';
 
-function SlideInPanel({ iconOpen = "fa-search", iconClose = "fa-times", isFloating = false, children }) {
+function SlideInPanel({ iconOpen = "fa-search", iconClose = "fa-times", children }) {
 
     const [ isOpen, setIsOpen ] = useState(false);
 
     const getPanelCssClasses = () => {
-        let classes = "slide-in-panel ";
-
-        classes += isFloating ? "floating" : "default";
+        let classes = "slide-in-panel";
 
         if (isOpen) {
             classes += " open";
         }
 
         return classes;
-    } 
+    }
 
     const getButtonIcon = () => {
         let icon = "fas ";

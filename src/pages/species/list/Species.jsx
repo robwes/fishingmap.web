@@ -30,6 +30,11 @@ function Species() {
 
     const paged = species.slice((currentPage - 1) * PAGE_LIMIT, currentPage * PAGE_LIMIT);
 
+    // Hide the count until the first fetch resolves so the page doesn't flash
+    // "0 species" on entry. Re-queries keep the previous data, so the count
+    // stays visible while searching.
+    const showCount = !isLoading || species.length > 0;
+
     const onSearch = (value) => patchParams({ q: value, page: '' });
 
     return (
@@ -64,7 +69,9 @@ function Species() {
                 </div>
 
                 <div className="species-count-row">
-                    <span className="species-result-count"><b>{species.length}</b> species</span>
+                    {showCount && (
+                        <span className="species-result-count"><b>{species.length}</b> species</span>
+                    )}
                 </div>
 
                 {species.length === 0 && !isLoading ? (
