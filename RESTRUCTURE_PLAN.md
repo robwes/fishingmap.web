@@ -278,7 +278,7 @@ git mv src/components/ui/buttons/CallToAction.jsx src/components/ui/buttons/Call
 
 ---
 
-## Phase 6 — Species feature → `src/features/species`
+## Phase 6 — Species feature → `src/features/species` ✅ done
 
 ```bash
 git mv src/pages/species src/features/species
