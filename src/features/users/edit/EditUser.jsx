@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import Input from '@/shared/components/form/Input';
 import { Formik, Form } from 'formik';
 import authService from '@/features/auth/authService';
-import userService from '../../../services/userService';
+import userService from '@/features/users/userService';
 import Collapse from '@/shared/components/collapse/Collapse';
 import ButtonSecondary from '@/shared/components/buttons/ButtonSecondary';
 import { useToast } from '@/shared/context/ToastContext';

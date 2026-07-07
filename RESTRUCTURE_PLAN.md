@@ -242,7 +242,7 @@ git mv src/services/authService.js src/services/authService.test.js src/features
 
 ---
 
-## Phase 4 — Users feature → `src/features/users`
+## Phase 4 — Users feature → `src/features/users` ✅ done
 
 ```bash
 git mv src/pages/user src/features/users

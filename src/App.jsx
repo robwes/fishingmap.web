@@ -16,7 +16,7 @@ import { CurrentUserProvider } from '@/shared/context/CurrentUserContext';
 import { ToastProvider } from '@/shared/context/ToastContext';
 import Login from '@/features/auth/Login';
 import ProtectedRoute from './components/route/ProtectedRoute';
-import EditUser from './pages/user/edit/EditUser';
+import EditUser from '@/features/users/edit/EditUser';
 import ProtectedRouteIsLoggedInUser from './components/route/ProtectedRouteCurrentUser';
 import LandingPage from './pages/landingPage/LandingPage';
 import ScrollToTop from './components/route/ScrollToTop';
