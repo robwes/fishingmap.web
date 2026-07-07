@@ -6,7 +6,7 @@ import { speciesService } from '@/shared/services/speciesService';
 import Map from '@/shared/components/map/Map';
 import LocationClusterer from './LocationClusterer';
 import MapTypeControl from './MapTypeControl';
-import Circle from '../../components/ui/map/Circle';
+import Circle from '@/features/map/components/Circle';
 import PositionMarker from '@/shared/components/map/PositionMarker';
 import LocateButton from './LocateButton';
 import MapResultStatus from './MapResultStatus';

@@ -6,10 +6,10 @@ import { locationService } from '@/shared/services/locationService';
 import { fileService } from '@/shared/services/fileService';
 import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 import geoUtils from '@/shared/utils/geoUtils';
-import { formatKm } from '../../utils/formatDistance';
+import { formatKm } from '@/features/map/utils/formatDistance';
 import ImageCarousell from '@/shared/components/imageCarousell/ImageCarousell';
 import LocationImagePlaceholder from '@/shared/components/location/LocationImagePlaceholder';
-import CollapsibleList from '../../components/ui/collapse/CollapsibleList';
+import CollapsibleList from '@/features/map/components/CollapsibleList';
 import './LocationInfoWindow.scss';
 
 const LocationInfoWindow = ({ location, onClose }) => {

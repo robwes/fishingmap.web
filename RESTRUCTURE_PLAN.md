@@ -312,7 +312,7 @@ git mv src/components/ui/permit/PermitForm.jsx src/components/ui/permit/PermitFo
 
 ---
 
-## Phase 8 — Map feature → `src/features/map`
+## Phase 8 — Map feature → `src/features/map` ✅ done
 
 ```bash
 git mv src/pages/map src/features/map

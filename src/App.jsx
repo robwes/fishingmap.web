@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import FishingMap from './pages/map/FishingMap';
+import FishingMap from '@/features/map/FishingMap';
 import Footer from './components/ui/footer/Footer';
 import Header from './components/ui/header/Header';
 import Locations from './pages/location/list/Locations';

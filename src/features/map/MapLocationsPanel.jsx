@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import LocationSpeciesItem from '@/shared/components/location/LocationSpeciesItem';
 import geoUtils from '@/shared/utils/geoUtils';
-import { formatKm } from '../../utils/formatDistance';
+import { formatKm } from '@/features/map/utils/formatDistance';
 import './MapLocationsPanel.scss';
 
 // Species pills shown per row before collapsing into a "+N" note, so long

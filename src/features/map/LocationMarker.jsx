@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { AdvancedMarker, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
 import LocationInfoWindow from './LocationInfoWindow';
-import markerIcon from '../../assets/images/map_marker.svg';
+import markerIcon from '@/assets/images/map_marker.svg';
 
 /**
  * A single location pin on the map. Selection (which controls the info
