@@ -20,10 +20,10 @@ import EditUser from '@/features/users/edit/EditUser';
 import ProtectedRouteIsLoggedInUser from './components/route/ProtectedRouteCurrentUser';
 import LandingPage from '@/features/landing/LandingPage';
 import ScrollToTop from './components/route/ScrollToTop';
-import Permits from './pages/permit/list/Permits';
-import PermitDetails from './pages/permit/details/PermitDetails';
-import AddPermit from './pages/permit/add/AddPermit';
-import EditPermit from './pages/permit/edit/EditPermit';
+import Permits from '@/features/permits/list/Permits';
+import PermitDetails from '@/features/permits/details/PermitDetails';
+import AddPermit from '@/features/permits/add/AddPermit';
+import EditPermit from '@/features/permits/edit/EditPermit';
 
 function App() {
 	return (

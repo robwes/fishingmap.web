@@ -5,7 +5,7 @@ import Input from '@/shared/components/form/Input';
 import ButtonBar from '@/shared/components/buttons/ButtonBar';
 import ButtonSecondary from '@/shared/components/buttons/ButtonSecondary';
 import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
-import permitImage from '../../../assets/images/permit.png';
+import permitImage from '@/assets/images/permit.png';
 import './PermitForm.scss';
 
 const formValidation = Yup.object({

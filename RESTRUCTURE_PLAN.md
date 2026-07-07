@@ -293,7 +293,7 @@ Internal `./` and `./panels/` imports unchanged; shared imports already aliased.
 
 ---
 
-## Phase 7 — Permits feature → `src/features/permits`
+## Phase 7 — Permits feature → `src/features/permits` ✅ done
 
 ```bash
 git mv src/pages/permit src/features/permits
