@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import Input from '../../../../components/ui/form/Input';
 import TextArea from '../../../../components/ui/form/TextArea';
 import ButtonSuccess from '../../../../components/ui/buttons/ButtonSuccess';
-import { locationService } from '../../../../services/locationService';
+import { locationService } from '@/shared/services/locationService';
 
 const validationSchema = Yup.object({
     name: Yup.string().max(50, 'Max 50 characters').required('Required'),

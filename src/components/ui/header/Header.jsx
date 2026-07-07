@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserMenu from './UserMenu';
-import { useCurrentUser } from '../../../context/CurrentUserContext';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 import './Header.scss';
 
 function Header() {

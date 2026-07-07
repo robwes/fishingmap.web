@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useCurrentUser } from '../../context/CurrentUserContext';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 
 function ProtectedRouteIsLoggedInUser({ redirectPath = "/", children }) {
 

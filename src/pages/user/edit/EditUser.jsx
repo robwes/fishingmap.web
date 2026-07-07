@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import Input from '../../../components/ui/form/Input';
 import { Formik, Form } from 'formik';
-import authService from '../../../services/authService';
+import authService from '@/services/authService';
 import userService from '../../../services/userService';
 import Collapse from '../../../components/ui/collapse/Collapse';
 import ButtonSecondary from '../../../components/ui/buttons/ButtonSecondary';
-import { useToast } from '../../../context/ToastContext';
+import { useToast } from '@/shared/context/ToastContext';
 import './EditUser.scss';
 
 const userDetailsValidation = Yup.object({

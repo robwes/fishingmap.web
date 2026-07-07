@@ -1,15 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCurrentUser } from '../../../context/CurrentUserContext';
-import { speciesService } from '../../../services/speciesService';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
+import { speciesService } from '@/shared/services/speciesService';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import ButtonSuccess from '../../../components/ui/buttons/ButtonSuccess';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
 import SearchInput from '../../../components/ui/form/SearchInput';
 import SpeciesListItem from './SpeciesListItem';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
-import useUrlFilters from '../../../hooks/useUrlFilters';
-import useDebouncedQuery from '../../../hooks/useDebouncedQuery';
+import useUrlFilters from '@/shared/hooks/useUrlFilters';
+import useDebouncedQuery from '@/shared/hooks/useDebouncedQuery';
 import './Species.scss';
 
 const PAGE_LIMIT = 12;

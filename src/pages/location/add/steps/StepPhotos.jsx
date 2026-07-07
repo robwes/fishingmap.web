@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { VALID_IMAGE_TYPES, IMAGE_ACCEPT } from '../../../../constants/images';
+import { VALID_IMAGE_TYPES, IMAGE_ACCEPT } from '@/shared/constants/images';
 import './StepPhotos.scss';
 
 const MAX = 5;

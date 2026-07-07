@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { permitService } from '../../../services/permitService';
+import { permitService } from '@/shared/services/permitService';
 import PermitForm from '../../../components/ui/permit/PermitForm';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
-import { useToast } from '../../../context/ToastContext';
+import { useToast } from '@/shared/context/ToastContext';
 import './EditPermit.scss';
 
 function EditPermit() {

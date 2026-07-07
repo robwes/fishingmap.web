@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ButtonSuccess from '../buttons/ButtonSuccess';
-import { fileService } from '../../../services/fileService';
-import { VALID_IMAGE_TYPES, IMAGE_ACCEPT } from '../../../constants/images';
+import { fileService } from '@/shared/services/fileService';
+import { VALID_IMAGE_TYPES, IMAGE_ACCEPT } from '@/shared/constants/images';
 import './MediaManagerPanel.scss';
 
 /**

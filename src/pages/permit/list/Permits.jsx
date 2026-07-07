@@ -1,12 +1,12 @@
 import React from 'react';
-import { permitService } from '../../../services/permitService';
+import { permitService } from '@/shared/services/permitService';
 import Pagination from '../../../components/ui/pagination/Pagination';
 import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
 import SearchInput from '../../../components/ui/form/SearchInput';
 import PermitListItem from './PermitListItem';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
-import useUrlFilters from '../../../hooks/useUrlFilters';
-import useDebouncedQuery from '../../../hooks/useDebouncedQuery';
+import useUrlFilters from '@/shared/hooks/useUrlFilters';
+import useDebouncedQuery from '@/shared/hooks/useDebouncedQuery';
 import './Permits.scss';
 
 const PAGE_LIMIT = 8;

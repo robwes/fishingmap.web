@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useCurrentUser } from '../../context/CurrentUserContext';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 
 function ProtectedRoute({ redirectPath = "/", requiredRoles = [], children }) {
 

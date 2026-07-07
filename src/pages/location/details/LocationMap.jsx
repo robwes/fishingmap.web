@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
 import LinkButtonPrimaryOutline from '../../../components/ui/buttons/LinkButtonPrimaryOutline';
 import Map from '../../../components/ui/map/Map';
-import geoUtils from '../../../utils/geoUtils';
-import { useCurrentUser } from '../../../context/CurrentUserContext';
+import geoUtils from '@/shared/utils/geoUtils';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 import PositionMarker from '../../../components/ui/map/PositionMarker';
 import './LocationMap.scss';
 

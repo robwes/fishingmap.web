@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { speciesService } from '../../../services/speciesService';
+import { speciesService } from '@/shared/services/speciesService';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import EditSpeciesBasicPanel from './panels/EditSpeciesBasicPanel';
 import MediaManagerPanel from '../../../components/ui/media/MediaManagerPanel';

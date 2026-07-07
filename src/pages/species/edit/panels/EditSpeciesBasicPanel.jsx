@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import ButtonSuccess from '../../../../components/ui/buttons/ButtonSuccess';
-import { speciesService } from '../../../../services/speciesService';
+import { speciesService } from '@/shared/services/speciesService';
 import './EditSpeciesBasicPanel.scss';
 
 const validation = Yup.object({

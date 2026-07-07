@@ -5,7 +5,7 @@ import { useMap } from '@vis.gl/react-google-maps';
 import Map from '../map/Map';
 import LocationGeometryToolbar from './LocationGeometryToolbar';
 import ImportGeoJson from '../form/ImportGeoJson';
-import geoUtils from '../../../utils/geoUtils';
+import geoUtils from '@/shared/utils/geoUtils';
 import NavigationPositionMarker from '../map/NavigationPositionMarker';
 import useData from '../map/useData';
 import './LocationGeometryEditor.scss';

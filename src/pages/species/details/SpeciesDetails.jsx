@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { speciesService } from '../../../services/speciesService';
-import { fileService } from '../../../services/fileService';
+import { speciesService } from '@/shared/services/speciesService';
+import { fileService } from '@/shared/services/fileService';
 import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import NotFoundMessage from '../../../components/ui/notFound/NotFoundMessage';

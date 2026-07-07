@@ -1,8 +1,8 @@
 /*global google*/
 import React, { useState, useEffect, useRef } from 'react';
 import { useMap, ControlPosition } from '@vis.gl/react-google-maps';
-import { locationService } from '../../services/locationService';
-import { speciesService } from '../../services/speciesService';
+import { locationService } from '@/shared/services/locationService';
+import { speciesService } from '@/shared/services/speciesService';
 import Map from '../../components/ui/map/Map';
 import LocationClusterer from './LocationClusterer';
 import MapTypeControl from './MapTypeControl';
@@ -18,9 +18,9 @@ import RangeInput from '../../components/ui/form/RangeInput';
 import ResetButton from '../../components/ui/buttons/ResetButton';
 import ViewToggle from '../../components/ui/viewToggle/ViewToggle';
 import FloatingSpinner from '../../components/ui/spinner/FloatingSpinner';
-import { useCurrentUser } from '../../context/CurrentUserContext';
-import useUrlFilters from '../../hooks/useUrlFilters';
-import useDebouncedQuery from '../../hooks/useDebouncedQuery';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
+import useUrlFilters from '@/shared/hooks/useUrlFilters';
+import useDebouncedQuery from '@/shared/hooks/useDebouncedQuery';
 import './FishingMap.scss';
 
 const startCenter = {

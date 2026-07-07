@@ -4,7 +4,7 @@ import Card from '../../../components/ui/card/Card';
 import CardImage from '../../../components/ui/card/CardImage';
 import CardTitle from '../../../components/ui/card/CardTitle';
 import CardBody from '../../../components/ui/card/CardBody';
-import { fileService } from '../../../services/fileService';
+import { fileService } from '@/shared/services/fileService';
 import './SpeciesListItem.scss';
 
 /**

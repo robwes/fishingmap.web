@@ -1,4 +1,4 @@
-import { apiClient } from './apiClient';
+import { apiClient } from '@/shared/services/apiClient';
 
 const endpointUrl = `${import.meta.env.VITE_BASE_URL}/api/users`;
 

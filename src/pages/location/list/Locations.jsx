@@ -11,11 +11,11 @@ import ResetButton from '../../../components/ui/buttons/ResetButton';
 import ViewToggle from '../../../components/ui/viewToggle/ViewToggle';
 import ButtonSuccess from '../../../components/ui/buttons/ButtonSuccess';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
-import { locationService } from '../../../services/locationService';
-import { speciesService } from '../../../services/speciesService';
-import { useCurrentUser } from '../../../context/CurrentUserContext';
-import useUrlFilters from '../../../hooks/useUrlFilters';
-import useDebouncedQuery from '../../../hooks/useDebouncedQuery';
+import { locationService } from '@/shared/services/locationService';
+import { speciesService } from '@/shared/services/speciesService';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
+import useUrlFilters from '@/shared/hooks/useUrlFilters';
+import useDebouncedQuery from '@/shared/hooks/useDebouncedQuery';
 import './Locations.scss';
 
 const PAGE_LIMIT = 10;

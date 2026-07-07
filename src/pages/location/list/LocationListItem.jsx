@@ -6,7 +6,7 @@ import CardImage from '../../../components/ui/card/CardImage';
 import CardBody from '../../../components/ui/card/CardBody';
 import CardTitle from '../../../components/ui/card/CardTitle';
 import InlineCard from '../../../components/ui/card/InlineCard';
-import { fileService } from '../../../services/fileService';
+import { fileService } from '@/shared/services/fileService';
 import './LocationListItem.scss';
 
 function LocationListItem({ location }) {

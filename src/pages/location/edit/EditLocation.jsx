@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { locationService } from '../../../services/locationService';
-import { speciesService } from '../../../services/speciesService';
-import { permitService } from '../../../services/permitService';
+import { locationService } from '@/shared/services/locationService';
+import { speciesService } from '@/shared/services/speciesService';
+import { permitService } from '@/shared/services/permitService';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
-import { useCurrentUser } from '../../../context/CurrentUserContext';
+import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 import EditBasicInfoPanel from './panels/EditBasicInfoPanel';
 import MediaManagerPanel from '../../../components/ui/media/MediaManagerPanel';
 import EditAssocPanel from './panels/EditAssocPanel';

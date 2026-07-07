@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import MultiSelect from '../../../../components/ui/form/MultiSelect';
 import ButtonSuccess from '../../../../components/ui/buttons/ButtonSuccess';
-import { locationService } from '../../../../services/locationService';
+import { locationService } from '@/shared/services/locationService';
 
 function EditAssocPanel({ location, speciesOptions, permitOptions, onLocationUpdated }) {
     const [saved, setSaved] = useState(false);

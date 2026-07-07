@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { permitService } from '../../../services/permitService';
+import { permitService } from '@/shared/services/permitService';
 import PermitForm from '../../../components/ui/permit/PermitForm';
-import { useToast } from '../../../context/ToastContext';
+import { useToast } from '@/shared/context/ToastContext';
 import './AddPermit.scss';
 
 function AddPermit() {

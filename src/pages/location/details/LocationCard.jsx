@@ -6,7 +6,7 @@ import LocationSpeciesItem from '../../../components/ui/location/LocationSpecies
 import LocationPermitItem from './LocationPermitItem';
 import CollapsibleArticlePrimary from '../../../components/ui/collapse/CollapsibleArticlePrimary';
 import lake from '../../../assets/images/lake.png';
-import { fileService } from '../../../services/fileService';
+import { fileService } from '@/shared/services/fileService';
 import './LocationCard.scss';
 
 function LocationCard({ location }) {

@@ -4,9 +4,9 @@ import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import ButtonSuccess from '../../../components/ui/buttons/ButtonSuccess';
 import ButtonSecondary from '../../../components/ui/buttons/ButtonSecondary';
-import { speciesService } from '../../../services/speciesService';
-import { VALID_IMAGE_TYPES, IMAGE_ACCEPT } from '../../../constants/images';
-import { useToast } from '../../../context/ToastContext';
+import { speciesService } from '@/shared/services/speciesService';
+import { VALID_IMAGE_TYPES, IMAGE_ACCEPT } from '@/shared/constants/images';
+import { useToast } from '@/shared/context/ToastContext';
 import './AddSpecies.scss';
 
 const MAX_PHOTOS = 4;

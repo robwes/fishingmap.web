@@ -108,7 +108,7 @@ A completed codebase inventory established the facts this plan relies on:
 
 ---
 
-## Phase 1 — Shared non-component code → `src/shared/*`
+## Phase 1 — Shared non-component code → `src/shared/*` ✅ done
 
 (`authService`/`userService` stay behind in `src/services` for now; `formatDistance` stays in `src/utils`.)
 

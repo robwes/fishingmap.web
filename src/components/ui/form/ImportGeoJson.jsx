@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Button from '../buttons/Button';
-import geoUtils from '../../../utils/geoUtils';
+import geoUtils from '@/shared/utils/geoUtils';
 import './ImportGeoJson.scss';
 
 function ImportGeoJson({onImport, onError}) {

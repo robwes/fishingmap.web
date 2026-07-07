@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { permitService } from '../../../services/permitService';
+import { permitService } from '@/shared/services/permitService';
 import PermitCard from './PermitCard';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import NotFoundMessage from '../../../components/ui/notFound/NotFoundMessage';
