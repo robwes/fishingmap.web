@@ -1,6 +1,6 @@
 import React from 'react';
-import MultiSelect from '../../../../components/ui/form/MultiSelect';
-import TextArea from '../../../../components/ui/form/TextArea';
+import MultiSelect from '@/features/locations/components/MultiSelect';
+import TextArea from '@/features/locations/components/TextArea';
 
 function StepSpeciesPermits({ speciesOptions, permitOptions }) {
     return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from '@/shared/components/form/Input';
-import TextArea from '../../../../components/ui/form/TextArea';
+import TextArea from '@/features/locations/components/TextArea';
 
 function StepDetails() {
     return (

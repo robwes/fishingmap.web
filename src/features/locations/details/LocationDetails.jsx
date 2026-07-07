@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import LocationCard from './LocationCard';
 import { locationService } from '@/shared/services/locationService';
 import LocationMap from './LocationMap';
-import Article from '../../../components/ui/article/Article';
+import Article from '@/features/locations/components/Article';
 import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
 import NotFoundMessage from '@/shared/components/notFound/NotFoundMessage';
 import './LocationDetails.scss';

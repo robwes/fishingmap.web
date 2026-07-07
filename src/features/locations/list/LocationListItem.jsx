@@ -5,7 +5,7 @@ import LocationImagePlaceholder from '@/shared/components/location/LocationImage
 import CardImage from '@/shared/components/card/CardImage';
 import CardBody from '@/shared/components/card/CardBody';
 import CardTitle from '@/shared/components/card/CardTitle';
-import InlineCard from '../../../components/ui/card/InlineCard';
+import InlineCard from '@/features/locations/components/InlineCard';
 import { fileService } from '@/shared/services/fileService';
 import './LocationListItem.scss';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
-import LocationGeometryInput from '../../../../components/ui/location/LocationGeometryInput';
+import LocationGeometryInput from '@/features/locations/components/LocationGeometryInput';
 import './StepMap.scss';
 
 function StepMap() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import MarkerWithInfoWindow from './MarkerWithInfoWindow';
-import marker from '../../../assets/images/navigation_position.svg';
-import markerSelected from '../../../assets/images/navigation_position_selected.svg';
+import marker from '@/assets/images/navigation_position.svg';
+import markerSelected from '@/assets/images/navigation_position_selected.svg';
 import './NavigationPositionMarker.scss';
 
 function NavigationPositionMarker({ position, draggable, onClick, onDragStart, onDragEnd, isSelected }) {

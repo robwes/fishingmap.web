@@ -1,34 +1,24 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import Input from '@/shared/components/form/Input';
-import TextArea from '../../../../components/ui/form/TextArea';
+import MultiSelect from '@/features/locations/components/MultiSelect';
 import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { locationService } from '@/shared/services/locationService';
 
-const validationSchema = Yup.object({
-    name: Yup.string().max(50, 'Max 50 characters').required('Required'),
-    description: Yup.string().max(3000, 'Max 3000 characters').nullable(),
-    rules: Yup.string().max(2000, 'Max 2000 characters').nullable(),
-});
-
-function EditBasicInfoPanel({ location, onLocationUpdated }) {
+function EditAssocPanel({ location, speciesOptions, permitOptions, onLocationUpdated }) {
     const [saved, setSaved] = useState(false);
     const [saveError, setSaveError] = useState(false);
 
     /**
-     * Patches the location's basic info, then updates the parent with the
-     * server's response so the form reinitializes with confirmed values.
-     * Only shows the saved confirmation after the server responds successfully.
+     * Patches the location's species and permit associations, then updates
+     * the parent with the server's confirmed response.
      * @param {Object} values - Formik field values.
      * @param {Object} formikHelpers
      */
     const handleSave = async (values, { setSubmitting }) => {
         setSaveError(false);
-        const result = await locationService.patchLocationInfo(location.id, {
-            name: values.name,
-            description: values.description,
-            rules: values.rules,
+        const result = await locationService.patchLocationAssociations(location.id, {
+            species: values.species.map(s => ({ id: s.value, name: s.label })),
+            permits: values.permits.map(p => ({ id: p.value, name: p.label })),
         });
 
         if (result?.id) {
@@ -46,20 +36,29 @@ function EditBasicInfoPanel({ location, onLocationUpdated }) {
     return (
         <Formik
             initialValues={{
-                name: location.name ?? '',
-                description: location.description ?? '',
-                rules: location.rules ?? '',
+                species: location.species.map(s => ({ label: s.name, value: s.id })),
+                permits: location.permits.map(p => ({ label: p.name, value: p.id })),
             }}
             enableReinitialize
-            validationSchema={validationSchema}
             onSubmit={handleSave}
         >
             {({ isSubmitting }) => (
                 <Form>
                     <div className="edit-panel-fields">
-                        <Input label="Name" name="name" type="text" disabled={isSubmitting} />
-                        <TextArea label="Description" name="description" rows={5} disabled={isSubmitting} />
-                        <TextArea label="Rules" name="rules" rows={7} disabled={isSubmitting} />
+                        <MultiSelect
+                            label="Species"
+                            name="species"
+                            options={speciesOptions}
+                            placeholder="Select species…"
+                            disabled={isSubmitting}
+                        />
+                        <MultiSelect
+                            label="Permits required"
+                            name="permits"
+                            options={permitOptions}
+                            placeholder="Select permits…"
+                            disabled={isSubmitting}
+                        />
                         <div className="edit-save-row">
                             {saved && (
                                 <span className="edit-saved-confirmation">
@@ -82,4 +81,4 @@ function EditBasicInfoPanel({ location, onLocationUpdated }) {
     );
 }
 
-export default EditBasicInfoPanel;
+export default EditAssocPanel;

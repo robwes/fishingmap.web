@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
-import LocationGeometryInput from '../../../../components/ui/location/LocationGeometryInput';
+import LocationGeometryInput from '@/features/locations/components/LocationGeometryInput';
 import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { locationService } from '@/shared/services/locationService';
 import geoUtils from '@/shared/utils/geoUtils';

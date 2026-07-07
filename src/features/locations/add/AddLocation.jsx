@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
-import ButtonPrimary from '../../../components/ui/buttons/ButtonPrimary';
+import ButtonPrimary from '@/features/locations/components/ButtonPrimary';
 import ButtonSecondary from '@/shared/components/buttons/ButtonSecondary';
 import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { locationService } from '@/shared/services/locationService';

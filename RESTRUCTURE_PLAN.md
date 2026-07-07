@@ -336,7 +336,7 @@ git mv src/utils/formatDistance.js src/features/map/utils/
 
 ---
 
-## Phase 9 — Locations feature → `src/features/locations` (largest phase)
+## Phase 9 — Locations feature → `src/features/locations` (largest phase) ✅ done
 
 ```bash
 git mv src/pages/location src/features/locations

@@ -1,5 +1,5 @@
 import React from 'react';
-import LinkItem from '../../../components/ui/linkItem/LinkItem';
+import LinkItem from '@/features/locations/components/LinkItem';
 
 function LocationPermitItem({ permit }) {
     return (

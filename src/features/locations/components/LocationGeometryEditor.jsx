@@ -4,10 +4,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
 import Map from '@/shared/components/map/Map';
 import LocationGeometryToolbar from './LocationGeometryToolbar';
-import ImportGeoJson from '../form/ImportGeoJson';
+import ImportGeoJson from './ImportGeoJson';
 import geoUtils from '@/shared/utils/geoUtils';
-import NavigationPositionMarker from '../map/NavigationPositionMarker';
-import useData from '../map/useData';
+import NavigationPositionMarker from './NavigationPositionMarker';
+import useData from './useData';
 import './LocationGeometryEditor.scss';
 
 const mapStyle = {
