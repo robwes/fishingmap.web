@@ -6,13 +6,13 @@ Single source of project guidance for AI coding agents working in this repositor
 
 - `npm start` — Vite dev server on **port 3000** (strict; fails if occupied). Opens a browser automatically.
 - `npm run build` — production build, output goes to `build/` (not the default `dist/`).
-- `npm test` — runs Vitest. Test files are colocated `*.test.js` next to the code they cover (e.g. `src/services/apiClient.test.js`). Use `npx vitest run path/to/file.test.js` for a single file, or `npx vitest -t "name"` to filter by test name. CI fails if the suite is empty, so never delete the last test file without replacing it.
+- `npm test` — runs Vitest. Test files are colocated `*.test.js` next to the code they cover (e.g. `src/shared/services/apiClient.test.js`). Use `npx vitest run path/to/file.test.js` for a single file, or `npx vitest -t "name"` to filter by test name. CI fails if the suite is empty, so never delete the last test file without replacing it.
 
 - `npm run lint` — ESLint 9 flat config (`eslint.config.js`: js recommended + react + react-hooks). Runs in CI; **errors fail the build, warnings don't.** The `react-hooks/refs` and `react-hooks/set-state-in-effect` compiler-alignment rules are downgraded to warnings because the imperative Google Maps integration (Circle, useData, clusterer) legitimately trips them — don't "fix" those warnings mechanically.
 
 ## Required environment
 
-Vite reads `.env.development.local` (dev) and `.env.production` (build). All four vars are required — the app refuses to boot without them (`src/utils/assertEnv.js` renders an error into #root and throws before render):
+Vite reads `.env.development.local` (dev) and `.env.production` (build). All four vars are required — the app refuses to boot without them (`src/shared/utils/assertEnv.js` renders an error into #root and throws before render):
 
 - `VITE_BASE_URL` — backend API origin
 - `VITE_IMAGES_URL` — image asset origin (typically `${VITE_BASE_URL}/api/images`)
@@ -25,55 +25,68 @@ This is the React frontend for **fishingmap.fi**, a map of fishing locations in 
 
 ### Routing & auth
 
-`src/App.jsx` is the single route table. Three protection levels:
+`src/app/App.jsx` is the single route table. Three protection levels:
 
 - **Public**: list/details routes for locations, species, permits, plus `/`, `/map`, `/login`.
-- **`ProtectedRoute`** (`src/components/route/ProtectedRoute.jsx`) — wraps add/edit routes for the three domain entities. Gate is `currentUser` truthy; supports optional `requiredRoles`. Redirects to `/` when denied.
+- **`ProtectedRoute`** (`src/app/route/ProtectedRoute.jsx`) — wraps add/edit routes for the three domain entities. Gate is `currentUser` truthy; supports optional `requiredRoles`. Redirects to `/` when denied.
 - **`ProtectedRouteIsLoggedInUser`** — for routes that should only be accessible to the user themselves (e.g. `/users/:id/edit`).
 
-Auth state lives in `CurrentUserContext` (`src/context/CurrentUserContext.jsx`):
+Auth state lives in `CurrentUserContext` (`src/shared/context/CurrentUserContext.jsx`):
 - User object is mirrored to `sessionStorage` under key `currentUser`. The provider blocks rendering children until session storage has been read (`isReady` gate) — this prevents protected-route flicker on refresh.
 - On mount the provider restores the stored user optimistically, then re-validates in the background via `authService.getSession()` (whoami): an explicit 401/403 signs the user out, a success refreshes the stored user (this is also what restores sessions in new tabs — sessionStorage is per-tab), and an unreachable backend (`'unknown'`) keeps the stored user so a network blip doesn't sign anyone out. Don't collapse `getSession`'s three states into user-or-null.
-- The provider also kicks off a geolocation lookup via `useGeolocation` (`src/hooks/useGeolocation.js` — deliberately not named `useLocation`, which would shadow react-router's hook) and exposes `currentLocation` as the third value in the context tuple `[currentUser, updateCurrentUser, currentLocation]`.
+- The provider also kicks off a geolocation lookup via `useGeolocation` (`src/shared/hooks/useGeolocation.js` — deliberately not named `useLocation`, which would shadow react-router's hook) and exposes `currentLocation` as the third value in the context tuple `[currentUser, updateCurrentUser, currentLocation]`.
 
 Auth itself is **cookie-based**: every fetch that needs identity passes `credentials: 'include'`. There are no tokens in JS-accessible storage.
 
 `currentUser.roles` is an array of role objects (`[{id, name}]`), not strings — checking membership needs `.some(r => r.name === 'Administrator')`, not `.includes(...)`. The admin role name is **`Administrator`**, not `Admin`; the backend (`[Authorize(Roles = "Administrator")]`) and frontend role checks must match it exactly, or the check silently always fails.
 
-### Page / domain structure
+### Feature-based layout
 
-Three CRUD domains follow an identical layout under `src/pages/`:
+The codebase is organized by feature (since July 2026), with an `@/` → `src/` path alias (`vite.config.js` `resolve.alias` + `jsconfig.json`):
 
 ```
-location/  { list, details, add, edit }
-species/   { list, details, add, edit }
-permit/    { list, details, add, edit }
+src/
+├── app/            App.jsx (route table) + route/ (guards), header/, footer/
+├── features/
+│   ├── locations/  { list, details, add/steps, edit/panels, components }
+│   ├── species/    { list, details, add, edit/panels }
+│   ├── permits/    { list, details, add, edit, components (PermitForm) }
+│   ├── map/        FishingMap + siblings flat at root, plus components/, utils/
+│   ├── auth/       Login, LoginForm, authService (flat)
+│   ├── users/      edit/ (EditUser), userService
+│   └── landing/    LandingPage, components/ (CallToAction)
+└── shared/         components/ (by category: buttons, form, card, …),
+                    services/, hooks/, context/, utils/, constants/
 ```
 
-Plus standalone pages: `landingPage/`, `login/`, `map/` (the main map view), `user/edit/`.
+Conventions:
+- **Imports**: same-folder and page-internal child folders (`./steps/StepX`, `./panels/EditXPanel`) stay relative; everything else uses `@/...`. No `../` imports anywhere.
+- **Feature-private components** live in a flat `features/<f>/components/` folder. Code used by 2+ features lives in `src/shared/` (components keep category subfolders).
+- **Feature-owned services**: `authService` lives in `features/auth`, `userService` in `features/users`; the cross-feature services live in `src/shared/services/`.
+- `src/index.jsx` and `src/index.scss` stay at the `src/` root (`index.html` hardcodes `/src/index.jsx`); `src/assets/` is shared by all features and referenced as `@/assets/...`.
 
-### Services layer (`src/services/`)
+### Services layer (`src/shared/services/` + feature-owned services)
 
-One file per backend resource (`locationService`, `speciesService`, `permitService`, `userService`, `authService`, `fileService`). All HTTP goes through the shared **`src/services/apiClient.js`** (`getJson` / `sendJson` / `sendForm` / `requestOk`), which checks `response.ok` — `fetch` only rejects on network errors, so skipping the check turns HTTP errors into fake successes. New endpoints must call `apiClient`, never raw `fetch`. Conventions to preserve when editing:
+One file per backend resource (`locationService`, `speciesService`, `permitService`, `fileService` in `src/shared/services/`; `authService` in `src/features/auth/`; `userService` in `src/features/users/`). All HTTP goes through the shared **`src/shared/services/apiClient.js`** (`getJson` / `sendJson` / `sendForm` / `requestOk`), which checks `response.ok` — `fetch` only rejects on network errors, so skipping the check turns HTTP errors into fake successes. New endpoints must call `apiClient`, never raw `fetch`. Conventions to preserve when editing:
 
 - All methods are `async` and **swallow errors** (apiClient logs to console and returns a sentinel: `null`, `[]`, `false`). Callers branch on the sentinel, never `try/catch`. Don't change this without updating call sites.
 - Mutating endpoints (create/update on locations, species, permits) send **`FormData`**, not JSON, because the backend accepts image uploads alongside the entity. Stringify nested arrays/objects (`species`, `permits`, `navigationposition`) before appending — each service has a `to<Entity>FormData` helper for this.
 - Authenticated requests must include `credentials: 'include'` — `sendJson`/`sendForm`/`requestOk` do this by default; for authenticated GETs pass it via `getJson`'s options (see `authService.getCurrentUser`).
-- Display images with `fileService.getImageUrl(path)` in a plain `<img src>` — never rebuild `${VITE_IMAGES_URL}/...` inline, and never download an image as a blob just to preview it. `fileService.getImage` (blob → `File`) is only for when an actual `File` object is needed (e.g. seeding a form for re-upload). Staged image add/remove UI is the shared `src/components/ui/media/MediaManagerPanel.jsx`.
-- Because services swallow errors, **callers must surface mutation failures to the user**: use `useToast()` from `src/context/ToastContext.jsx` (error/success toasts, bottom-right, auto-dismiss) or an inline form status (edit panels, login). Never let a failed create/save/delete look like success — check the sentinel before navigating away.
+- Display images with `fileService.getImageUrl(path)` in a plain `<img src>` — never rebuild `${VITE_IMAGES_URL}/...` inline, and never download an image as a blob just to preview it. `fileService.getImage` (blob → `File`) is only for when an actual `File` object is needed (e.g. seeding a form for re-upload). Staged image add/remove UI is the shared `src/shared/components/media/MediaManagerPanel.jsx`.
+- Because services swallow errors, **callers must surface mutation failures to the user**: use `useToast()` from `src/shared/context/ToastContext.jsx` (error/success toasts, bottom-right, auto-dismiss) or an inline form status (edit panels, login). Never let a failed create/save/delete look like success — check the sentinel before navigating away.
 - `locationService` exposes three list-shaped endpoints: `/api/locations` (full), `/api/locations/markers` (lightweight, for map clustering), `/api/locations/summary`. The map page uses `getLocationMarkers`; list pages use `getLocations` / `getLocationsSummary`.
 
-### Map (`src/pages/map/` + `src/components/ui/map/`)
+### Map (`src/features/map/` + `src/shared/components/map/`)
 
 Built on `@vis.gl/react-google-maps`. The `<APIProvider>` wraps everything inside `App.jsx` so every page can use `useMap()`.
 
-- `FishingMap.jsx` is the main view. It composes `Map`, `LocationClusterer` (uses `@googlemaps/markerclusterer`), `Circle` (radius search), and `PositionMarker` (the user's location).
-- `geoUtils.js` (in `src/utils/`) wraps `@turf/turf` for bbox computation, MultiPolygon ↔ FeatureCollection conversion, and centroid calculation for arbitrary geometries. Non-component files (services, utils, hooks) use the `.js` extension; `.jsx` is reserved for files containing JSX.
+- `FishingMap.jsx` is the main view. It composes `Map` and `PositionMarker` (shared, also used by location details), plus the map-feature-private `LocationClusterer` (uses `@googlemaps/markerclusterer`) and `Circle` (radius search). The location-geometry editing subsystem (`LocationGeometryInput/Editor/Toolbar`, `NavigationPositionMarker`, `useData`) is private to `src/features/locations/components/`.
+- `geoUtils.js` (in `src/shared/utils/`) wraps `@turf/turf` for bbox computation, MultiPolygon ↔ FeatureCollection conversion, and centroid calculation for arbitrary geometries. Non-component files (services, utils, hooks) use the `.js` extension; `.jsx` is reserved for files containing JSX.
 - Search is radius-based: a draggable circle on the map defines `(orgLat, orgLng, radius)` query params sent to the backend.
 
 ### List pages
 
-The three list pages (locations, species, permits) share one pattern built on two hooks in `src/hooks/`:
+The three list pages (locations, species, permits) share one pattern built on two hooks in `src/shared/hooks/`:
 
 - `useUrlFilters` — URL-driven filter/paging state (`patchParams`, `currentPage`, `goToPage`). Filters live in the URL (`q`, `page`, plus `sIds`/`distance`/`sort` on locations); empty values are deleted so clean URLs stay clean, and updates `replace` history. Filter changes must also pass `page: ''` to reset paging.
 - `useDebouncedQuery` — debounced fetch keyed on the filter values, with a stale-result guard. Stringify array deps (`JSON.stringify(ids)`).
@@ -82,7 +95,7 @@ New list filters should extend this pattern, not reintroduce per-page `patchPara
 
 ### Forms
 
-Formik + Yup for add/edit flows. `AddLocation` is a four-step wizard (`src/pages/location/add/steps/`), edit pages use per-section panels; `PermitForm` (`src/components/ui/permit/`) is shared by the permit add/edit pages. The old shared `LocationForm`/`SpeciesForm` components were removed in July 2026 — don't resurrect them from git history.
+Formik + Yup for add/edit flows. `AddLocation` is a four-step wizard (`src/features/locations/add/steps/`), edit pages use per-section panels; `PermitForm` (`src/features/permits/components/`) is shared by the permit add/edit pages. The old shared `LocationForm`/`SpeciesForm` components were removed in July 2026 — don't resurrect them from git history.
 
 ### Styling
 
@@ -98,7 +111,7 @@ When implementing a Claude Design (claude.ai/design) handoff bundle, trust its *
 
 - `if` blocks always use braces with the body on a new line — never a single-line inline `if (x) doThing();`.
 - Add a JSDoc comment above non-trivial named functions and const-assigned arrow functions (handlers, helpers, async operations) describing what they do and their `@param`s. Skip trivial one-liners where the name already says everything.
-- Prefer splitting UI into smaller, focused components whenever a piece of markup is reusable or makes the parent noticeably easier to read. Co-locate the new component in the same folder as the single parent that uses it; only move it to `src/components/ui/` once it is used in more than one place.
+- Prefer splitting UI into smaller, focused components whenever a piece of markup is reusable or makes the parent noticeably easier to read. Co-locate the new component with its parent (same folder, or the feature's `components/` folder if used by several pages of that feature); only move it to `src/shared/components/` once it is used by more than one feature.
 
 ## Deployment
 
