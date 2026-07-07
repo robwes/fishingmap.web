@@ -258,7 +258,7 @@ git mv src/services/userService.js src/features/users/
 
 ---
 
-## Phase 5 — Landing feature → `src/features/landing`
+## Phase 5 — Landing feature → `src/features/landing` ✅ done
 
 ```bash
 git mv src/pages/landingPage src/features/landing

@@ -1,7 +1,7 @@
 import React from 'react';
-import CallToAction from '../../components/ui/buttons/CallToAction';
-import heroLocation from '../../assets/images/hero_location.png';
-import heroMap from '../../assets/images/hero_map.png';
+import CallToAction from '@/features/landing/components/CallToAction';
+import heroLocation from '@/assets/images/hero_location.png';
+import heroMap from '@/assets/images/hero_map.png';
 import './LandingPage.scss';
 
 function LandingPage() {

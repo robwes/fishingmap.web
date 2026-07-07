@@ -18,7 +18,7 @@ import Login from '@/features/auth/Login';
 import ProtectedRoute from './components/route/ProtectedRoute';
 import EditUser from '@/features/users/edit/EditUser';
 import ProtectedRouteIsLoggedInUser from './components/route/ProtectedRouteCurrentUser';
-import LandingPage from './pages/landingPage/LandingPage';
+import LandingPage from '@/features/landing/LandingPage';
 import ScrollToTop from './components/route/ScrollToTop';
 import Permits from './pages/permit/list/Permits';
 import PermitDetails from './pages/permit/details/PermitDetails';
