@@ -45,7 +45,7 @@ function Species() {
                 <SearchInput
                     value={search}
                     onChange={onSearch}
-                    placeholder="Search species…"
+                    placeholder="Search…"
                     ariaLabel="Search species"
                 />
             </SlideInPanel>
@@ -63,7 +63,7 @@ function Species() {
                     <SearchInput
                         value={search}
                         onChange={onSearch}
-                        placeholder="Search species…"
+                        placeholder="Search…"
                         ariaLabel="Search species"
                     />
                 </div>

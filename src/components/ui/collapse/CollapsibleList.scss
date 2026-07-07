@@ -3,6 +3,16 @@
     display: flex;
     flex-direction: column;
 
+    // Whole container is a toggle target; hovering anywhere highlights the
+    // toggle row so the affordance is still anchored to it.
+    &.is-toggleable {
+        cursor: pointer;
+
+        &:hover .collapsible-list-toggle {
+            background-color: var(--clr-primary-light, rgba(0, 0, 0, 0.05));
+        }
+    }
+
     .collapsible-list-label {
         font-size: 1.125rem;
         font-weight: 700;
@@ -30,6 +40,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        gap: 0.4em;
         width: 100%;
         background: transparent;
         border: none;
@@ -42,10 +53,21 @@
             background-color: var(--clr-primary-light, rgba(0, 0, 0, 0.05));
         }
 
+        // Labeled variant: quiet text button so it reads as part of the list,
+        // not as a second call-to-action competing with links below it.
+        &.has-label {
+            color: var(--clr-secondary-text, #666);
+            font-size: 0.85rem;
+
+            .collapsible-list-icon {
+                font-size: 0.8em;
+            }
+        }
+
         .collapsible-list-icon {
             font-size: 1.1rem;
             transition: transform 0.3s ease;
-            
+
             &.open {
                 transform: rotate(180deg);
             }

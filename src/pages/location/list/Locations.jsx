@@ -8,6 +8,7 @@ import MultiSelectInput from '../../../components/ui/form/MultiSelectInput';
 import RangeInput from '../../../components/ui/form/RangeInput';
 import SortControl from './SortControl';
 import ResetButton from '../../../components/ui/buttons/ResetButton';
+import ViewToggle from '../../../components/ui/viewToggle/ViewToggle';
 import ButtonSuccess from '../../../components/ui/buttons/ButtonSuccess';
 import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
 import { locationService } from '../../../services/locationService';
@@ -101,7 +102,7 @@ function Locations() {
                 <SearchInput
                     value={search}
                     onChange={onSearch}
-                    placeholder="Search locations…"
+                    placeholder="Search…"
                     ariaLabel="Search locations"
                 />
                 <MultiSelectInput
@@ -128,7 +129,7 @@ function Locations() {
                     <SearchInput
                         value={search}
                         onChange={onSearch}
-                        placeholder="Search locations…"
+                        placeholder="Search…"
                         ariaLabel="Search locations"
                     />
                     <MultiSelectInput
@@ -147,16 +148,19 @@ function Locations() {
                             <><b>{sortedLocations.length}</b> {sortedLocations.length === 1 ? 'spot' : 'spots'}</>
                         )}
                     </span>
-                    {currentLocation && (
-                        <SortControl
-                            value={effectiveSort}
-                            onChange={onSortChange}
-                            options={[
-                                { value: 'nearest', label: 'Nearest' },
-                                { value: 'name', label: 'Name (A–Z)' },
-                            ]}
-                        />
-                    )}
+                    <div className="loc-count-actions">
+                        <ViewToggle active="list" />
+                        {currentLocation && (
+                            <SortControl
+                                value={effectiveSort}
+                                onChange={onSortChange}
+                                options={[
+                                    { value: 'nearest', label: 'Nearest' },
+                                    { value: 'name', label: 'Name (A–Z)' },
+                                ]}
+                            />
+                        )}
+                    </div>
                 </div>
 
                 {sortedLocations.length === 0 && !isLoading ? (

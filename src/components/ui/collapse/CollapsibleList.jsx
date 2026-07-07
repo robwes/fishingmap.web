@@ -1,7 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './CollapsibleList.scss';
 
-function CollapsibleList({ className, listClassName, label, children, open = false, ...props }) {
+/**
+ * A list that collapses to a single row with a toggle to expand it.
+ * @param {string} className - Extra class for the outer container.
+ * @param {string} listClassName - Extra class for the inner list element.
+ * @param {string} label - Optional heading rendered above the list.
+ * @param {string} closedLabel - Text shown on the toggle while collapsed (e.g. "Show all 8 species").
+ * @param {string} openLabel - Text shown on the toggle while expanded (e.g. "Show fewer").
+ * @param {boolean} open - Whether the list starts expanded.
+ */
+function CollapsibleList({ className, listClassName, label, closedLabel, openLabel, children, open = false, ...props }) {
     const [isOpen, setIsOpen] = useState(open);
     const [needsToggle, setNeedsToggle] = useState(true); // default to true so space is reserved
     const contentRef = useRef(null);
@@ -26,8 +35,17 @@ function CollapsibleList({ className, listClassName, label, children, open = fal
         setIsOpen(!isOpen);
     }
 
+    const toggleLabel = isOpen ? openLabel : closedLabel;
+
     return (
-        <div className={`collapsible-list-container${className ? ` ${className}` : ''}${isOpen ? ' open' : ''}`} {...props}>
+        // The whole container toggles (bigger touch target on mobile); the
+        // button inside has no handler of its own — its clicks, including
+        // keyboard-triggered ones, bubble up here.
+        <div
+            className={`collapsible-list-container${className ? ` ${className}` : ''}${isOpen ? ' open' : ''}${needsToggle ? ' is-toggleable' : ''}`}
+            onClick={needsToggle ? toggleOpen : undefined}
+            {...props}
+        >
             {label && (
                 <div className="collapsible-list-label">{label}</div>
             )}
@@ -37,7 +55,10 @@ function CollapsibleList({ className, listClassName, label, children, open = fal
                 </div>
             </div>
             {needsToggle && (
-                <button className="collapsible-list-toggle" onClick={toggleOpen}>
+                <button className={`collapsible-list-toggle${toggleLabel ? ' has-label' : ''}`} aria-expanded={isOpen}>
+                    {toggleLabel && (
+                        <span className="collapsible-list-toggle-label">{toggleLabel}</span>
+                    )}
                     <i className={`fas fa-chevron-down collapsible-list-icon ${isOpen ? 'open' : ''}`}></i>
                 </button>
             )}

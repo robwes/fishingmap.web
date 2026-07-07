@@ -34,6 +34,7 @@ const Map = ({
             fullscreenControl={false}
             streetViewControl={false}
             mapTypeControl={false}
+            cameraControl={false}
             zoomControlOptions={zoomControlOptions}
             gestureHandling={'greedy'}
             onClick={onClick}

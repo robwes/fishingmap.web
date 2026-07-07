@@ -1,6 +1,6 @@
 .call-to-action {
     display: block;
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.5rem);
     padding: .7em 1.8em;
     background: #00A361;
     border: 2px solid #00A361;

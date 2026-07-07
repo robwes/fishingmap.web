@@ -1,12 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { AdvancedMarker, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
 import LocationInfoWindow from './LocationInfoWindow';
 import markerIcon from '../../assets/images/map_marker.svg';
 
-const LocationMarker = ({ location, clusterer }) => {
+/**
+ * A single location pin on the map. Selection (which controls the info
+ * window) is owned by the map page so the sidebar list and the markers stay
+ * in sync — clicking a pin toggles it via onSelect.
+ * @param {Object} props
+ * @param {Object} props.location - Marker-shaped location ({id, name, position, species}).
+ * @param {Object} props.clusterer - The shared MarkerClusterer instance.
+ * @param {boolean} props.isSelected - Whether this location is the selected one.
+ * @param {(id: ?number) => void} props.onSelect - Selects a location id (null clears).
+ */
+const LocationMarker = ({ location, clusterer, isSelected, onSelect }) => {
     const { latitude, longitude } = location.position;
 
-    const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false);
     const [refCallback, marker] = useAdvancedMarkerRef();
 
     useEffect(() => {
@@ -21,16 +30,15 @@ const LocationMarker = ({ location, clusterer }) => {
         };
     }, [clusterer, marker]);
 
-    // clicking the marker will toggle the infowindow
+    // Clicking the marker toggles its selection (and thus the info window).
     const handleMarkerClick = useCallback(() =>
-        setIsInfoWindowOpen(isShown => !isShown),
-        []
+        onSelect(isSelected ? null : location.id),
+        [onSelect, isSelected, location.id]
     );
 
-    // if the maps api closes the infowindow, we have to synchronize our state
-    const handleClose = useCallback(() => setIsInfoWindowOpen(false), []);
+    // If the maps api closes the info window, clear the selection too.
+    const handleClose = useCallback(() => onSelect(null), [onSelect]);
 
-    // Your LocationMarker component code here
     return (
         <>
             <AdvancedMarker
@@ -45,7 +53,7 @@ const LocationMarker = ({ location, clusterer }) => {
                 <img width={34} height={47} src={markerIcon} alt="Marker" />
             </AdvancedMarker>
 
-            {isInfoWindowOpen && (
+            {isSelected && (
                 <LocationInfoWindow
                     location={location}
                     onClose={handleClose}

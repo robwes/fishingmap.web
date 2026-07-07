@@ -1,0 +1,20 @@
+// Sized and styled to sit alongside the native Google zoom control
+// (40px wide, 10px margin) and match the MapTypeControl look.
+.locate-button {
+    appearance: none;
+    border: 0;
+    margin: 10px;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    color: #666;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, .3);
+    font-size: 1.125rem;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+        color: #222;
+    }
+}

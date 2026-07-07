@@ -1,0 +1,20 @@
+// Cluster count badge in the fish-pin colors (see assets/images/map_marker.svg:
+// #86B0F5 fill, #3561A9 stroke, white glyph). AdvancedMarker content anchors
+// bottom-center, so the badge shifts down half its height to sit centered on
+// the cluster position.
+.cluster-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #86b0f5;
+    border: 2px solid #3561a9;
+    box-shadow: 0 0 0 5px rgba(134, 176, 245, 0.4);
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    transform: translateY(50%);
+}

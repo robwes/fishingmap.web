@@ -16,6 +16,9 @@
         gap: 0.5em;
         min-height: 44px;
         padding: 0.3em 0.9em;
+        // Match SearchInput's input text size so the two filters read as a
+        // set; without this the control inherits the larger 1.125rem body size.
+        font-size: 1rem;
         background: #fff;
         border: 1px solid var(--clr-input-border);
         border-radius: var(--radius-input);

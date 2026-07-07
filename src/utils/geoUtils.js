@@ -28,6 +28,20 @@ const geoUtils = {
         return combinedFeature;
     },
 
+    /**
+     * Great-circle distance in kilometers between two lat/lng points.
+     * @param {{latitude: number, longitude: number}} from - Origin point.
+     * @param {{latitude: number, longitude: number}} to - Destination point.
+     * @returns {number} Distance in kilometers.
+     */
+    distanceKm: (from, to) => {
+        return turf.distance(
+            turf.point([from.longitude, from.latitude]),
+            turf.point([to.longitude, to.latitude]),
+            { units: 'kilometers' }
+        );
+    },
+
     getBoundingBox: (geoJson) => {
         const bbox = turf.bbox(geoJson);
 

@@ -1,11 +1,25 @@
 .location-info-window {
     width: 100%;
-    padding-bottom: .5em;
+    padding-bottom: .25em;
+
+    // Suppress the mobile browser tap-highlight overlay. Tapping the carousell
+    // arrows (which sit inside the header <a>) otherwise flashes the whole
+    // anchor — image and the area behind the title — blue on Android.
+    .location-info-window-header {
+        -webkit-tap-highlight-color: transparent;
+    }
 
     .location-info-window-image-container {
+        position: relative;
         width: 100%;
         height: 150px;
         background-color: var(--clr-primary-light, #eee);
+
+        // No photo: a shorter tile with the subtle placeholder, so the name
+        // and species lead instead of a big flat block of colour.
+        &.is-placeholder {
+            height: 90px;
+        }
 
         .location-info-window-image {
             height: 100%;
@@ -23,9 +37,31 @@
 
     .location-info-window-title {
         text-align: center;
-        padding: 0.5em 0;
+        padding: 0.5em 0 0;
         margin: 0 1em;
-        border-bottom: 1px solid var(--clr-primary);
+        font-size: 1.25rem;
+    }
+
+    // Floating pill over the image so the header stays a single compact link.
+    .location-info-window-distance {
+        position: absolute;
+        left: 0.6em;
+        top: 0.6em;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+        padding: 0.3em 0.7em;
+        border-radius: 999px;
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+        color: var(--clr-secondary-text);
+        font-size: 0.8rem;
+
+        i {
+            color: var(--clr-primary);
+            font-size: 0.85em;
+        }
     }
 
     .location-species-collapse {
@@ -38,6 +74,28 @@
         gap: 0.5em;
         justify-content: center;
         padding: 0.5em 1em;
+    }
+
+    // Inline hint under the title — part of the single header link, not a
+    // separate call-to-action.
+    .location-info-window-details-hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4em;
+        margin-top: 0.3em;
+        color: var(--clr-primary);
+        font-size: 0.85rem;
+        font-weight: 500;
+
+        i {
+            font-size: 0.8em;
+            transition: transform 0.15s ease;
+        }
+    }
+
+    .location-info-window-header:hover .location-info-window-details-hint i {
+        transform: translateX(3px);
     }
 }
 

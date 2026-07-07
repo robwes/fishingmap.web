@@ -9,4 +9,16 @@
         font-size: 3.1rem;
         color: #fff;
     }
+
+    // Recedes instead of dominating: tinted background and a smaller muted
+    // icon, so surrounding content (name, species) leads. Used in the
+    // compact map info window.
+    &--subtle {
+        background: var(--clr-primary-light);
+
+        i {
+            font-size: 1.8rem;
+            color: var(--clr-primary);
+        }
+    }
 }
