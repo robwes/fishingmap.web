@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import useGeolocation from '@/shared/hooks/useGeolocation';
-import authService from '@/services/authService';
+import authService from '@/features/auth/authService';
 
 export const CurrentUserContext = React.createContext();
 

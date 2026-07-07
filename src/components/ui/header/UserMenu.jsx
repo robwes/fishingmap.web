@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCurrentUser } from '@/shared/context/CurrentUserContext';
-import authService from '@/services/authService';
+import authService from '@/features/auth/authService';
 import './UserMenu.scss';
 
 function UserMenu({ user, open }) {

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import Input from '@/shared/components/form/Input';
 import { Formik, Form } from 'formik';
-import authService from '@/services/authService';
+import authService from '@/features/auth/authService';
 import userService from '../../../services/userService';
 import Collapse from '@/shared/components/collapse/Collapse';
 import ButtonSecondary from '@/shared/components/buttons/ButtonSecondary';

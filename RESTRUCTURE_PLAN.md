@@ -222,7 +222,7 @@ grep -rnE "'(\.\.?/)+components/ui/(imageCarousell|media|notFound|pagination|sli
 
 ---
 
-## Phase 3 — Auth feature → `src/features/auth`
+## Phase 3 — Auth feature → `src/features/auth` ✅ done
 
 ```bash
 mkdir -p src/features
