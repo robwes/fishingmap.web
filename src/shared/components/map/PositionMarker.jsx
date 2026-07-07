@@ -1,6 +1,6 @@
 import React from 'react';
 import { AdvancedMarker } from '@vis.gl/react-google-maps';
-import marker from '../../../assets/images/position_marker.svg';
+import marker from '@/assets/images/position_marker.svg';
 
 function PositionMarker({ position }) {
     return (

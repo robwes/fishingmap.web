@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import LocationGeometryInput from '../../../../components/ui/location/LocationGeometryInput';
-import ButtonSuccess from '../../../../components/ui/buttons/ButtonSuccess';
+import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { locationService } from '@/shared/services/locationService';
 import geoUtils from '@/shared/utils/geoUtils';
 import './EditGeoPanel.scss';

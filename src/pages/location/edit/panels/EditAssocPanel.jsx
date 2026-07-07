@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import MultiSelect from '../../../../components/ui/form/MultiSelect';
-import ButtonSuccess from '../../../../components/ui/buttons/ButtonSuccess';
+import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { locationService } from '@/shared/services/locationService';
 
 function EditAssocPanel({ location, speciesOptions, permitOptions, onLocationUpdated }) {

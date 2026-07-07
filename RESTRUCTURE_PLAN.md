@@ -162,7 +162,7 @@ Allowed remaining hits from the first grep ONLY: `authService` imports in `src/p
 
 ---
 
-## Phase 2 — Shared components → `src/shared/components/*`
+## Phase 2 — Shared components → `src/shared/components/*` ✅ done
 
 ```bash
 mkdir -p src/shared/components/{buttons,form,card,collapse,location,map}

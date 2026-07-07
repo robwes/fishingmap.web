@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../../../components/ui/card/Card';
-import CardImage from '../../../components/ui/card/CardImage';
-import CardTitle from '../../../components/ui/card/CardTitle';
-import CardBody from '../../../components/ui/card/CardBody';
+import Card from '@/shared/components/card/Card';
+import CardImage from '@/shared/components/card/CardImage';
+import CardTitle from '@/shared/components/card/CardTitle';
+import CardBody from '@/shared/components/card/CardBody';
 import { fileService } from '@/shared/services/fileService';
 import './SpeciesListItem.scss';
 

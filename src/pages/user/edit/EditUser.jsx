@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import Input from '../../../components/ui/form/Input';
+import Input from '@/shared/components/form/Input';
 import { Formik, Form } from 'formik';
 import authService from '@/services/authService';
 import userService from '../../../services/userService';
-import Collapse from '../../../components/ui/collapse/Collapse';
-import ButtonSecondary from '../../../components/ui/buttons/ButtonSecondary';
+import Collapse from '@/shared/components/collapse/Collapse';
+import ButtonSecondary from '@/shared/components/buttons/ButtonSecondary';
 import { useToast } from '@/shared/context/ToastContext';
 import './EditUser.scss';
 

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import LocationSpeciesItem from '../../components/ui/location/LocationSpeciesItem';
+import LocationSpeciesItem from '@/shared/components/location/LocationSpeciesItem';
 import { InfoWindow } from '@vis.gl/react-google-maps';
 import { locationService } from '@/shared/services/locationService';
 import { fileService } from '@/shared/services/fileService';
 import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 import geoUtils from '@/shared/utils/geoUtils';
 import { formatKm } from '../../utils/formatDistance';
-import ImageCarousell from '../../components/ui/imageCarousell/ImageCarousell';
-import LocationImagePlaceholder from '../../components/ui/location/LocationImagePlaceholder';
+import ImageCarousell from '@/shared/components/imageCarousell/ImageCarousell';
+import LocationImagePlaceholder from '@/shared/components/location/LocationImagePlaceholder';
 import CollapsibleList from '../../components/ui/collapse/CollapsibleList';
 import './LocationInfoWindow.scss';
 

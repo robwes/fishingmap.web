@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button';
+import Button from '@/shared/components/buttons/Button';
 import './ButtonPrimary.scss';
 
 function ButtonPrimary({children, ...rest}) {

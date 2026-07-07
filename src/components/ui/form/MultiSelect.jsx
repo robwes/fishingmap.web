@@ -1,8 +1,8 @@
 import React from 'react';
 import { useField } from 'formik';
 import Select from 'react-select';
-import Label from './Label';
-import Error from './Error';
+import Label from '@/shared/components/form/Label';
+import Error from '@/shared/components/form/Error';
 
 const customStyles = {
     option: (provided, state) => ({

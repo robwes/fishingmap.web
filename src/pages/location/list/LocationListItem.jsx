@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LocationSpeciesItem from '../../../components/ui/location/LocationSpeciesItem';
-import LocationImagePlaceholder from '../../../components/ui/location/LocationImagePlaceholder';
-import CardImage from '../../../components/ui/card/CardImage';
-import CardBody from '../../../components/ui/card/CardBody';
-import CardTitle from '../../../components/ui/card/CardTitle';
+import LocationSpeciesItem from '@/shared/components/location/LocationSpeciesItem';
+import LocationImagePlaceholder from '@/shared/components/location/LocationImagePlaceholder';
+import CardImage from '@/shared/components/card/CardImage';
+import CardBody from '@/shared/components/card/CardBody';
+import CardTitle from '@/shared/components/card/CardTitle';
 import InlineCard from '../../../components/ui/card/InlineCard';
 import { fileService } from '@/shared/services/fileService';
 import './LocationListItem.scss';

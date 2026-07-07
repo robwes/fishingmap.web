@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
-import Map from '../map/Map';
+import Map from '@/shared/components/map/Map';
 import LocationGeometryToolbar from './LocationGeometryToolbar';
 import ImportGeoJson from '../form/ImportGeoJson';
 import geoUtils from '@/shared/utils/geoUtils';

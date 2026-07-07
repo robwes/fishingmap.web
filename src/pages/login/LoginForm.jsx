@@ -1,7 +1,7 @@
 import React from 'react';
-import ButtonSuccess from '../../components/ui/buttons/ButtonSuccess';
-import Input from '../../components/ui/form/Input';
-import Error from '../../components/ui/form/Error';
+import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
+import Input from '@/shared/components/form/Input';
+import Error from '@/shared/components/form/Error';
 import { Formik, Form } from 'formik';
 import './LoginForm.scss';
 

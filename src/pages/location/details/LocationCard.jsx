@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Collapse from '../../../components/ui/collapse/Collapse';
-import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
-import LocationSpeciesItem from '../../../components/ui/location/LocationSpeciesItem';
+import Collapse from '@/shared/components/collapse/Collapse';
+import ImageCarousell from '@/shared/components/imageCarousell/ImageCarousell';
+import LocationSpeciesItem from '@/shared/components/location/LocationSpeciesItem';
 import LocationPermitItem from './LocationPermitItem';
 import CollapsibleArticlePrimary from '../../../components/ui/collapse/CollapsibleArticlePrimary';
 import lake from '../../../assets/images/lake.png';

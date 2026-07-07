@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Button from '../buttons/Button';
+import Button from '@/shared/components/buttons/Button';
 import geoUtils from '@/shared/utils/geoUtils';
 import './ImportGeoJson.scss';
 

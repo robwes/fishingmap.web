@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import LocationSpeciesItem from '../../components/ui/location/LocationSpeciesItem';
+import LocationSpeciesItem from '@/shared/components/location/LocationSpeciesItem';
 import geoUtils from '@/shared/utils/geoUtils';
 import { formatKm } from '../../utils/formatDistance';
 import './MapLocationsPanel.scss';

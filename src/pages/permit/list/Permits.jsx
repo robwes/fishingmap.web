@@ -1,10 +1,10 @@
 import React from 'react';
 import { permitService } from '@/shared/services/permitService';
-import Pagination from '../../../components/ui/pagination/Pagination';
-import SlideInPanel from '../../../components/ui/slideInPanel/SlideInPanel';
-import SearchInput from '../../../components/ui/form/SearchInput';
+import Pagination from '@/shared/components/pagination/Pagination';
+import SlideInPanel from '@/shared/components/slideInPanel/SlideInPanel';
+import SearchInput from '@/shared/components/form/SearchInput';
 import PermitListItem from './PermitListItem';
-import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
+import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
 import useUrlFilters from '@/shared/hooks/useUrlFilters';
 import useDebouncedQuery from '@/shared/hooks/useDebouncedQuery';
 import './Permits.scss';

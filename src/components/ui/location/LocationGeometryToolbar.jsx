@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../buttons/Button';
+import Button from '@/shared/components/buttons/Button';
 import './LocationGeometryToolbar.scss';
 
 const LocationGeometryToolbar = ({ onDrawingModeChanged, onRemoveFeature, drawingMode }) => {

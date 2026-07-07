@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { speciesService } from '@/shared/services/speciesService';
 import { fileService } from '@/shared/services/fileService';
-import ImageCarousell from '../../../components/ui/imageCarousell/ImageCarousell';
-import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
-import NotFoundMessage from '../../../components/ui/notFound/NotFoundMessage';
+import ImageCarousell from '@/shared/components/imageCarousell/ImageCarousell';
+import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
+import NotFoundMessage from '@/shared/components/notFound/NotFoundMessage';
 import './SpeciesDetails.scss';
 
 function SpeciesDetails() {

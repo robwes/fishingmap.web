@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import Input from '../../../../components/ui/form/Input';
+import Input from '@/shared/components/form/Input';
 import TextArea from '../../../../components/ui/form/TextArea';
-import ButtonSuccess from '../../../../components/ui/buttons/ButtonSuccess';
+import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { locationService } from '@/shared/services/locationService';
 
 const validationSchema = Yup.object({

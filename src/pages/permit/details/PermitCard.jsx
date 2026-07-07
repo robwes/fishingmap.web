@@ -1,6 +1,6 @@
 import React from 'react';
 import permitImage from '../../../assets/images/permit.png';
-import LinkButtonPrimaryOutline from '../../../components/ui/buttons/LinkButtonPrimaryOutline';
+import LinkButtonPrimaryOutline from '@/shared/components/buttons/LinkButtonPrimaryOutline';
 import './PermitCard.scss';
 
 function PermitCard({ permit }) {

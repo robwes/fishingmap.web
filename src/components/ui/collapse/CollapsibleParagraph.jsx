@@ -1,5 +1,5 @@
 import React from 'react';
-import Collapse from './Collapse';
+import Collapse from '@/shared/components/collapse/Collapse';
 import './CollapsibleParagraph.scss';
 
 function CollapsibleParagraph({ text, ...props }) {

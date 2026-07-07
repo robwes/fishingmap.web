@@ -4,8 +4,8 @@ import LocationCard from './LocationCard';
 import { locationService } from '@/shared/services/locationService';
 import LocationMap from './LocationMap';
 import Article from '../../../components/ui/article/Article';
-import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
-import NotFoundMessage from '../../../components/ui/notFound/NotFoundMessage';
+import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
+import NotFoundMessage from '@/shared/components/notFound/NotFoundMessage';
 import './LocationDetails.scss';
 
 function LocationDetails() {

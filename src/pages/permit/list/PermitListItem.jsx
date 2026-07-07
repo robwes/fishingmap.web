@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../../../components/ui/card/Card';
+import Card from '@/shared/components/card/Card';
 import permitImage from '../../../assets/images/permit.png';
 import './PermitListItem.scss';
 

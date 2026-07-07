@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import React from 'react';
-import Label from './Label';
-import Error from './Error';
+import Label from '@/shared/components/form/Label';
+import Error from '@/shared/components/form/Error';
 import './TextArea.scss';
 
 function TextArea({label, className, ...props}) {

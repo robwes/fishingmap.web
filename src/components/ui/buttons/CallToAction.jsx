@@ -1,5 +1,5 @@
 import React from 'react';
-import LinkButton from './LinkButton';
+import LinkButton from '@/shared/components/buttons/LinkButton';
 import './CallToAction.scss';
 
 function CallToAction({children, className, ...props}) {

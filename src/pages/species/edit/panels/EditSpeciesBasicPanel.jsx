@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import ButtonSuccess from '../../../../components/ui/buttons/ButtonSuccess';
+import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { speciesService } from '@/shared/services/speciesService';
 import './EditSpeciesBasicPanel.scss';
 

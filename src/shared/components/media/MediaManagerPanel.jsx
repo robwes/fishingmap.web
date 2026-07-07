@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ButtonSuccess from '../buttons/ButtonSuccess';
+import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { fileService } from '@/shared/services/fileService';
 import { VALID_IMAGE_TYPES, IMAGE_ACCEPT } from '@/shared/constants/images';
 import './MediaManagerPanel.scss';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { permitService } from '@/shared/services/permitService';
 import PermitForm from '../../../components/ui/permit/PermitForm';
-import FloatingSpinner from '../../../components/ui/spinner/FloatingSpinner';
+import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
 import { useToast } from '@/shared/context/ToastContext';
 import './EditPermit.scss';
 
