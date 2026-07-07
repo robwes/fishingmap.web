@@ -378,7 +378,7 @@ grep -rnE "'(\.\.?/)+assets" src --include='*.js*'   # zero (the landing SCSS ur
 
 ---
 
-## Phase 10 — App shell → `src/app`
+## Phase 10 — App shell → `src/app` ✅ done
 
 ```bash
 mkdir -p src/app
