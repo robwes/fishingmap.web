@@ -94,11 +94,30 @@ function Locations() {
         unit: 'km',
     };
 
+    const sortOptions = [
+        { value: 'nearest', label: 'Nearest' },
+        { value: 'name', label: 'Name (A–Z)' },
+    ];
+
+    // Result count shown next to the view toggle in the filter UI (panel on
+    // mobile, toolbar on desktop) — mirrors the map page's layout.
+    const countText = (
+        <span className="loc-count-text">
+            {showCount && (
+                <><b>{sortedLocations.length}</b> {sortedLocations.length === 1 ? 'spot' : 'spots'}</>
+            )}
+        </span>
+    );
+
     return (
         <div className="locations page">
             {isLoading && <FloatingSpinner />}
 
             <SlideInPanel>
+                <div className="loc-view-row">
+                    <ViewToggle active="list" />
+                    {countText}
+                </div>
                 <SearchInput
                     value={search}
                     onChange={onSearch}
@@ -113,6 +132,14 @@ function Locations() {
                     placeholder="Any species…"
                 />
                 {currentLocation && <RangeInput label="Distance (km)" {...distanceFilterProps} />}
+                {currentLocation && (
+                    <SortControl
+                        label="Sort by"
+                        value={effectiveSort}
+                        onChange={onSortChange}
+                        options={sortOptions}
+                    />
+                )}
                 {hasActiveFilters && <ResetButton onClick={onReset} />}
             </SlideInPanel>
 
@@ -140,24 +167,14 @@ function Locations() {
                     />
                     {currentLocation && <RangeInput label="Distance" {...distanceFilterProps} />}
                     {hasActiveFilters && <ResetButton onClick={onReset} />}
-                </div>
-
-                <div className="loc-count-row">
-                    <span className="loc-count-text">
-                        {showCount && (
-                            <><b>{sortedLocations.length}</b> {sortedLocations.length === 1 ? 'spot' : 'spots'}</>
-                        )}
-                    </span>
-                    <div className="loc-count-actions">
-                        <ViewToggle active="list" />
+                    <ViewToggle active="list" />
+                    <div className="loc-view-row">
+                        {countText}
                         {currentLocation && (
                             <SortControl
                                 value={effectiveSort}
                                 onChange={onSortChange}
-                                options={[
-                                    { value: 'nearest', label: 'Nearest' },
-                                    { value: 'name', label: 'Name (A–Z)' },
-                                ]}
+                                options={sortOptions}
                             />
                         )}
                     </div>

@@ -11,15 +11,19 @@ import './MapResultStatus.scss';
  * @param {boolean} props.show - Whether results have resolved at least once.
  * @param {boolean} props.hasActiveFilters - Whether any filter is applied.
  * @param {() => void} props.onReset - Clears all active filters.
+ * @param {'pill'|'inline'} [props.variant] - 'pill' floats over the map;
+ * 'inline' is plain text matching the count on the Locations/Species pages.
  */
-function MapResultStatus({ count, show, hasActiveFilters, onReset }) {
+function MapResultStatus({ count, show, hasActiveFilters, onReset, variant = 'pill' }) {
     if (!show) {
         return null;
     }
 
+    const baseClass = `map-result-status${variant === 'inline' ? ' is-inline' : ''}`;
+
     if (count === 0) {
         return (
-            <div className="map-result-status is-empty">
+            <div className={`${baseClass} is-empty`}>
                 {hasActiveFilters ? (
                     <>
                         <span>No locations match your filters.</span>
@@ -33,7 +37,7 @@ function MapResultStatus({ count, show, hasActiveFilters, onReset }) {
     }
 
     return (
-        <div className="map-result-status">
+        <div className={baseClass}>
             <b>{count}</b> {count === 1 ? 'location' : 'locations'}
         </div>
     );

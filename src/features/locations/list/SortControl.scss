@@ -1,11 +1,28 @@
 .sort-control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+
+    // Matches the other filter inputs' label styling (see RangeInput).
+    > label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--clr-secondary-text);
+    }
+}
+
+.sort-control-field {
     position: relative;
     display: flex;
     align-items: center;
-    flex-shrink: 0;
 }
 
 .sort-select {
+    // Fill the field wrapper so the absolutely-positioned chevron stays
+    // inside the select (the wrapper is stretched full-width in the
+    // slide-in panel; in the toolbar it shrinks to the select anyway).
+    width: 100%;
     appearance: none;
     -webkit-appearance: none;
     font: inherit;

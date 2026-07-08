@@ -15,6 +15,25 @@
         color: var(--clr-primary-text);
     }
 
+    // Plain-text variant for the filter panel/toolbar — matches the count
+    // styling on the Locations and Species list pages (.loc-count-text /
+    // .species-result-count).
+    &.is-inline {
+        background: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        font-size: 1rem;
+        font-weight: 300;
+        color: var(--clr-secondary-text);
+        white-space: nowrap;
+
+        b {
+            font-weight: 500;
+            color: var(--clr-body);
+        }
+    }
+
     &.is-empty {
         color: var(--clr-secondary-text);
 

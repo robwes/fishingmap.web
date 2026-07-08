@@ -335,12 +335,32 @@ function FishingMap() {
             {isLoading && <FloatingSpinner />}
 
             <SlideInPanel>
+                <div className="map-view-row">
+                    <ViewToggle active="map" />
+                    <MapResultStatus
+                        count={locations.length}
+                        show={showCount}
+                        hasActiveFilters={hasActiveFilters}
+                        onReset={onReset}
+                        variant="inline"
+                    />
+                </div>
                 {filterControls('panel')}
             </SlideInPanel>
 
             <div className="map-filter">
                 <div className="container">
                     {filterControls('toolbar')}
+                    <div className="map-view-row">
+                        <MapResultStatus
+                            count={locations.length}
+                            show={showCount}
+                            hasActiveFilters={hasActiveFilters}
+                            onReset={onReset}
+                            variant="inline"
+                        />
+                        <ViewToggle active="map" />
+                    </div>
                 </div>
             </div>
 
@@ -356,20 +376,24 @@ function FishingMap() {
                 />
 
                 <div className='map-area'>
-                    <div className="map-overlay-top">
-                        <ViewToggle active="map" />
-                        <MapResultStatus
-                            count={locations.length}
-                            show={showCount}
-                            hasActiveFilters={hasActiveFilters}
-                            onReset={onReset}
-                        />
-                    </div>
+                    {/* The count and view toggle live in the filter UI; only
+                        the no-results state still floats over the map (mobile,
+                        panel closed) so an empty map isn't mute about why. */}
+                    {showCount && locations.length === 0 && (
+                        <div className="map-overlay-top">
+                            <MapResultStatus
+                                count={0}
+                                show
+                                hasActiveFilters={hasActiveFilters}
+                                onReset={onReset}
+                            />
+                        </div>
+                    )}
 
                     <Map
                         center={initialViewport ? initialViewport.center : startCenter}
                         zoom={initialViewport ? initialViewport.zoom : 8}>
-                        <MapTypeControl position={ControlPosition.RIGHT_BOTTOM} />
+                        <MapTypeControl position={ControlPosition.TOP_RIGHT} />
                         <LocateButton location={currentLocation} />
                         {currentLocation && (
                             <PositionMarker

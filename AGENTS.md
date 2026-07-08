@@ -6,7 +6,8 @@ Single source of project guidance for AI coding agents working in this repositor
 
 - `npm start` — Vite dev server on **port 3000** (strict; fails if occupied). Opens a browser automatically.
 - `npm run build` — production build, output goes to `build/` (not the default `dist/`).
-- `npm test` — runs Vitest. Test files are colocated `*.test.js` next to the code they cover (e.g. `src/shared/services/apiClient.test.js`). Use `npx vitest run path/to/file.test.js` for a single file, or `npx vitest -t "name"` to filter by test name. CI fails if the suite is empty, so never delete the last test file without replacing it.
+- `npm test` — runs Vitest. Test files are colocated `*.test.js` next to the code they cover (e.g. `src/shared/services/apiClient.test.js`); use `.test.jsx` only when the test itself contains JSX. Use `npx vitest run path/to/file.test.js` for a single file, or `npx vitest -t "name"` to filter by test name. CI fails if the suite is empty, so never delete the last test file without replacing it.
+  - The default test environment is node. Hook/component tests use `@testing-library/react`: start the file with `// @vitest-environment happy-dom` and set `globalThis.IS_REACT_ACT_ENVIRONMENT = true` (tests don't enable vitest globals, so RTL can't register act support or auto-cleanup — call `cleanup` in an `afterEach` yourself). See `src/shared/hooks/useDebouncedQuery.test.js` for the pattern.
 
 - `npm run lint` — ESLint 9 flat config (`eslint.config.js`: js recommended + react + react-hooks). Runs in CI; **errors fail the build, warnings don't.** The `react-hooks/refs` and `react-hooks/set-state-in-effect` compiler-alignment rules are downgraded to warnings because the imperative Google Maps integration (Circle, useData, clusterer) legitimately trips them — don't "fix" those warnings mechanically.
 
