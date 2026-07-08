@@ -1,8 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.scss';
-import App from './App';
-import { assertRequiredEnv } from './utils/assertEnv';
+import App from '@/app/App';
+import { assertRequiredEnv } from '@/shared/utils/assertEnv';
 
 assertRequiredEnv();
 

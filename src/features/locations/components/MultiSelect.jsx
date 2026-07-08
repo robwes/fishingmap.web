@@ -1,0 +1,84 @@
+import React from 'react';
+import { useField } from 'formik';
+import Select from 'react-select';
+import Label from '@/shared/components/form/Label';
+import Error from '@/shared/components/form/Error';
+
+const customStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: state.isFocused || state.isActive ? "white" : provided.color,
+        background: state.isFocused || state.isActive ? "#00ADFF" : provided.background,
+        padding: ".5em 1em"
+    }),
+    control: (provided, state) => ({
+        ...provided,
+        borderColor: state.isFocused || state.isActive ? "#00ADFF" : "#9e9e9e",
+        boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+        borderRadius: ".5em"
+    }),
+    menu: (provided) => ({
+        ...provided,
+        overflow: "hidden"
+    }),
+    menuList: (provided) => ({
+        ...provided,
+        padding: 0
+    }),
+    valueContainer: (provided) => ({
+        ...provided,
+        padding: ".5em 1em"
+    }),
+    multiValue: (provided) => ({
+        ...provided,
+        marginLeft: 0,
+        background: "#00ADFF",
+        color: "white",
+        borderRadius: "5px",
+        paddingLeft: ".2em",
+        paddingRight: ".2em",
+        marginRight: ".5em"
+    }),
+    multiValueLabel: (provided) => ({
+        ...provided,
+        color: "white"
+    }),
+    multiValueRemove: (provided) => ({
+        ...provided,
+        color: "white",
+    })
+}
+
+function MultiSelect({ label, options, disabled = false, ...props }) {
+    const [field, meta, helpers] = useField(props);
+    const { setTouched, setValue } = helpers;
+
+    return (
+        <div className="multi-select">
+            <Label htmlFor={props.id || props.name}>{label}</Label>
+            <Select
+                isDisabled={disabled}
+                value={field.value}
+                styles={customStyles}
+                onChange={setValue}
+                onBlur={setTouched}
+                options={options}
+                isMulti={true}
+                theme={theme => ({
+                    ...theme,
+                    borderRadius: ".5em",
+                    colors: {
+                        ...theme.colors,
+                        primary25: '#00ADFF',
+                        primary: '#00ADFF',
+                    },
+                })}
+            />
+            {meta.touched && meta.error ? (
+                <Error message={meta.error} />
+            ) : null}
+        </div>
+    )
+}
+
+export default MultiSelect

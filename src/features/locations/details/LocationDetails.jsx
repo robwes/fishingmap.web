@@ -1,0 +1,56 @@
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import LocationCard from './LocationCard';
+import { locationService } from '@/shared/services/locationService';
+import LocationMap from './LocationMap';
+import Article from '@/features/locations/components/Article';
+import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
+import NotFoundMessage from '@/shared/components/notFound/NotFoundMessage';
+import './LocationDetails.scss';
+
+function LocationDetails() {
+
+    const { id } = useParams();
+    const [location, setLocation] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        (async () => {
+            const l = await locationService.getLocation(parseInt(id));
+            if (l) {
+                setLocation(l);
+            }
+            setIsLoading(false);
+        })();
+    }, [id]);
+
+    return (
+        <div className="location-details page">
+            {isLoading && <FloatingSpinner />}
+            {!isLoading && !location && (
+                <NotFoundMessage
+                    message="This location could not be loaded. It may have been removed."
+                    linkTo="/locations"
+                    linkText="Back to locations"
+                />
+            )}
+            {location && <>
+                <div className='left'>
+                    <LocationCard location={location} />
+                </div>
+
+                <div className='right'>
+                    <LocationMap
+                        location={location}
+                    />
+                    <Article
+                        className="location-description"
+                        text={location.description}
+                    />
+                </div>
+            </>}
+        </div>
+    )
+}
+
+export default LocationDetails

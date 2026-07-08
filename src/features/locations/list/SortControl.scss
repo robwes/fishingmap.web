@@ -1,0 +1,56 @@
+.sort-control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+
+    // Matches the other filter inputs' label styling (see RangeInput).
+    > label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--clr-secondary-text);
+    }
+}
+
+.sort-control-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sort-select {
+    // Fill the field wrapper so the absolutely-positioned chevron stays
+    // inside the select (the wrapper is stretched full-width in the
+    // slide-in panel; in the toolbar it shrinks to the select anyway).
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    font-size: 0.9rem;
+    height: 40px;
+    padding: 0 2.2em 0 0.9em;
+    background: #fff;
+    color: var(--clr-body);
+    border: 1px solid var(--clr-input-border);
+    border-radius: var(--radius-input);
+    cursor: pointer;
+
+    &:hover {
+        border-color: var(--clr-primary);
+    }
+
+    &:focus {
+        outline: 0;
+        border-color: var(--clr-primary);
+    }
+}
+
+.sort-control .chev {
+    position: absolute;
+    right: 0.85em;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--clr-secondary-text);
+    font-size: 0.75rem;
+}
