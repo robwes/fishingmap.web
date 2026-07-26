@@ -48,6 +48,10 @@ export const speciesService = {
         return await apiClient.sendForm(`${baseUrl}/${id}`, "PUT", toSpeciesFormData(species));
     },
 
+    patchSpeciesInfo: async (id, { name, scientificName, description }) => {
+        return await apiClient.sendJson(`${baseUrl}/${id}/info`, "PATCH", { name, scientificName, description });
+    },
+
     addImageToSpecies: async (id, image) => {
         const formData = new FormData();
         formData.append('image', image);

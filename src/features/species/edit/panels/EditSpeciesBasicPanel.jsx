@@ -20,8 +20,7 @@ function EditSpeciesBasicPanel({ species, onSpeciesUpdated }) {
     const [saveError, setSaveError] = useState(false);
 
     const handleSubmit = async (values, { setSubmitting }) => {
-        const updated = await speciesService.updateSpecies(species.id, {
-            id: species.id,
+        const updated = await speciesService.patchSpeciesInfo(species.id, {
             name: values.name,
             scientificName: values.scientificName,
             description: values.description,
