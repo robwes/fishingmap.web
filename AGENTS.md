@@ -2,6 +2,19 @@
 
 Single source of project guidance for AI coding agents working in this repository. Claude Code imports this file via `CLAUDE.md`; Codex and other agents read it directly. **Edit this file, not CLAUDE.md.**
 
+## Active work
+
+Multi-session features are tracked as GitHub issues in `robwes/fishingmap.web` labelled **`feature-plan`**. Each one records the decisions already made, the options already rejected, per-surface status, and the remaining plan — including work that lands in `fishingmap.server` or the Claude Design prototype.
+
+Before starting on a feature, check for an open one:
+
+```
+gh issue list --repo robwes/fishingmap.web --label feature-plan
+gh issue view <number> --repo robwes/fishingmap.web
+```
+
+Update the issue at the end of a session. When the feature ships, graduate its durable constraints into this file and close the issue.
+
 ## Commands
 
 - `npm start` — Vite dev server on **port 3000** (strict; fails if occupied). Opens a browser automatically.
