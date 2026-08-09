@@ -8,6 +8,7 @@ import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 import EditBasicInfoPanel from './panels/EditBasicInfoPanel';
 import MediaManagerPanel from '@/shared/components/media/MediaManagerPanel';
 import EditAssocPanel from './panels/EditAssocPanel';
+import EditRegulationsPanel from './panels/EditRegulationsPanel';
 import EditGeoPanel from './panels/EditGeoPanel';
 import './EditLocation.scss';
 
@@ -15,6 +16,7 @@ const EDIT_SECTIONS = [
     { id: 'info',  icon: 'fa-circle-info', label: 'Basic info',        shortLabel: 'Info' },
     { id: 'media', icon: 'fa-images',      label: 'Media',             shortLabel: 'Media' },
     { id: 'assoc', icon: 'fa-tags',        label: 'Species & permits', shortLabel: 'Species' },
+    { id: 'rules', icon: 'fa-scale-balanced', label: 'Regulations',    shortLabel: 'Rules' },
     { id: 'geo',   icon: 'fa-map',         label: 'Geometry',          shortLabel: 'Geometry', adminOnly: true },
 ];
 
@@ -66,6 +68,9 @@ function EditLocation() {
                 />
             );
             case 'assoc': return <EditAssocPanel location={location} speciesOptions={speciesOptions} permitOptions={permitOptions} onLocationUpdated={setLocation} />;
+            // Regulation writes are Administrator-only on the backend, so the
+            // panel reads for everyone and edits for admins.
+            case 'rules': return <EditRegulationsPanel location={location} canEdit={isAdmin} onLocationUpdated={setLocation} />;
             case 'geo':   return <EditGeoPanel location={location} isAdmin={isAdmin} onLocationUpdated={setLocation} />;
             default:      return null;
         }

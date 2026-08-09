@@ -3,6 +3,7 @@ import {
     RULE_SOURCE,
     RULE_SOURCE_REGION_PREFIX,
     BAG_LIMIT_BASIS_LABELS,
+    MONTH_NAMES,
 } from '@/shared/constants/regulations';
 
 /**
@@ -18,11 +19,6 @@ import {
  * 2. Sizes are decimals on the backend, so 40 must render as "40" and
  *    40.5 as "40.5" — never "40.00".
  */
-
-const MONTH_NAMES = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-];
 
 /**
  * Collapses a month/day pair into a comparable ordinal (Mar 5 -> 305) so

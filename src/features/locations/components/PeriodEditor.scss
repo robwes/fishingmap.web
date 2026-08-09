@@ -1,0 +1,55 @@
+.reg-periods {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+
+    .reg-period-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.4em;
+    }
+
+    .reg-period-pair {
+        display: flex;
+        gap: 0.35em;
+
+        .edit-input {
+            padding: 0.45em 0.6em;
+            font-size: 0.9rem;
+        }
+    }
+
+    .reg-day {
+        width: 4.2em;
+    }
+
+    .reg-period-arrow {
+        font-size: 0.7rem;
+        opacity: 0.5;
+    }
+
+    /* A period whose start falls after its end is legitimate — most winter
+       closures wrap the year end — so say so rather than flagging an error. */
+    .reg-period-wrap-note {
+        padding: 0.2em 0.6em;
+        border-radius: 999px;
+        background-color: var(--clr-primary-light);
+        color: var(--clr-primary-text);
+        font-size: 0.75rem;
+    }
+
+    .reg-icon-button {
+        padding: 0.3em;
+        border: 0;
+        background: none;
+        font-size: 0.85rem;
+        color: var(--clr-secondary-text);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--clr-danger);
+        }
+    }
+}

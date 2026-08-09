@@ -1,0 +1,61 @@
+.reg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding-top: 0.4em;
+
+    .reg-field-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75em;
+    }
+
+    .reg-toggles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em 1.5em;
+    }
+
+    .reg-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        font-size: 0.9rem;
+        cursor: pointer;
+
+        input {
+            width: 1.1em;
+            height: 1.1em;
+            accent-color: var(--clr-primary);
+        }
+    }
+
+    .reg-form-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75em;
+    }
+}
+
+.reg-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+}
+
+.reg-field-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--clr-secondary-text);
+}
+
+.reg-field-hint {
+    font-size: 0.75rem;
+    color: var(--clr-secondary-text);
+    opacity: 0.85;
+}
+
+.reg-empty-note {
+    font-size: 0.8rem;
+    color: var(--clr-secondary-text);
+}

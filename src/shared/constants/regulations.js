@@ -54,6 +54,16 @@ export const BAG_LIMIT_BASIS = {
     PERMIT: 'Permit',
 };
 
+/**
+ * Short month names, indexed 0-11. Protected periods carry a month number and
+ * no year, so both the formatters and the period editor's month pickers read
+ * from this one list.
+ */
+export const MONTH_NAMES = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
 export const BAG_LIMIT_BASIS_LABELS = {
     [BAG_LIMIT_BASIS.DAY]: 'per day',
     [BAG_LIMIT_BASIS.WEEK]: 'per week',

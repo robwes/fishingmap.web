@@ -1,0 +1,122 @@
+.reg-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    padding: 0.9em 1em;
+    border: 1px solid var(--clr-border-subtle);
+    border-left: 3px solid var(--clr-border-subtle);
+    border-radius: var(--radius-input);
+    background-color: #fff;
+
+    &.is-override {
+        border-left-color: var(--clr-primary);
+    }
+
+    /* Shared with other waters: read-only, and visibly set apart from rows
+       that can actually be edited here. */
+    &.is-locked {
+        background-color: var(--clr-secondary);
+    }
+
+    &.is-editing {
+        border-color: var(--clr-primary);
+        box-shadow: 0 2px 10px rgba(66, 133, 244, 0.12);
+    }
+}
+
+.reg-row-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.35em 0.75em;
+}
+
+.reg-row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em 0.75em;
+    margin-top: 0.15em;
+}
+
+.reg-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    white-space: nowrap;
+    padding: 0.45em 0.8em;
+    border: 1px solid var(--clr-primary);
+    border-radius: 999px;
+    background-color: var(--clr-primary-light);
+    color: var(--clr-primary-text);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    i {
+        font-size: 0.85em;
+    }
+
+    &:hover:not(:disabled) {
+        background-color: #dbe8ff;
+    }
+
+    &:disabled {
+        opacity: 0.55;
+        cursor: default;
+    }
+
+    &.is-quiet {
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+        border-color: transparent;
+        background: none;
+        color: var(--clr-secondary-text);
+
+        &:hover:not(:disabled) {
+            background: none;
+            color: var(--clr-body);
+            text-decoration: underline;
+        }
+    }
+
+    &.is-danger {
+        border-color: var(--clr-danger);
+        background-color: var(--clr-danger-light);
+        color: var(--clr-danger-text);
+    }
+}
+
+.reg-confirm {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    font-size: 0.8rem;
+    color: var(--clr-secondary-text);
+}
+
+.reg-locked-note {
+    display: flex;
+    gap: 0.6em;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--clr-secondary-text);
+
+    i {
+        margin-top: 0.25em;
+    }
+}
+
+@media (max-width: 600px) {
+    .reg-row-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .reg-action {
+        justify-content: center;
+    }
+}
