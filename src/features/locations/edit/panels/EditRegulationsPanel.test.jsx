@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, cleanup, act } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import EditRegulationsPanel from './EditRegulationsPanel';
 import { regulationService } from '@/shared/services/regulationService';
 import { locationService } from '@/shared/services/locationService';
@@ -87,11 +88,13 @@ const sharedRule = { ...ownRule, regulationId: 105, locationIds: [1, 7, 9] };
  */
 const renderPanel = (location, canEdit = true) => {
     render(
-        <EditRegulationsPanel
-            location={location}
-            canEdit={canEdit}
-            onLocationUpdated={vi.fn()}
-        />
+        <MemoryRouter>
+            <EditRegulationsPanel
+                location={location}
+                canEdit={canEdit}
+                onLocationUpdated={vi.fn()}
+            />
+        </MemoryRouter>
     );
 };
 

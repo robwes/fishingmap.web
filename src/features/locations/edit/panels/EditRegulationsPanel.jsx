@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import RegulationRow from '@/features/locations/components/RegulationRow';
 import RegionChainNote from '@/features/locations/components/RegionChainNote';
 import { regulationService } from '@/shared/services/regulationService';
@@ -139,6 +140,7 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
                     <i className="fa-solid fa-circle-info"></i>
                     Regional and national rules are maintained centrally. Here you can make this
                     water stricter or looser than the rule it inherits.
+                    {canEdit && <> <Link className="reg-link" to="/regions">Manage regional rules</Link></>}
                 </p>
             </div>
 

@@ -20,6 +20,19 @@ export const REGION_TYPE_LABELS = {
 };
 
 /**
+ * The tier a new child region gets, one step below its parent.
+ *
+ * A lookup rather than arithmetic: `type` is the enum's name now, so
+ * `parent.type + 1` is meaningless. A management area has nothing below it,
+ * which is why it is absent rather than mapped to itself — callers use that
+ * to hide the "add a region under this" affordance.
+ */
+export const REGION_CHILD_TYPE = {
+    [REGION_TYPE.NATIONAL]: REGION_TYPE.ELY,
+    [REGION_TYPE.ELY]: REGION_TYPE.MANAGEMENT_AREA,
+};
+
+/**
  * The `source` string on a resolved rule (`location.speciesRules[].source`),
  * which is the only signal telling us whether a rule was inherited or set on
  * the water itself. Region-scoped rules arrive as `"Region: <name>"`, so they

@@ -1,0 +1,47 @@
+.region-tree-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+}
+
+.region-tree-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    width: 100%;
+    padding: 0.6em 0.9em;
+    border: 0;
+    border-left: 3px solid transparent;
+    background: none;
+    font: inherit;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--clr-secondary);
+    }
+
+    &.is-selected {
+        background-color: var(--clr-primary-light);
+        border-left-color: var(--clr-primary);
+        color: var(--clr-primary-text);
+        font-weight: 500;
+    }
+
+    .region-tree-icon {
+        font-size: 0.8em;
+        opacity: 0.6;
+    }
+
+    .region-tree-name {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .region-tree-type {
+        font-size: 0.7rem;
+        color: var(--clr-secondary-text);
+        white-space: nowrap;
+    }
+}

@@ -24,6 +24,7 @@ import Permits from '@/features/permits/list/Permits';
 import PermitDetails from '@/features/permits/details/PermitDetails';
 import AddPermit from '@/features/permits/add/AddPermit';
 import EditPermit from '@/features/permits/edit/EditPermit';
+import RegionAdmin from '@/features/regions/RegionAdmin';
 
 function App() {
 	return (
@@ -49,6 +50,10 @@ function App() {
 								<Route path="/species/:id/edit" element={<EditSpecies />} />
 								<Route path="/permits/add" element={<AddPermit />} />
 								<Route path="/permits/:id/edit" element={<EditPermit />} />
+							</Route>
+
+							<Route element={<ProtectedRoute requiredRoles={['Administrator']} />}>
+								<Route path="/regions" element={<RegionAdmin />} />
 							</Route>
 
 							<Route element={<ProtectedRouteIsLoggedInUser />}>

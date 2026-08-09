@@ -29,6 +29,17 @@
         }
     }
 
+    .reg-link {
+        color: var(--clr-primary);
+        font-weight: 500;
+        white-space: nowrap;
+
+        &:hover {
+            color: var(--clr-primary-dark);
+            text-decoration: underline;
+        }
+    }
+
     .reg-list {
         display: flex;
         flex-direction: column;

@@ -10,6 +10,10 @@ function UserMenu({ user, open }) {
 
 	const [, setCurrentUser] = useCurrentUser();
 
+	// Region admin is the only screen gated on a role rather than on being
+	// signed in, so it stays out of the header nav every visitor sees.
+	const isAdministrator = !!user?.roles?.some(role => role.name === 'Administrator');
+
 	const toggleUserMenu = (event) => {
 		event.preventDefault();
 		setIsOpen(!isOpen);
@@ -44,6 +48,19 @@ function UserMenu({ user, open }) {
 							{user.userName}
 						</Link>
 					</li>
+					{isAdministrator && (
+						<>
+							<li className='list-separator'></li>
+							<li>
+								<Link
+									className='dropdown-button'
+									to='/regions'
+									onClick={() => setIsOpen(false)}>
+									Regions &amp; regulations
+								</Link>
+							</li>
+						</>
+					)}
 					<li className='list-separator'></li>
 					<li>
 						<button onClick={logoutUser} className='dropdown-button'>Sign out</button>
