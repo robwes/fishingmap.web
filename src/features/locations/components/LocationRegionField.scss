@@ -1,0 +1,100 @@
+.location-region-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    .region-chain {
+        margin-top: 0;
+    }
+}
+
+/* Moving a water rewrites everything it inherits, so the change is spelled
+   out before it is saved rather than discovered afterwards. */
+.region-impact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.75em 0.9em;
+    border: 1px solid #f3cfcb;
+    border-left: 3px solid var(--clr-danger);
+    border-radius: var(--radius-input);
+    background-color: var(--clr-danger-light);
+}
+
+.region-impact-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--clr-primary-text);
+
+    i {
+        margin-top: 0.2em;
+        color: var(--clr-danger);
+    }
+}
+
+.region-impact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+
+    li {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45em;
+        font-size: 0.8rem;
+        color: var(--clr-secondary-text);
+    }
+}
+
+.region-impact-species {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--clr-primary-text);
+
+    i {
+        font-size: 0.8em;
+        opacity: 0.65;
+    }
+}
+
+.region-impact-from,
+.region-impact-to {
+    padding: 0.15em 0.6em;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.75);
+    white-space: nowrap;
+}
+
+.region-impact-to {
+    font-weight: 500;
+    color: var(--clr-primary-text);
+}
+
+.region-impact-arrow {
+    font-size: 0.7em;
+    opacity: 0.55;
+}
+
+.region-impact-note {
+    font-size: 0.75rem;
+    color: var(--clr-secondary-text);
+}
+
+.region-impact-none {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.8rem;
+    color: var(--clr-secondary-text);
+
+    i {
+        color: var(--clr-success);
+    }
+}

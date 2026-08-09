@@ -101,8 +101,21 @@ export const locationService = {
         return await apiClient.requestOk(`${baseUrl}/${id}`, { method: "DELETE" });
     },
 
-    patchLocationInfo: async (id, { name, description, rules }) => {
-        return await apiClient.sendJson(`${baseUrl}/${id}/info`, "PATCH", { name, description, rules });
+    /**
+     * Patches a location's basic info. `LocationInfoPatch` uses `Optional<T>`
+     * on the backend: an absent property leaves the field untouched, while an
+     * explicit null clears it. So `regionId` is only sent when the caller
+     * passes one — always including it would turn every basic-info save into
+     * a region write, and sending null would silently unassign the water.
+     */
+    patchLocationInfo: async (id, { name, description, rules, regionId }) => {
+        const patch = { name, description, rules };
+
+        if (regionId !== undefined) {
+            patch.regionId = regionId;
+        }
+
+        return await apiClient.sendJson(`${baseUrl}/${id}/info`, "PATCH", patch);
     },
 
     patchLocationAssociations: async (id, { species, permits }) => {

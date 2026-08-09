@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { locationService } from '@/shared/services/locationService';
 import { speciesService } from '@/shared/services/speciesService';
 import { permitService } from '@/shared/services/permitService';
+import { regionService } from '@/shared/services/regionService';
+import { regulationService } from '@/shared/services/regulationService';
 import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
 import { useCurrentUser } from '@/shared/context/CurrentUserContext';
 import EditBasicInfoPanel from './panels/EditBasicInfoPanel';
@@ -25,6 +27,8 @@ function EditLocation() {
     const [location, setLocation] = useState(null);
     const [species, setSpecies] = useState([]);
     const [permits, setPermits] = useState([]);
+    const [regions, setRegions] = useState([]);
+    const [regulations, setRegulations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [activeSection, setActiveSection] = useState('info');
     const [currentUser] = useCurrentUser();
@@ -49,6 +53,19 @@ function EditLocation() {
         })();
     }, []);
 
+    // The region picker needs the whole region list to build the inheritance
+    // chain, and every regulation to say which rules a region change rewrites.
+    useEffect(() => {
+        (async () => {
+            const [r, reg] = await Promise.all([
+                regionService.getRegions(),
+                regulationService.getRegulations(),
+            ]);
+            setRegions(r);
+            setRegulations(reg);
+        })();
+    }, []);
+
     const speciesOptions = species.map(s => ({ label: s.name, value: s.id }));
     const permitOptions = permits.map(p => ({ label: p.name, value: p.id }));
 
@@ -56,7 +73,14 @@ function EditLocation() {
     const renderPanel = () => {
         if (!location) return null;
         switch (activeSection) {
-            case 'info':  return <EditBasicInfoPanel location={location} onLocationUpdated={setLocation} />;
+            case 'info':  return (
+                <EditBasicInfoPanel
+                    location={location}
+                    regions={regions}
+                    regulations={regulations}
+                    onLocationUpdated={setLocation}
+                />
+            );
             case 'media': return (
                 <MediaManagerPanel
                     images={location.images}

@@ -4,6 +4,8 @@ import {
     buildRegionChain,
     isValidProtectedPeriod,
     getDaysInMonth,
+    resolveRegionRule,
+    getRegionChangeImpact,
     isInheritedRule,
     getRuleSourceKind,
     getRuleSourceLabel,
@@ -85,6 +87,81 @@ describe('buildRegionChain', () => {
         ];
 
         expect(buildRegionChain(cyclic, 1).map(r => r.name)).toEqual(['B', 'A']);
+    });
+});
+
+describe('getRegionChangeImpact', () => {
+    const finland = { id: 1, name: 'Finland', parentRegionId: null };
+    const uusimaa = { id: 2, name: 'Uusimaa ELY', parentRegionId: 1 };
+    const lapland = { id: 3, name: 'Lapland ELY', parentRegionId: 1 };
+
+    const species = [{ id: 10, name: 'Pike' }, { id: 20, name: 'Perch' }];
+    const regulations = [
+        { id: 900, speciesId: 10, regionId: 1 },   // Pike, nationally
+        { id: 901, speciesId: 10, regionId: 2 },   // Pike, stricter in Uusimaa
+        { id: 902, speciesId: 20, regionId: 1 },   // Perch, nationally
+    ];
+
+    const impact = (fromChain, toChain, overriddenSpeciesIds = []) => getRegionChangeImpact({
+        species, regulations, fromChain, toChain, overriddenSpeciesIds,
+    });
+
+    it('names the species whose rule changes, and where it moves', () => {
+        const result = impact([finland], [finland, uusimaa]);
+
+        expect(result).toEqual([{ id: 10, name: 'Pike', from: 'Finland', to: 'Uusimaa ELY' }]);
+    });
+
+    it('leaves out species whose rule is the same either way', () => {
+        // Perch is only ruled nationally, and both chains include Finland.
+        const result = impact([finland], [finland, uusimaa]);
+
+        expect(result.some(e => e.name === 'Perch')).toBe(false);
+    });
+
+    it('reports gaining and losing a rule', () => {
+        expect(impact([finland, uusimaa], [finland, lapland]))
+            .toEqual([{ id: 10, name: 'Pike', from: 'Uusimaa ELY', to: 'Finland' }]);
+
+        expect(impact([finland, uusimaa], []))
+            .toEqual([
+                { id: 10, name: 'Pike', from: 'Uusimaa ELY', to: null },
+                { id: 20, name: 'Perch', from: 'Finland', to: null },
+            ]);
+    });
+
+    it('ignores species with a rule set on the water itself', () => {
+        // A local rule wins wherever the water sits, so moving it changes
+        // nothing for that species.
+        expect(impact([finland], [finland, uusimaa], [10])).toEqual([]);
+    });
+
+    it('reports nothing when the chain does not change', () => {
+        expect(impact([finland, uusimaa], [finland, uusimaa])).toEqual([]);
+    });
+});
+
+describe('resolveRegionRule', () => {
+    const chain = [
+        { id: 1, name: 'Finland' },
+        { id: 2, name: 'Uusimaa ELY' },
+    ];
+    const regulations = [
+        { id: 900, speciesId: 10, regionId: 1 },
+        { id: 901, speciesId: 10, regionId: 2 },
+    ];
+
+    it('prefers the most specific region in the chain', () => {
+        expect(resolveRegionRule(regulations, chain, 10).rule.id).toBe(901);
+    });
+
+    it('falls back up the chain when the specific region has no rule', () => {
+        expect(resolveRegionRule([regulations[0]], chain, 10).rule.id).toBe(900);
+    });
+
+    it('returns null when nothing in the chain rules the species', () => {
+        expect(resolveRegionRule(regulations, chain, 99)).toBeNull();
+        expect(resolveRegionRule(regulations, [], 10)).toBeNull();
     });
 });
 

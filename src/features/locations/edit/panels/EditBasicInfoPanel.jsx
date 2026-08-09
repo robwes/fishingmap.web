@@ -5,6 +5,7 @@ import Input from '@/shared/components/form/Input';
 import TextArea from '@/features/locations/components/TextArea';
 import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { locationService } from '@/shared/services/locationService';
+import LocationRegionField from '@/features/locations/components/LocationRegionField';
 
 const validationSchema = Yup.object({
     name: Yup.string().max(50, 'Max 50 characters').required('Required'),
@@ -12,7 +13,7 @@ const validationSchema = Yup.object({
     rules: Yup.string().max(2000, 'Max 2000 characters').nullable(),
 });
 
-function EditBasicInfoPanel({ location, onLocationUpdated }) {
+function EditBasicInfoPanel({ location, regions = [], regulations = [], onLocationUpdated }) {
     const [saved, setSaved] = useState(false);
     const [saveError, setSaveError] = useState(false);
 
@@ -29,6 +30,8 @@ function EditBasicInfoPanel({ location, onLocationUpdated }) {
             name: values.name,
             description: values.description,
             rules: values.rules,
+            // '' is the "Not part of a region" option; null clears the field.
+            regionId: values.regionId === '' ? null : Number(values.regionId),
         });
 
         if (result?.id) {
@@ -49,16 +52,23 @@ function EditBasicInfoPanel({ location, onLocationUpdated }) {
                 name: location.name ?? '',
                 description: location.description ?? '',
                 rules: location.rules ?? '',
+                regionId: location.region?.id ?? '',
             }}
             enableReinitialize
             validationSchema={validationSchema}
             onSubmit={handleSave}
         >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, values }) => (
                 <Form>
                     <div className="edit-panel-fields">
                         <Input label="Name" name="name" type="text" disabled={isSubmitting} />
                         <TextArea label="Description" name="description" rows={5} disabled={isSubmitting} />
+                        <LocationRegionField
+                            location={location}
+                            regions={regions}
+                            regulations={regulations}
+                            value={values.regionId === '' ? null : Number(values.regionId)}
+                        />
                         <TextArea label="Rules" name="rules" rows={7} disabled={isSubmitting} />
                         <div className="edit-save-row">
                             {saved && (

@@ -10,7 +10,7 @@ import { regulationService } from '@/shared/services/regulationService';
 import { speciesService } from '@/shared/services/speciesService';
 import { locationService } from '@/shared/services/locationService';
 import { useToast } from '@/shared/context/ToastContext';
-import { getRegionTypeLabel, buildRegionChain } from '@/shared/utils/regulationUtils';
+import { getRegionTypeLabel, buildRegionChain, resolveRegionRule } from '@/shared/utils/regulationUtils';
 import '@/shared/components/regulations/regulationFields.scss';
 import './RegionAdmin.scss';
 
@@ -92,16 +92,13 @@ function RegionAdmin() {
      * @returns {{rule: Object, region: Object}|null} The inherited rule and its region.
      */
     const findAncestorRule = (speciesId) => {
-        const chain = buildRegionChain(regions, selectedRegion?.parentRegionId);
-
-        for (let i = chain.length - 1; i >= 0; i--) {
-            const found = regulations.find(r => r.regionId === chain[i].id && r.speciesId === speciesId);
-            if (found) {
-                return { rule: found, region: chain[i] };
-            }
-        }
-
-        return null;
+        // The chain stops at the parent, so the region's own rules can't
+        // pre-fill a rule it doesn't have yet.
+        return resolveRegionRule(
+            regulations,
+            buildRegionChain(regions, selectedRegion?.parentRegionId),
+            speciesId
+        );
     };
 
     /** Opens the form for an existing rule. */

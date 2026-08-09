@@ -110,6 +110,72 @@ export const buildRegionChain = (regions, regionId) => {
 };
 
 /**
+ * The rule a region chain contributes for one species — the most specific
+ * region in the chain that rules it. Mirrors the backend cascade, which is
+ * why the walk runs from the end of the chain backwards.
+ * @param {Array<Object>} regulations - Every regulation, region-scoped or not.
+ * @param {Array<Object>} chain - Region chain, root first.
+ * @param {number} speciesId - The species being resolved.
+ * @returns {{rule: Object, region: Object}|null} The winning rule and the region it belongs to.
+ */
+export const resolveRegionRule = (regulations, chain, speciesId) => {
+    if (!Array.isArray(regulations) || !Array.isArray(chain)) {
+        return null;
+    }
+
+    for (let i = chain.length - 1; i >= 0; i--) {
+        const rule = regulations.find(r => r.regionId === chain[i].id && r.speciesId === speciesId);
+        if (rule) {
+            return { rule, region: chain[i] };
+        }
+    }
+
+    return null;
+};
+
+/**
+ * Which species rules change if a water moves between regions.
+ *
+ * Moving a water silently rewrites everything it inherits, so the editor can
+ * name the damage before it is saved rather than after. Species with a rule
+ * set on the water itself are excluded: a local rule wins wherever the water
+ * sits, so moving it changes nothing for them.
+ * @param {Object} args
+ * @param {Array<Object>} args.species - The species at this water.
+ * @param {Array<Object>} args.regulations - Every regulation.
+ * @param {Array<Object>} args.fromChain - The water's current region chain, root first.
+ * @param {Array<Object>} args.toChain - The chain it would move to, root first.
+ * @param {Array<number>} [args.overriddenSpeciesIds] - Species with a rule on this water.
+ * @returns {Array<{id: number, name: string, from: string|null, to: string|null}>} One entry per changed rule.
+ */
+export const getRegionChangeImpact = ({
+    species,
+    regulations,
+    fromChain,
+    toChain,
+    overriddenSpeciesIds = [],
+}) => {
+    return (species ?? [])
+        .filter(s => !overriddenSpeciesIds.includes(s.id))
+        .map(s => {
+            const before = resolveRegionRule(regulations, fromChain, s.id);
+            const after = resolveRegionRule(regulations, toChain, s.id);
+
+            if ((before?.rule.id ?? null) === (after?.rule.id ?? null)) {
+                return null;
+            }
+
+            return {
+                id: s.id,
+                name: s.name,
+                from: before?.region.name ?? null,
+                to: after?.region.name ?? null,
+            };
+        })
+        .filter(Boolean);
+};
+
+/**
  * Whether a resolved rule was inherited from a region or national rule
  * rather than being set on this specific water. Drives the "inherited"
  * affordance on location details and the read-only state in the editor.
