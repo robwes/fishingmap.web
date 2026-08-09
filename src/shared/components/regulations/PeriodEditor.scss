@@ -19,6 +19,17 @@
             padding: 0.45em 0.6em;
             font-size: 0.9rem;
         }
+
+        /* The compact padding above is a shorthand, so it resets the
+           right-hand clearance that keeps the month name off the chevron.
+           Put it back, tightened to match, and pull the chevron in with it. */
+        select.reg-input {
+            /* Size to the month name rather than inheriting width:100% and
+               relying on flex shrink to land somewhere sensible. */
+            width: auto;
+            padding-right: 1.9em;
+            background-position: right 0.55em center;
+        }
     }
 
     .reg-day {
