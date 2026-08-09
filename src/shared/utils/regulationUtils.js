@@ -2,6 +2,7 @@ import {
     REGION_TYPE_LABELS,
     RULE_SOURCE,
     RULE_SOURCE_REGION_PREFIX,
+    BAG_LIMIT_BASIS_LABELS,
 } from '@/shared/constants/regulations';
 
 /**
@@ -133,18 +134,30 @@ export const formatSizeLimit = (minimumSizeCm, maximumSizeCm) => {
 };
 
 /**
- * Formats a bag limit. A limit of 0 means no fish may be kept, which reads
- * badly as "0 fish", so it gets its own phrasing.
+ * Formats a bag limit against its basis — "6 per day", "4 per permit". A limit
+ * of 0 means no fish may be kept, which reads badly as "0 fish", so it gets its
+ * own phrasing. When the basis is missing the count renders bare: the source
+ * regulation didn't say what it counts against, and stating one anyway would
+ * misdescribe the law.
  * @param {number|null} bagLimit - Number of fish that may be kept, or null.
+ * @param {string|null} [bagLimitBasis] - Basis name ('Day' | 'Week' | 'Season' | 'Year' | 'Permit').
  * @returns {string|null} Formatted limit, or null when unset.
  */
-export const formatBagLimit = (bagLimit) => {
+export const formatBagLimit = (bagLimit, bagLimitBasis = null) => {
     if (bagLimit === null || bagLimit === undefined) {
         return null;
     }
 
     if (bagLimit === 0) {
         return 'No fish may be kept';
+    }
+
+    const basis = Object.hasOwn(BAG_LIMIT_BASIS_LABELS, bagLimitBasis)
+        ? BAG_LIMIT_BASIS_LABELS[bagLimitBasis]
+        : null;
+
+    if (basis) {
+        return `${bagLimit} ${basis}`;
     }
 
     return bagLimit === 1 ? '1 fish' : `${bagLimit} fish`;

@@ -105,18 +105,34 @@ describe('formatSizeLimit', () => {
 });
 
 describe('formatBagLimit', () => {
-    it('formats plural and singular limits', () => {
+    it('formats the limit against its basis', () => {
+        expect(formatBagLimit(6, 'Day')).toBe('6 per day');
+        expect(formatBagLimit(1, 'Season')).toBe('1 per season');
+        expect(formatBagLimit(4, 'Permit')).toBe('4 per permit');
+    });
+
+    it('renders a bare count when the basis is missing', () => {
+        // The regulation didn't say what the limit counts against. Naming one
+        // anyway would state a legal claim the data does not support.
         expect(formatBagLimit(5)).toBe('5 fish');
+        expect(formatBagLimit(5, null)).toBe('5 fish');
         expect(formatBagLimit(1)).toBe('1 fish');
     });
 
-    it('phrases a zero limit as no fish kept', () => {
+    it('renders a bare count for an unrecognised basis', () => {
+        expect(formatBagLimit(5, 'Fortnight')).toBe('5 fish');
+        expect(formatBagLimit(5, 'constructor')).toBe('5 fish');
+    });
+
+    it('phrases a zero limit as no fish kept, whatever the basis', () => {
         expect(formatBagLimit(0)).toBe('No fish may be kept');
+        expect(formatBagLimit(0, 'Day')).toBe('No fish may be kept');
     });
 
     it('returns null when unset', () => {
         expect(formatBagLimit(null)).toBeNull();
         expect(formatBagLimit(undefined)).toBeNull();
+        expect(formatBagLimit(null, 'Day')).toBeNull();
     });
 });
 

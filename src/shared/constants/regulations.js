@@ -36,3 +36,28 @@ export const RULE_SOURCE = {
 };
 
 export const RULE_SOURCE_REGION_PREFIX = 'Region: ';
+
+/**
+ * What a bag limit is counted against. Deliberately not a duration — put-and-take
+ * waters sell a permit covering a fixed number of fish, so `Permit` sits alongside
+ * the time-based values. Keep in sync with `BagLimitBasis.cs`, which serializes by
+ * name for the same reason `RegionType` does.
+ *
+ * A rule may carry a `bagLimit` with no basis: the source regulation didn't say.
+ * That renders as a bare count — never assume "per day".
+ */
+export const BAG_LIMIT_BASIS = {
+    DAY: 'Day',
+    WEEK: 'Week',
+    SEASON: 'Season',
+    YEAR: 'Year',
+    PERMIT: 'Permit',
+};
+
+export const BAG_LIMIT_BASIS_LABELS = {
+    [BAG_LIMIT_BASIS.DAY]: 'per day',
+    [BAG_LIMIT_BASIS.WEEK]: 'per week',
+    [BAG_LIMIT_BASIS.SEASON]: 'per season',
+    [BAG_LIMIT_BASIS.YEAR]: 'per year',
+    [BAG_LIMIT_BASIS.PERMIT]: 'per permit',
+};
