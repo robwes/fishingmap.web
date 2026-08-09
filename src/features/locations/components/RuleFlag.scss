@@ -1,0 +1,23 @@
+.rule-flag {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.4em 0.7em;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+
+    i {
+        font-size: 0.85em;
+    }
+
+    &.is-closed {
+        background-color: var(--clr-danger);
+        color: #fff;
+    }
+
+    .rule-flag-note {
+        font-weight: 300;
+        opacity: 0.9;
+    }
+}

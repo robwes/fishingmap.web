@@ -12,6 +12,16 @@
 	--clr-input-border: #9e9e9e;
 	--clr-input-disabled: #f2f2f2;
 	--clr-bg-light: #fff;
+	/* Status colours. --clr-danger and --clr-success were already in use as literals
+	   (toasts, required-field markers, media panel, the edit screens) — same values,
+	   named here so the regulations UI and everything after it stop repeating them. */
+	--clr-danger: #dc2626;
+	--clr-danger-light: #fdecea;
+	--clr-danger-text: #a2201c;
+	--clr-success: #00A361;
+	--clr-success-light: #e7f6ef;
+	--clr-success-text: #0b6b47;
+	--clr-border-subtle: #e4e6ea;
 	--radius-input: 8px;
 	--padding-input-x: 1em;
 	--padding-input-y: .8em;

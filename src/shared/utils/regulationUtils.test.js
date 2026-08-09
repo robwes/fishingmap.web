@@ -2,12 +2,15 @@ import { describe, it, expect } from 'vitest';
 import {
     getRegionTypeLabel,
     isInheritedRule,
+    getRuleSourceKind,
     getRuleSourceLabel,
     formatSizeLimit,
     formatBagLimit,
     formatProtectedPeriod,
     formatProtectedPeriods,
     isDateInProtectedPeriod,
+    getActiveProtectedPeriod,
+    formatPeriodEnd,
     isCurrentlyProtected,
     hasRestrictions,
 } from './regulationUtils';
@@ -59,6 +62,24 @@ describe('isInheritedRule', () => {
     });
 });
 
+describe('getRuleSourceKind', () => {
+    it('classifies the three real tiers', () => {
+        expect(getRuleSourceKind('Location')).toBe('location');
+        expect(getRuleSourceKind('Region: Uusimaa ELY')).toBe('region');
+        expect(getRuleSourceKind('National')).toBe('national');
+    });
+
+    it('returns none for the backend Unknown fallback and for empty sources', () => {
+        expect(getRuleSourceKind('Unknown')).toBe('none');
+        expect(getRuleSourceKind('')).toBe('none');
+        expect(getRuleSourceKind(undefined)).toBe('none');
+    });
+
+    it('returns none for an unrecognised source rather than guessing a tier', () => {
+        expect(getRuleSourceKind('Municipality: Espoo')).toBe('none');
+    });
+});
+
 describe('getRuleSourceLabel', () => {
     it('extracts the region name from a region source', () => {
         expect(getRuleSourceLabel('Region: Uusimaa ELY')).toBe('Uusimaa ELY');
@@ -73,6 +94,10 @@ describe('getRuleSourceLabel', () => {
         expect(getRuleSourceLabel('Unknown')).toBeNull();
         expect(getRuleSourceLabel('')).toBeNull();
         expect(getRuleSourceLabel(undefined)).toBeNull();
+    });
+
+    it('does not echo an unrecognised source back at the user', () => {
+        expect(getRuleSourceLabel('Municipality: Espoo')).toBeNull();
     });
 });
 
@@ -206,6 +231,33 @@ describe('isDateInProtectedPeriod', () => {
         expect(isDateInProtectedPeriod(null, new Date(2026, 3, 15))).toBe(false);
         expect(isDateInProtectedPeriod(springClosure, null)).toBe(false);
         expect(isDateInProtectedPeriod(springClosure, new Date('nope'))).toBe(false);
+    });
+});
+
+describe('getActiveProtectedPeriod', () => {
+    it('returns the period covering the date', () => {
+        const rule = { protectedPeriods: [springClosure, winterClosure] };
+
+        expect(getActiveProtectedPeriod(rule, new Date(2026, 11, 20))).toEqual(winterClosure);
+        expect(getActiveProtectedPeriod(rule, new Date(2026, 3, 20))).toEqual(springClosure);
+    });
+
+    it('returns null when nothing covers the date', () => {
+        expect(getActiveProtectedPeriod({ protectedPeriods: [springClosure] }, new Date(2026, 7, 20))).toBeNull();
+        expect(getActiveProtectedPeriod({ protectedPeriods: [] }, new Date(2026, 7, 20))).toBeNull();
+        expect(getActiveProtectedPeriod(null)).toBeNull();
+    });
+});
+
+describe('formatPeriodEnd', () => {
+    it('formats the closing day', () => {
+        expect(formatPeriodEnd(springClosure)).toBe('31 May');
+        expect(formatPeriodEnd(winterClosure)).toBe('31 Jan');
+    });
+
+    it('returns null for a malformed period', () => {
+        expect(formatPeriodEnd({ startMonth: 99 })).toBeNull();
+        expect(formatPeriodEnd(null)).toBeNull();
     });
 });
 

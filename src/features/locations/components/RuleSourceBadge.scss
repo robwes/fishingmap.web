@@ -1,0 +1,25 @@
+.rule-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    max-width: 100%;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: var(--clr-secondary-text);
+
+    i {
+        flex: none;
+        font-size: 0.85em;
+        opacity: 0.6;
+    }
+
+    /* A rule set on this water is the one a maintainer can change here, so it
+       is the only source that gets any weight. */
+    &.is-location {
+        padding: 0.25em 0.65em;
+        border-radius: 999px;
+        background-color: var(--clr-primary-light);
+        color: var(--clr-primary-text);
+        font-weight: 500;
+    }
+}

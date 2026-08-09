@@ -1,0 +1,20 @@
+.rule-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.25em 0.65em;
+    border-radius: 999px;
+    background-color: var(--clr-secondary-dark);
+    color: var(--clr-secondary-text);
+    font-size: 0.8rem;
+
+    i {
+        font-size: 0.8em;
+        opacity: 0.7;
+    }
+
+    &.is-release {
+        background-color: var(--clr-success-light);
+        color: var(--clr-success-text);
+    }
+}

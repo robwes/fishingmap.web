@@ -76,6 +76,33 @@ export const isInheritedRule = (source) => {
 };
 
 /**
+ * Classifies a rule's `source` into the tier it came from. Components use this
+ * to pick an icon and a modifier class, which a label alone can't drive —
+ * a region name is arbitrary text, so it can't be matched against.
+ * @param {string} source - The rule's `source` string.
+ * @returns {'location'|'region'|'national'|'none'} The tier, or 'none' when there is no usable signal.
+ */
+export const getRuleSourceKind = (source) => {
+    if (!source || source === RULE_SOURCE.UNKNOWN) {
+        return 'none';
+    }
+
+    if (source === RULE_SOURCE.LOCATION) {
+        return 'location';
+    }
+
+    if (source.startsWith(RULE_SOURCE_REGION_PREFIX)) {
+        return 'region';
+    }
+
+    if (source === RULE_SOURCE.NATIONAL) {
+        return 'national';
+    }
+
+    return 'none';
+};
+
+/**
  * Turns a rule's `source` into something worth showing a user — the region
  * name for region-scoped rules, a plain phrase for the other cases.
  * @param {string} source - The rule's `source` string.
@@ -94,7 +121,13 @@ export const getRuleSourceLabel = (source) => {
         return source.slice(RULE_SOURCE_REGION_PREFIX.length);
     }
 
-    return source;
+    if (source === RULE_SOURCE.NATIONAL) {
+        return 'National';
+    }
+
+    // Anything else is a source we don't recognise. Return null rather than
+    // echoing raw wire text at an angler.
+    return null;
 };
 
 /**
@@ -224,17 +257,41 @@ export const isDateInProtectedPeriod = (period, date) => {
 };
 
 /**
+ * The rule's protected period covering the given date, if any. Callers that
+ * need to say when the closure lifts want the period itself, not just a flag.
+ * @param {Object} rule - A resolved species rule.
+ * @param {Date} [date] - The date to test, defaulting to now.
+ * @returns {Object|null} The active period, or null when the species is open.
+ */
+export const getActiveProtectedPeriod = (rule, date = new Date()) => {
+    if (!rule || !Array.isArray(rule.protectedPeriods)) {
+        return null;
+    }
+
+    return rule.protectedPeriods.find(period => isDateInProtectedPeriod(period, date)) ?? null;
+};
+
+/**
  * Whether any of a rule's protected periods covers the given date.
  * @param {Object} rule - A resolved species rule.
  * @param {Date} [date] - The date to test, defaulting to now.
  * @returns {boolean} True when the species is currently closed at this water.
  */
 export const isCurrentlyProtected = (rule, date = new Date()) => {
-    if (!rule || !Array.isArray(rule.protectedPeriods)) {
-        return false;
+    return getActiveProtectedPeriod(rule, date) !== null;
+};
+
+/**
+ * Formats the closing day of a period, for phrases like "until 31 Aug".
+ * @param {Object} period - Period with startMonth/startDay/endMonth/endDay.
+ * @returns {string|null} Day and short month, or null when malformed.
+ */
+export const formatPeriodEnd = (period) => {
+    if (!isValidPeriod(period)) {
+        return null;
     }
 
-    return rule.protectedPeriods.some(period => isDateInProtectedPeriod(period, date));
+    return `${period.endDay} ${MONTH_NAMES[period.endMonth - 1]}`;
 };
 
 /**

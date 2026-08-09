@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Collapse from '@/shared/components/collapse/Collapse';
 import ImageCarousell from '@/shared/components/imageCarousell/ImageCarousell';
-import LocationSpeciesItem from '@/shared/components/location/LocationSpeciesItem';
+import SpeciesRuleRow from '@/features/locations/components/SpeciesRuleRow';
+import RegionChainNote from '@/features/locations/components/RegionChainNote';
 import LocationPermitItem from './LocationPermitItem';
 import CollapsibleArticlePrimary from '@/features/locations/components/CollapsibleArticlePrimary';
 import lake from '@/assets/images/lake.png';
@@ -31,15 +31,20 @@ function LocationCard({ location }) {
         return images;
     }
 
-    const getSpecies = () => {
+    /**
+     * Pairs each species with the rule that actually applies to it here.
+     * `speciesRules` holds one resolved rule per species, but only for species
+     * that have one — a water can list a fish with no regulation at all.
+     */
+    const getSpeciesRules = () => {
+        const rules = location.speciesRules ?? [];
+
         return location.species.map(s => (
-            <Link
+            <SpeciesRuleRow
                 key={s.id}
-                to={`/species/${s.id}`}>
-                <LocationSpeciesItem
-                    species={s}
-                />
-            </Link>
+                species={s}
+                rule={rules.find(r => r.speciesId === s.id)}
+            />
         ));
     }
 
@@ -65,10 +70,11 @@ function LocationCard({ location }) {
             </h3>
             <div className="location-card-body">
 
-                <Collapse label="Species" open={true}>
-                    <div className="location-species-list">
-                        {getSpecies()}
-                    </div>
+                <Collapse label="Species &amp; rules" open={true}>
+                    <ul className="species-rule-list">
+                        {getSpeciesRules()}
+                    </ul>
+                    <RegionChainNote regions={location.region ? [location.region] : []} />
                 </Collapse>
 
                 <Collapse label="Permits" open={true}>

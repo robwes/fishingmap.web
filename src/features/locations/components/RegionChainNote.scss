@@ -1,0 +1,28 @@
+.region-chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em;
+    margin-top: 0.9em;
+    font-size: 0.8rem;
+    color: var(--clr-secondary-text);
+
+    i {
+        opacity: 0.6;
+    }
+
+    .region-chain-label {
+        font-weight: 500;
+    }
+
+    .region-chain-step {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4em;
+    }
+
+    .region-chain-sep {
+        font-size: 0.6em;
+        opacity: 0.5;
+    }
+}
