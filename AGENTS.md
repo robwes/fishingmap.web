@@ -121,6 +121,15 @@ Default to **`rem` for `font-size`** and **`em` for `padding`/`margin`/`gap`**, 
 
 When implementing a Claude Design (claude.ai/design) handoff bundle, trust its *structural* changes (markup, layout direction, color usage, new components) but treat its *numeric* tokens skeptically — cross-check against the current SCSS first. Handoff specs have drifted from the live app before (e.g. a handoff spec'd `56px` for a control the app already built at `55px`); prefer the existing app value over a cosmetic-but-arbitrary delta unless the user specifically called out that value as the thing to change.
 
+**Class names are not part of the handoff either.** A prototype is a standalone app with its own flat CSS; a class it uses may not exist here, or may exist and mean something else. Before reusing a class name from a prototype, `grep` for it in `src/**/*.scss` and confirm what it does. Two ways this has already gone wrong:
+
+- **A class that doesn't exist here.** The prototype styles form fields with `.edit-input`; this repo has no such rule and styles inputs through `.input .input-field` on the shared Formik `Input` component. Ported markup rendered browser-default inputs — square corners, no padding, monospace textareas.
+- **A class that exists and collides.** The prototype's location-card footer carried `article` alongside `collapsible-article-primary`. Here `.article`'s white background is declared later and wins at equal specificity, so the panel rendered white-on-white and looked empty.
+
+Prefer the repo's existing component (`Input`, `CollapsibleArticlePrimary`, …) over re-implementing what the prototype drew. When a component genuinely can't reuse one — a form that isn't Formik-bound, say — give it its own class name and copy the *values* from the existing rule, so there is one look and two names rather than two looks.
+
+**Component tests will not catch any of this.** They assert on text and roles, so a completely unstyled screen passes. Every ported screen needs a look, or a described diff against the prototype, before it counts as done.
+
 ## Code style
 
 - `if` blocks always use braces with the body on a new line — never a single-line inline `if (x) doThing();`.
