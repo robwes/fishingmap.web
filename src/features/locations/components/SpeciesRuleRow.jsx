@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import RuleSourceBadge from './RuleSourceBadge';
-import RuleFlag from './RuleFlag';
-import RuleFacts from './RuleFacts';
-import RuleNotes from './RuleNotes';
+import RuleFlag from '@/shared/components/regulations/RuleFlag';
+import RuleFacts from '@/shared/components/regulations/RuleFacts';
+import RuleNotes from '@/shared/components/regulations/RuleNotes';
 import {
     getRuleSourceKind,
     getActiveProtectedPeriod,

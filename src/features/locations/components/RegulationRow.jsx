@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import RuleSourceBadge from './RuleSourceBadge';
-import RuleFlag from './RuleFlag';
-import RuleFacts from './RuleFacts';
-import RuleNotes from './RuleNotes';
-import RegulationForm from './RegulationForm';
+import RuleFlag from '@/shared/components/regulations/RuleFlag';
+import RuleFacts from '@/shared/components/regulations/RuleFacts';
+import RuleNotes from '@/shared/components/regulations/RuleNotes';
+import RegulationForm from '@/shared/components/regulations/RegulationForm';
 import {
     getRuleSourceKind,
     getRuleSourceLabel,
