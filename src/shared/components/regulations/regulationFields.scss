@@ -1,0 +1,35 @@
+/* The regulations form isn't Formik-bound, so it can't use the shared Input
+   component. These mirror .input-field in shared/components/form/Input.scss
+   rather than inventing a second look for the same control. */
+.reg-input,
+.reg-textarea {
+    display: block;
+    width: 100%;
+    padding: var(--padding-input-y) var(--padding-input-x);
+    border: 1px solid var(--clr-input-border);
+    border-radius: var(--radius-input);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    color: var(--clr-body);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+
+    &:focus {
+        border-color: #00ADFF;
+    }
+
+    &:disabled {
+        background-color: var(--clr-input-disabled);
+    }
+}
+
+.reg-textarea {
+    resize: vertical;
+}
+
+/* Native selects draw their arrow hard against the border, so leave it room. */
+select.reg-input {
+    padding-right: 2.2em;
+    cursor: pointer;
+}

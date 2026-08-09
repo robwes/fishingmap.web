@@ -11,6 +11,7 @@ import { speciesService } from '@/shared/services/speciesService';
 import { locationService } from '@/shared/services/locationService';
 import { useToast } from '@/shared/context/ToastContext';
 import { getRegionTypeLabel, buildRegionChain } from '@/shared/utils/regulationUtils';
+import '@/shared/components/regulations/regulationFields.scss';
 import './RegionAdmin.scss';
 
 /** An empty region-scoped rule for a species. */
@@ -291,7 +292,7 @@ function RegionAdmin() {
                                             </label>
                                             <select
                                                 id="region-add-species"
-                                                className="edit-input"
+                                                className="reg-input"
                                                 value=""
                                                 onChange={(e) => e.target.value && startAdd(Number(e.target.value))}>
                                                 <option value="">Select species…</option>

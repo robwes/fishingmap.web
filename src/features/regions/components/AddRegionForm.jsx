@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { REGION_CHILD_TYPE } from '@/shared/constants/regulations';
 import { getRegionTypeLabel } from '@/shared/utils/regulationUtils';
+import '@/shared/components/regulations/regulationFields.scss';
 import './AddRegionForm.scss';
 
 /**
@@ -49,7 +50,7 @@ function AddRegionForm({ parentRegion, onAdd, isSaving = false }) {
     return (
         <div className="region-add-row">
             <input
-                className="edit-input"
+                className="reg-input"
                 autoFocus
                 value={name}
                 placeholder={`New ${childTypeLabel?.toLowerCase() ?? 'region'}…`}

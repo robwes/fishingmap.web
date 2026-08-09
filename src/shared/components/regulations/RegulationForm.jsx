@@ -1,6 +1,7 @@
 import React from 'react';
 import PeriodEditor from './PeriodEditor';
 import { BAG_LIMIT_BASIS_LABELS } from '@/shared/constants/regulations';
+import '@/shared/components/regulations/regulationFields.scss';
 import './RegulationForm.scss';
 
 /**
@@ -41,7 +42,7 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
                 <label className="reg-field">
                     <span className="reg-field-label">Minimum size (cm)</span>
                     <input
-                        className="edit-input"
+                        className="reg-input"
                         type="number"
                         min="0"
                         step="0.1"
@@ -54,7 +55,7 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
                 <label className="reg-field">
                     <span className="reg-field-label">Maximum size (cm)</span>
                     <input
-                        className="edit-input"
+                        className="reg-input"
                         type="number"
                         min="0"
                         step="0.1"
@@ -67,7 +68,7 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
                 <label className="reg-field">
                     <span className="reg-field-label">Bag limit</span>
                     <input
-                        className="edit-input"
+                        className="reg-input"
                         type="number"
                         min="0"
                         placeholder="—"
@@ -79,7 +80,7 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
                 <label className="reg-field">
                     <span className="reg-field-label">Counted per</span>
                     <select
-                        className="edit-input"
+                        className="reg-input"
                         disabled={draft.bagLimit == null}
                         value={draft.bagLimitBasis ?? ''}
                         onChange={(e) => update('bagLimitBasis', e.target.value || null)}>
@@ -121,7 +122,7 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
             <label className="reg-field">
                 <span className="reg-field-label">Additional rules</span>
                 <textarea
-                    className="edit-textarea"
+                    className="reg-textarea"
                     rows={3}
                     maxLength={5000}
                     placeholder="Gear restrictions, access limits, anything else specific to this water…"

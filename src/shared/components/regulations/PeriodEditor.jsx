@@ -1,5 +1,6 @@
 import React from 'react';
 import { MONTH_NAMES } from '@/shared/constants/regulations';
+import '@/shared/components/regulations/regulationFields.scss';
 import './PeriodEditor.scss';
 
 const DEFAULT_PERIOD = { startMonth: 5, startDay: 1, endMonth: 6, endDay: 30 };
@@ -42,7 +43,7 @@ function PeriodEditor({ periods, onChange }) {
                     <div key={index} className="reg-period-row">
                         <div className="reg-period-pair">
                             <input
-                                className="edit-input reg-day"
+                                className="reg-input reg-day"
                                 type="number"
                                 min="1"
                                 max="31"
@@ -51,7 +52,7 @@ function PeriodEditor({ periods, onChange }) {
                                 onChange={(e) => setField(index, 'startDay', Number(e.target.value) || 1)}
                             />
                             <select
-                                className="edit-input"
+                                className="reg-input"
                                 aria-label="Start month"
                                 value={period.startMonth}
                                 onChange={(e) => setField(index, 'startMonth', Number(e.target.value))}>
@@ -65,7 +66,7 @@ function PeriodEditor({ periods, onChange }) {
 
                         <div className="reg-period-pair">
                             <input
-                                className="edit-input reg-day"
+                                className="reg-input reg-day"
                                 type="number"
                                 min="1"
                                 max="31"
@@ -74,7 +75,7 @@ function PeriodEditor({ periods, onChange }) {
                                 onChange={(e) => setField(index, 'endDay', Number(e.target.value) || 1)}
                             />
                             <select
-                                className="edit-input"
+                                className="reg-input"
                                 aria-label="End month"
                                 value={period.endMonth}
                                 onChange={(e) => setField(index, 'endMonth', Number(e.target.value))}>
