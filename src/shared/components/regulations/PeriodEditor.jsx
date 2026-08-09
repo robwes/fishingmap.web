@@ -1,5 +1,6 @@
 import React from 'react';
 import { MONTH_NAMES } from '@/shared/constants/regulations';
+import { getDaysInMonth } from '@/shared/utils/regulationUtils';
 import '@/shared/components/regulations/regulationFields.scss';
 import './PeriodEditor.scss';
 
@@ -18,13 +19,32 @@ const DEFAULT_PERIOD = { startMonth: 5, startDay: 1, endMonth: 6, endDay: 30 };
 function PeriodEditor({ periods, onChange }) {
 
     /**
-     * Replaces one field on one period.
+     * Replaces one end of one period, keeping the day inside the month.
+     *
+     * Both directions need clamping: typing 31 into a February field, and
+     * switching a month to one that has fewer days than the day already set.
+     * Clamping rather than rejecting means the invalid state is never
+     * reachable, so there is nothing to warn about.
      * @param {number} index - Index of the period being edited.
-     * @param {string} field - Field name on the period.
-     * @param {number} value - The new value.
+     * @param {'start'|'end'} end - Which end of the period to change.
+     * @param {{month?: number, day?: number}} change - The new month and/or day.
      */
-    const setField = (index, field, value) => {
-        onChange(periods.map((period, i) => (i === index ? { ...period, [field]: value } : period)));
+    const setPeriodEnd = (index, end, change) => {
+        onChange(periods.map((period, i) => {
+            if (i !== index) {
+                return period;
+            }
+
+            const month = change.month ?? period[`${end}Month`];
+            const day = change.day ?? period[`${end}Day`];
+            const lastDay = getDaysInMonth(month);
+
+            return {
+                ...period,
+                [`${end}Month`]: month,
+                [`${end}Day`]: Math.min(Math.max(day, 1), lastDay),
+            };
+        }));
     };
 
     return (
@@ -46,16 +66,16 @@ function PeriodEditor({ periods, onChange }) {
                                 className="reg-input reg-day"
                                 type="number"
                                 min="1"
-                                max="31"
+                                max={getDaysInMonth(period.startMonth)}
                                 aria-label="Start day"
                                 value={period.startDay}
-                                onChange={(e) => setField(index, 'startDay', Number(e.target.value) || 1)}
+                                onChange={(e) => setPeriodEnd(index, 'start', { day: Number(e.target.value) || 1 })}
                             />
                             <select
                                 className="reg-input"
                                 aria-label="Start month"
                                 value={period.startMonth}
-                                onChange={(e) => setField(index, 'startMonth', Number(e.target.value))}>
+                                onChange={(e) => setPeriodEnd(index, 'start', { month: Number(e.target.value) })}>
                                 {MONTH_NAMES.map((month, i) => (
                                     <option key={month} value={i + 1}>{month}</option>
                                 ))}
@@ -69,16 +89,16 @@ function PeriodEditor({ periods, onChange }) {
                                 className="reg-input reg-day"
                                 type="number"
                                 min="1"
-                                max="31"
+                                max={getDaysInMonth(period.endMonth)}
                                 aria-label="End day"
                                 value={period.endDay}
-                                onChange={(e) => setField(index, 'endDay', Number(e.target.value) || 1)}
+                                onChange={(e) => setPeriodEnd(index, 'end', { day: Number(e.target.value) || 1 })}
                             />
                             <select
                                 className="reg-input"
                                 aria-label="End month"
                                 value={period.endMonth}
-                                onChange={(e) => setField(index, 'endMonth', Number(e.target.value))}>
+                                onChange={(e) => setPeriodEnd(index, 'end', { month: Number(e.target.value) })}>
                                 {MONTH_NAMES.map((month, i) => (
                                     <option key={month} value={i + 1}>{month}</option>
                                 ))}

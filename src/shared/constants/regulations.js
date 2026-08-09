@@ -77,6 +77,17 @@ export const MONTH_NAMES = [
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
+/**
+ * Days per month, indexed 0-11, used to keep a protected period from naming a
+ * day its month doesn't have.
+ *
+ * February is 29, not 28. Periods carry no year, so a closure ending "end of
+ * February" is a real rule that has to be expressible; and because periods are
+ * compared as month/day ordinals, an end of 29 Feb still behaves correctly in
+ * a non-leap year.
+ */
+export const DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
 export const BAG_LIMIT_BASIS_LABELS = {
     [BAG_LIMIT_BASIS.DAY]: 'per day',
     [BAG_LIMIT_BASIS.WEEK]: 'per week',

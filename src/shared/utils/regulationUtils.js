@@ -4,6 +4,7 @@ import {
     RULE_SOURCE_REGION_PREFIX,
     BAG_LIMIT_BASIS_LABELS,
     MONTH_NAMES,
+    DAYS_IN_MONTH,
 } from '@/shared/constants/regulations';
 
 /**
@@ -30,22 +31,38 @@ import {
 const toOrdinal = (month, day) => (month * 100) + day;
 
 /**
- * Checks that a protected period has all four parts within calendar range.
+ * How many days a month has. February counts 29 — see DAYS_IN_MONTH.
+ * @param {number} month - Month, 1-12.
+ * @returns {number} Days in the month, or 0 when the month is out of range.
+ */
+export const getDaysInMonth = (month) => {
+    return Number.isInteger(month) && month >= 1 && month <= 12
+        ? DAYS_IN_MONTH[month - 1]
+        : 0;
+};
+
+/**
+ * Checks that a protected period names a real day in a real month at both
+ * ends. A per-field 1-31 range isn't enough — it accepts 31 February.
+ *
+ * Start after end is *not* invalid: that's a period wrapping past new year.
  * @param {Object} period - Period with startMonth/startDay/endMonth/endDay.
  * @returns {boolean} True when the period can be formatted and compared.
  */
-const isValidPeriod = (period) => {
+export const isValidProtectedPeriod = (period) => {
     if (!period) {
         return false;
     }
 
     const { startMonth, startDay, endMonth, endDay } = period;
-    const inMonthRange = (m) => Number.isInteger(m) && m >= 1 && m <= 12;
-    const inDayRange = (d) => Number.isInteger(d) && d >= 1 && d <= 31;
+    const dayFitsMonth = (month, day) =>
+        Number.isInteger(day) && day >= 1 && day <= getDaysInMonth(month);
 
-    return inMonthRange(startMonth) && inDayRange(startDay)
-        && inMonthRange(endMonth) && inDayRange(endDay);
+    return dayFitsMonth(startMonth, startDay) && dayFitsMonth(endMonth, endDay);
 };
+
+// Kept as a local alias: this module uses it in a dozen guards.
+const isValidPeriod = isValidProtectedPeriod;
 
 /**
  * Maps the `region.type` name from the API to a display label. An unknown

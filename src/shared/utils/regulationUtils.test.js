@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import {
     getRegionTypeLabel,
     buildRegionChain,
+    isValidProtectedPeriod,
+    getDaysInMonth,
     isInheritedRule,
     getRuleSourceKind,
     getRuleSourceLabel,
@@ -198,6 +200,46 @@ describe('formatBagLimit', () => {
         expect(formatBagLimit(null)).toBeNull();
         expect(formatBagLimit(undefined)).toBeNull();
         expect(formatBagLimit(null, 'Day')).toBeNull();
+    });
+});
+
+describe('isValidProtectedPeriod', () => {
+    it('accepts real dates, including a wrapping period', () => {
+        expect(isValidProtectedPeriod(springClosure)).toBe(true);
+        expect(isValidProtectedPeriod(winterClosure)).toBe(true);
+    });
+
+    it('accepts the end of February, which a yearless period must be able to name', () => {
+        expect(isValidProtectedPeriod({ startMonth: 1, startDay: 1, endMonth: 2, endDay: 29 })).toBe(true);
+    });
+
+    it('rejects a day its month does not have', () => {
+        // A per-field 1-31 range accepts all of these.
+        expect(isValidProtectedPeriod({ startMonth: 2, startDay: 30, endMonth: 3, endDay: 1 })).toBe(false);
+        expect(isValidProtectedPeriod({ startMonth: 2, startDay: 31, endMonth: 3, endDay: 1 })).toBe(false);
+        expect(isValidProtectedPeriod({ startMonth: 4, startDay: 1, endMonth: 4, endDay: 31 })).toBe(false);
+        expect(isValidProtectedPeriod({ startMonth: 9, startDay: 31, endMonth: 10, endDay: 1 })).toBe(false);
+    });
+
+    it('rejects out-of-range months and missing parts', () => {
+        expect(isValidProtectedPeriod({ startMonth: 13, startDay: 1, endMonth: 1, endDay: 1 })).toBe(false);
+        expect(isValidProtectedPeriod({ startMonth: 0, startDay: 1, endMonth: 1, endDay: 1 })).toBe(false);
+        expect(isValidProtectedPeriod({ startMonth: 1, startDay: 1 })).toBe(false);
+        expect(isValidProtectedPeriod(null)).toBe(false);
+    });
+});
+
+describe('getDaysInMonth', () => {
+    it('knows the short months', () => {
+        expect(getDaysInMonth(2)).toBe(29);
+        expect(getDaysInMonth(4)).toBe(30);
+        expect(getDaysInMonth(1)).toBe(31);
+    });
+
+    it('returns 0 for a month outside the calendar', () => {
+        expect(getDaysInMonth(0)).toBe(0);
+        expect(getDaysInMonth(13)).toBe(0);
+        expect(getDaysInMonth(undefined)).toBe(0);
     });
 });
 
