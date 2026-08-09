@@ -28,8 +28,25 @@
     resize: vertical;
 }
 
-/* Native selects draw their arrow hard against the border, so leave it room. */
+/* Chrome paints a native select's arrow against the border no matter how much
+   padding-right the element has, so the arrow has to be ours to position. The
+   app does this once already on .sort-select, with a sibling <i> element; here
+   it is a background image instead, because these selects sit in four places
+   across two features and none of them has a wrapper to hang an icon on.
+
+   The chevron sits 1em from the right, mirroring the text inset on the left. */
 select.reg-input {
-    padding-right: 2.2em;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.4em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23505050' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1em center;
+    background-size: 0.7em auto;
     cursor: pointer;
+
+    &:disabled {
+        cursor: default;
+        opacity: 0.7;
+    }
 }
