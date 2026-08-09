@@ -20,6 +20,11 @@ vi.mock('@/shared/services/locationService', () => ({
     locationService: { getLocation: vi.fn() },
 }));
 
+// The panel builds the region chain from the full region list.
+vi.mock('@/shared/services/regionService', () => ({
+    regionService: { getRegions: vi.fn(async () => []) },
+}));
+
 const showToast = vi.fn();
 vi.mock('@/shared/context/ToastContext', () => ({
     useToast: () => showToast,

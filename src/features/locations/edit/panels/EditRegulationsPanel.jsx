@@ -4,6 +4,8 @@ import RegionChainNote from '@/features/locations/components/RegionChainNote';
 import { regulationService } from '@/shared/services/regulationService';
 import { locationService } from '@/shared/services/locationService';
 import { useToast } from '@/shared/context/ToastContext';
+import useRegions from '@/shared/hooks/useRegions';
+import { buildRegionChain } from '@/shared/utils/regulationUtils';
 import './EditRegulationsPanel.scss';
 
 /**
@@ -43,6 +45,7 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
     const [draft, setDraft] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const showToast = useToast();
+    const { regions } = useRegions();
 
     const rules = location.speciesRules ?? [];
     const ruleFor = (speciesId) => rules.find(r => r.speciesId === speciesId);
@@ -131,7 +134,7 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
     return (
         <div className="reg-panel">
             <div className="reg-panel-intro">
-                <RegionChainNote regions={location.region ? [location.region] : []} />
+                <RegionChainNote regions={buildRegionChain(regions, location.region?.id)} />
                 <p className="reg-panel-note">
                     <i className="fa-solid fa-circle-info"></i>
                     Regional and national rules are maintained centrally. Here you can make this

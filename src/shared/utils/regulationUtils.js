@@ -61,6 +61,38 @@ export const getRegionTypeLabel = (type) => {
 };
 
 /**
+ * Walks a region's ancestry and returns the chain root-first — Finland →
+ * Uusimaa ELY → Espoo lakes. The API hands out one region at a time with a
+ * `parentRegionId` and no parent object, so the chain has to be assembled
+ * from the full region list.
+ *
+ * `parentRegionId` is editable, so a cycle is possible. Walking one blindly
+ * would hang the page, so already-visited ids end the walk.
+ * @param {Array<Object>} regions - Every region, each with id and parentRegionId.
+ * @param {number|null} regionId - The region to build the chain for.
+ * @returns {Array<Object>} Chain from root to the given region; empty when unresolvable.
+ */
+export const buildRegionChain = (regions, regionId) => {
+    if (!Array.isArray(regions) || regionId == null) {
+        return [];
+    }
+
+    const chain = [];
+    const seen = new Set();
+    let current = regions.find(r => r.id === regionId);
+
+    while (current && !seen.has(current.id)) {
+        seen.add(current.id);
+        chain.unshift(current);
+        current = current.parentRegionId != null
+            ? regions.find(r => r.id === current.parentRegionId)
+            : null;
+    }
+
+    return chain;
+};
+
+/**
  * Whether a resolved rule was inherited from a region or national rule
  * rather than being set on this specific water. Drives the "inherited"
  * affordance on location details and the read-only state in the editor.

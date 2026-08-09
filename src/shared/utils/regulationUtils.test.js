@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
     getRegionTypeLabel,
+    buildRegionChain,
     isInheritedRule,
     getRuleSourceKind,
     getRuleSourceLabel,
@@ -43,6 +44,45 @@ describe('getRegionTypeLabel', () => {
     it('does not resolve inherited object keys', () => {
         expect(getRegionTypeLabel('constructor')).toBeNull();
         expect(getRegionTypeLabel('toString')).toBeNull();
+    });
+});
+
+describe('buildRegionChain', () => {
+    const regions = [
+        { id: 1, name: 'Finland', parentRegionId: null },
+        { id: 2, name: 'Uusimaa ELY', parentRegionId: 1 },
+        { id: 5, name: 'Espoo lakes', parentRegionId: 2 },
+    ];
+
+    it('builds the chain root-first', () => {
+        expect(buildRegionChain(regions, 5).map(r => r.name))
+            .toEqual(['Finland', 'Uusimaa ELY', 'Espoo lakes']);
+    });
+
+    it('returns a single step for a root region', () => {
+        expect(buildRegionChain(regions, 1).map(r => r.name)).toEqual(['Finland']);
+    });
+
+    it('returns nothing for an unknown or absent region', () => {
+        expect(buildRegionChain(regions, 99)).toEqual([]);
+        expect(buildRegionChain(regions, null)).toEqual([]);
+        expect(buildRegionChain(undefined, 1)).toEqual([]);
+    });
+
+    it('stops where the chain breaks rather than dropping the whole chain', () => {
+        const orphaned = [{ id: 5, name: 'Espoo lakes', parentRegionId: 404 }];
+
+        expect(buildRegionChain(orphaned, 5).map(r => r.name)).toEqual(['Espoo lakes']);
+    });
+
+    it('terminates on a cycle instead of hanging', () => {
+        // parentRegionId is editable, so a loop is reachable through the UI.
+        const cyclic = [
+            { id: 1, name: 'A', parentRegionId: 2 },
+            { id: 2, name: 'B', parentRegionId: 1 },
+        ];
+
+        expect(buildRegionChain(cyclic, 1).map(r => r.name)).toEqual(['B', 'A']);
     });
 });
 

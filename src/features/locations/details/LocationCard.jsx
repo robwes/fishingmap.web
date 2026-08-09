@@ -4,12 +4,19 @@ import ImageCarousell from '@/shared/components/imageCarousell/ImageCarousell';
 import SpeciesRuleRow from '@/features/locations/components/SpeciesRuleRow';
 import RegionChainNote from '@/features/locations/components/RegionChainNote';
 import LocationPermitItem from './LocationPermitItem';
+import useRegions from '@/shared/hooks/useRegions';
+import { buildRegionChain } from '@/shared/utils/regulationUtils';
 import CollapsibleArticlePrimary from '@/features/locations/components/CollapsibleArticlePrimary';
 import lake from '@/assets/images/lake.png';
 import { fileService } from '@/shared/services/fileService';
 import './LocationCard.scss';
 
 function LocationCard({ location }) {
+
+    // The location carries its own region but not its ancestors, so the
+    // inheritance chain has to be assembled from the full region list.
+    const { regions } = useRegions();
+    const regionChain = buildRegionChain(regions, location.region?.id);
 
     const getImages = () => {
         const images = [];
@@ -74,7 +81,7 @@ function LocationCard({ location }) {
                     <ul className="species-rule-list">
                         {getSpeciesRules()}
                     </ul>
-                    <RegionChainNote regions={location.region ? [location.region] : []} />
+                    <RegionChainNote regions={regionChain} />
                 </Collapse>
 
                 <Collapse label="Permits" open={true}>
