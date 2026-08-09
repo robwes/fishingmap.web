@@ -3,7 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://fonts.googleapis.com/css?family=Lora|Ubuntu:400,700&display=swap" rel="stylesheet">
+    <!-- 500 is loaded because the stylesheets ask for it in 40-odd places. Without
+         it, CSS weight matching falls from 500 down to 400 and every "medium weight"
+         in the app rendered as plain regular.
+         300 is deliberately still not loaded: body sets font-weight: 300, which has
+         therefore always resolved to 400, and loading the real Light face would
+         lighten every screen in the app. Only load a weight you mean to see. -->
+    <link href="https://fonts.googleapis.com/css?family=Lora|Ubuntu:400,500,700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/cb11e1ca51.js" crossorigin="anonymous"></script>
     <!--
       manifest.json provides metadata used when your web app is installed on a
