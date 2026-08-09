@@ -5,6 +5,7 @@ import { fileService } from '@/shared/services/fileService';
 import ImageCarousell from '@/shared/components/imageCarousell/ImageCarousell';
 import FloatingSpinner from '@/shared/components/spinner/FloatingSpinner';
 import NotFoundMessage from '@/shared/components/notFound/NotFoundMessage';
+import SpeciesRegulationsOverview from '@/features/species/components/SpeciesRegulationsOverview';
 import './SpeciesDetails.scss';
 
 function SpeciesDetails() {
@@ -56,6 +57,7 @@ function SpeciesDetails() {
                         <p className="species-details-scientific">{species.scientificName}</p>
                     )}
                     <p className="species-details-description">{species.description}</p>
+                    <SpeciesRegulationsOverview speciesId={species.id} />
                 </article>
             )}
         </div>

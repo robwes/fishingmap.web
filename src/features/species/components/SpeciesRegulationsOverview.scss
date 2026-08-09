@@ -1,0 +1,41 @@
+.species-regs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin-top: 2.5em;
+    text-align: left;
+}
+
+.species-regs-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.species-regs-lede {
+    font-size: 0.9rem;
+    color: var(--clr-secondary-text);
+}
+
+.species-regs-tier {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+}
+
+.species-regs-tier-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0;
+    font-size: 1rem;
+
+    i {
+        font-size: 0.85em;
+        opacity: 0.6;
+    }
+}
+
+.species-regs-empty {
+    font-size: 0.85rem;
+    color: var(--clr-secondary-text);
+}

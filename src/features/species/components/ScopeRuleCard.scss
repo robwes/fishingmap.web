@@ -1,0 +1,55 @@
+.scope-rule-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.8em 1em;
+    border: 1px solid var(--clr-border-subtle);
+    border-left: 3px solid var(--clr-border-subtle);
+    border-radius: var(--radius-input);
+    background-color: #fff;
+
+    &.is-closed {
+        background-color: var(--clr-danger-light);
+        border-color: #f3cfcb;
+
+        .rule-chip {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+    }
+}
+
+.scope-rule-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.35em 0.75em;
+}
+
+.scope-rule-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--clr-primary-text);
+}
+
+.scope-rule-meta {
+    font-size: 0.75rem;
+    color: var(--clr-secondary-text);
+    white-space: nowrap;
+}
+
+.scope-rule-links {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--clr-secondary-text);
+}
+
+.scope-rule-link {
+    color: var(--clr-primary);
+    font-weight: 500;
+
+    &:hover {
+        color: var(--clr-primary-dark);
+        text-decoration: underline;
+    }
+}
