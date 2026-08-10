@@ -34,7 +34,7 @@ vi.mock('@/shared/context/ToastContext', () => ({
     useToast: () => showToast,
 }));
 
-const finland = { id: 1, name: 'Finland', type: 'National', parentRegionId: null };
+const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
 const uusimaa = { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 };
 const espoo = { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 };
 

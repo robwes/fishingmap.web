@@ -25,7 +25,7 @@ const springClosure = { startMonth: 4, startDay: 1, endMonth: 5, endDay: 31 };
 
 describe('getRegionTypeLabel', () => {
     it('maps the region type names to display labels', () => {
-        expect(getRegionTypeLabel('National')).toBe('National');
+        expect(getRegionTypeLabel('Root')).toBe('National');
         expect(getRegionTypeLabel('Ely')).toBe('ELY region');
         expect(getRegionTypeLabel('ManagementArea')).toBe('Management area');
     });
@@ -34,6 +34,9 @@ describe('getRegionTypeLabel', () => {
         // A tier added to the backend enum should surface as a missing label,
         // never as a confidently wrong one.
         expect(getRegionTypeLabel('Municipality')).toBeNull();
+        // The root tier is 'Root'; 'National' is the rule *source* label, not a
+        // region type. Half-reverting the rename would fail here.
+        expect(getRegionTypeLabel('National')).toBeNull();
         expect(getRegionTypeLabel(null)).toBeNull();
         expect(getRegionTypeLabel(undefined)).toBeNull();
     });

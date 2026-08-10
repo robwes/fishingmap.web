@@ -35,7 +35,7 @@ const rule = (id, overrides = {}) => ({
 });
 
 const nationalRule = rule(900, {
-    region: { id: 1, name: 'Finland', type: 'National', parentRegionId: null },
+    region: { id: 1, name: 'Finland', type: 'Root', parentRegionId: null },
     minimumSizeCm: 40,
 });
 const elyRule = rule(901, {

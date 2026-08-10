@@ -4,7 +4,7 @@ import { REGION_TYPE } from '@/shared/constants/regulations';
 import './RegionTree.scss';
 
 const TIER_ICONS = {
-    [REGION_TYPE.NATIONAL]: 'fa-flag',
+    [REGION_TYPE.ROOT]: 'fa-flag',
     [REGION_TYPE.ELY]: 'fa-sitemap',
     [REGION_TYPE.MANAGEMENT_AREA]: 'fa-water',
 };

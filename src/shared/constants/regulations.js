@@ -8,13 +8,16 @@
  * below are the display strings, which deliberately differ.
  */
 export const REGION_TYPE = {
-    NATIONAL: 'National',
+    // Root, not National: the top of the hierarchy needn't be a country. The
+    // rule *source* label still reads "National" — see RULE_SOURCE below; that
+    // is a display string, not this tier's name.
+    ROOT: 'Root',
     ELY: 'Ely',
     MANAGEMENT_AREA: 'ManagementArea',
 };
 
 export const REGION_TYPE_LABELS = {
-    [REGION_TYPE.NATIONAL]: 'National',
+    [REGION_TYPE.ROOT]: 'National',
     [REGION_TYPE.ELY]: 'ELY region',
     [REGION_TYPE.MANAGEMENT_AREA]: 'Management area',
 };
@@ -28,7 +31,7 @@ export const REGION_TYPE_LABELS = {
  * to hide the "add a region under this" affordance.
  */
 export const REGION_CHILD_TYPE = {
-    [REGION_TYPE.NATIONAL]: REGION_TYPE.ELY,
+    [REGION_TYPE.ROOT]: REGION_TYPE.ELY,
     [REGION_TYPE.ELY]: REGION_TYPE.MANAGEMENT_AREA,
 };
 

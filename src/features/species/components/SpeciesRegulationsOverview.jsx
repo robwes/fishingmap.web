@@ -34,8 +34,8 @@ function SpeciesRegulationsOverview({ speciesId }) {
 
     // The API already orders these national → regions by tier → waters, so
     // the tiers are split out rather than re-sorted.
-    const national = regulations.find(r => r.region?.type === REGION_TYPE.NATIONAL);
-    const regional = regulations.filter(r => r.region && r.region.type !== REGION_TYPE.NATIONAL);
+    const national = regulations.find(r => r.region?.type === REGION_TYPE.ROOT);
+    const regional = regulations.filter(r => r.region && r.region.type !== REGION_TYPE.ROOT);
     const local = regulations.filter(r => !r.region);
 
     if (isLoading) {

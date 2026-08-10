@@ -11,7 +11,7 @@ vi.mock('@/shared/services/locationService', () => ({
     locationService: { patchLocationInfo: vi.fn() },
 }));
 
-const finland = { id: 1, name: 'Finland', type: 'National', parentRegionId: null };
+const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
 const uusimaa = { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 };
 const espoo = { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 };
 const regions = [finland, uusimaa, espoo];

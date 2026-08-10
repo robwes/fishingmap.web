@@ -11,7 +11,7 @@ import './LocationRegionField.scss';
 
 // Tier order for grouping, most general first.
 const REGION_TIERS = [
-    { type: REGION_TYPE.NATIONAL, label: 'National' },
+    { type: REGION_TYPE.ROOT, label: 'National' },
     { type: REGION_TYPE.ELY, label: 'ELY regions' },
     { type: REGION_TYPE.MANAGEMENT_AREA, label: 'Management areas' },
 ];
