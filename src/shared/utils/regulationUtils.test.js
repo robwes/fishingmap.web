@@ -18,6 +18,9 @@ import {
     formatPeriodEnd,
     isCurrentlyProtected,
     hasRestrictions,
+    getAdiposeFinLabel,
+    getAdiposeFinHint,
+    getRuleKey,
 } from './regulationUtils';
 
 const winterClosure = { startMonth: 12, startDay: 1, endMonth: 1, endDay: 31 };
@@ -469,5 +472,60 @@ describe('hasRestrictions', () => {
         expect(hasRestrictions({ ...emptyRule, mustReportCatch: true })).toBe(true);
         expect(hasRestrictions({ ...emptyRule, additionalRules: 'No live bait.' })).toBe(true);
         expect(hasRestrictions({ ...emptyRule, protectedPeriods: [winterClosure] })).toBe(true);
+    });
+
+    it('counts full protection as a restriction', () => {
+        // Otherwise a rule saying "this fish may not be taken" renders as
+        // "No size or bag limits", which is the opposite of what it says.
+        expect(hasRestrictions({ ...emptyRule, isFullyProtected: true })).toBe(true);
+    });
+});
+
+describe('getAdiposeFinLabel', () => {
+    it('labels the two fin states', () => {
+        expect(getAdiposeFinLabel('Intact')).toBe('Adipose fin intact');
+        expect(getAdiposeFinLabel('Clipped')).toBe('Adipose fin clipped');
+    });
+
+    it('returns null for a rule that does not distinguish', () => {
+        // Null is the normal case and needs no label — inventing "All fish"
+        // would imply a distinction the regulations don't make.
+        expect(getAdiposeFinLabel(null)).toBeNull();
+        expect(getAdiposeFinLabel(undefined)).toBeNull();
+    });
+
+    it('returns null rather than echoing an unknown value', () => {
+        expect(getAdiposeFinLabel('Whatever')).toBeNull();
+        // Inherited keys must not resolve to something truthy.
+        expect(getAdiposeFinLabel('constructor')).toBeNull();
+    });
+});
+
+describe('getAdiposeFinHint', () => {
+    it('glosses each fin state in plain language', () => {
+        expect(getAdiposeFinHint('Intact')).toBe('wild fish');
+        expect(getAdiposeFinHint('Clipped')).toBe('hatchery-reared');
+    });
+
+    it('has nothing to gloss when the rule does not distinguish', () => {
+        expect(getAdiposeFinHint(null)).toBeNull();
+    });
+});
+
+describe('getRuleKey', () => {
+    it('separates the variants of one species', () => {
+        expect(getRuleKey(10, 'Intact')).not.toBe(getRuleKey(10, 'Clipped'));
+        expect(getRuleKey(10, 'Intact')).not.toBe(getRuleKey(10, null));
+    });
+
+    it('treats a missing fin the same as an explicit null', () => {
+        // The two reach it from different places — an absent field on a draft
+        // and a null off the wire — and they mean the same rule.
+        expect(getRuleKey(10)).toBe(getRuleKey(10, null));
+        expect(getRuleKey(10, undefined)).toBe(getRuleKey(10, null));
+    });
+
+    it('separates the same fin state on different species', () => {
+        expect(getRuleKey(10, 'Intact')).not.toBe(getRuleKey(11, 'Intact'));
     });
 });

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import RuleFlag from '@/shared/components/regulations/RuleFlag';
+import RuleAlerts from '@/shared/components/regulations/RuleAlerts';
 import RuleFacts from '@/shared/components/regulations/RuleFacts';
 import RuleNotes from '@/shared/components/regulations/RuleNotes';
 import {
     getActiveProtectedPeriod,
-    formatPeriodEnd,
+    getAdiposeFinLabel,
+    getAdiposeFinHint,
     hasRestrictions,
 } from '@/shared/utils/regulationUtils';
 import './ScopeRuleCard.scss';
@@ -23,23 +24,28 @@ import './ScopeRuleCard.scss';
  * @param {Date} [today] - Reference date, injectable for tests.
  */
 function ScopeRuleCard({ title, meta, rule, locations, today = new Date() }) {
-    const activePeriod = getActiveProtectedPeriod(rule, today);
+    const isClosed = rule.isFullyProtected || getActiveProtectedPeriod(rule, today);
+    const finLabel = getAdiposeFinLabel(rule.adiposeFin);
+    const finHint = getAdiposeFinHint(rule.adiposeFin);
 
     return (
-        <div className={`scope-rule-card${activePeriod ? ' is-closed' : ''}`}>
+        <div className={`scope-rule-card${isClosed ? ' is-closed' : ''}`}>
             <div className="scope-rule-head">
                 <span className="scope-rule-title">{title}</span>
                 {meta && <span className="scope-rule-meta">{meta}</span>}
             </div>
 
-            {activePeriod && (
-                <RuleFlag
-                    icon="fa-ban"
-                    variant="closed"
-                    label="Protected now"
-                    note={`until ${formatPeriodEnd(activePeriod)}`}
-                />
+            {/* Separate from `meta`, which names the scope's tier: this narrows
+                which fish the rule covers, and the two can both apply. */}
+            {finLabel && (
+                <span className="scope-rule-fin">
+                    <i className="fa-solid fa-fish-fins"></i>
+                    {finLabel}
+                    {finHint && <span className="scope-rule-fin-hint">{finHint}</span>}
+                </span>
             )}
+
+            <RuleAlerts rule={rule} today={today} />
 
             {hasRestrictions(rule)
                 ? <RuleFacts rule={rule} today={today} />

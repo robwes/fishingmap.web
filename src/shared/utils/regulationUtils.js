@@ -3,6 +3,8 @@ import {
     RULE_SOURCE,
     RULE_SOURCE_REGION_PREFIX,
     BAG_LIMIT_BASIS_LABELS,
+    ADIPOSE_FIN_LABELS,
+    ADIPOSE_FIN_HINTS,
     MONTH_NAMES,
     DAYS_IN_MONTH,
 } from '@/shared/constants/regulations';
@@ -75,6 +77,45 @@ export const getRegionTypeLabel = (type) => {
     // Own-property check: `type` comes off the wire, and a plain index would
     // happily resolve inherited keys like 'constructor' to something truthy.
     return Object.hasOwn(REGION_TYPE_LABELS, type) ? REGION_TYPE_LABELS[type] : null;
+};
+
+/**
+ * Labels the fish a rule covers. Null is the common case and means the rule
+ * applies whatever the fin looks like, which needs no label at all — so this
+ * returns null there rather than inventing "All fish", which would imply the
+ * regulations make a distinction they don't.
+ * @param {string|null} fin - Fin state name ('Intact' | 'Clipped'), or null.
+ * @returns {string|null} Label, or null when the rule doesn't distinguish.
+ */
+export const getAdiposeFinLabel = (fin) => {
+    // Own-property check for the same reason getRegionTypeLabel has one: `fin`
+    // comes off the wire.
+    return Object.hasOwn(ADIPOSE_FIN_LABELS, fin) ? ADIPOSE_FIN_LABELS[fin] : null;
+};
+
+/**
+ * The plain-language gloss for a fin state — "wild fish", "hatchery-reared".
+ * "Adipose fin" is a term most anglers know and some don't.
+ * @param {string|null} fin - Fin state name ('Intact' | 'Clipped'), or null.
+ * @returns {string|null} Hint, or null when there is nothing to gloss.
+ */
+export const getAdiposeFinHint = (fin) => {
+    return Object.hasOwn(ADIPOSE_FIN_HINTS, fin) ? ADIPOSE_FIN_HINTS[fin] : null;
+};
+
+/**
+ * Identifies a rule by what it covers rather than by its row id, so an editor
+ * can track which rule is open before that rule has been saved.
+ *
+ * A species is no longer one rule: it can carry a separate rule per fin state,
+ * so keying an editor on the species id alone would open two forms at once and
+ * save one over the other.
+ * @param {number} speciesId - The species.
+ * @param {string|null} [adiposeFin] - Fin state, or null for a rule covering all fish.
+ * @returns {string} A stable key for the (species, fin) pair.
+ */
+export const getRuleKey = (speciesId, adiposeFin = null) => {
+    return `${speciesId}:${adiposeFin ?? ''}`;
 };
 
 /**
@@ -418,6 +459,7 @@ export const hasRestrictions = (rule) => {
 
     return formatSizeLimit(rule.minimumSizeCm, rule.maximumSizeCm) !== null
         || formatBagLimit(rule.bagLimit) !== null
+        || rule.isFullyProtected === true
         || rule.isCatchAndReleaseOnly === true
         || rule.mustReportCatch === true
         || Boolean(rule.additionalRules)

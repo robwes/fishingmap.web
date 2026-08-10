@@ -206,4 +206,95 @@ describe('EditRegulationsPanel', () => {
 
         expect(screen.getByText(/No species listed for this water yet/)).toBeTruthy();
     });
+
+    describe('adipose fin variants', () => {
+        const intact = {
+            ...inheritedRule,
+            regulationId: 300,
+            adiposeFin: 'Intact',
+            minimumSizeCm: null,
+            isFullyProtected: true,
+        };
+        const clipped = { ...inheritedRule, regulationId: 301, adiposeFin: 'Clipped', minimumSizeCm: 50 };
+
+        /** A location whose one species resolves to several rules. */
+        const locationWithRules = (...rules) => ({ ...locationWith(null), speciesRules: rules });
+
+        it('gives each fin state its own row', () => {
+            renderPanel(locationWithRules(intact, clipped));
+
+            expect(screen.getByText('Adipose fin intact')).toBeTruthy();
+            expect(screen.getByText('Adipose fin clipped')).toBeTruthy();
+            expect(screen.getAllByRole('button', { name: /Override for this water/ })).toHaveLength(2);
+        });
+
+        it('overrides one variant without opening the other', async () => {
+            renderPanel(locationWithRules(intact, clipped));
+
+            const overrides = screen.getAllByRole('button', { name: /Override for this water/ });
+            await act(async () => { overrides[1].click(); });
+
+            expect(screen.getAllByRole('button', { name: /Save rule/ })).toHaveLength(1);
+        });
+
+        it('keeps the fin state when overriding, rather than widening the rule', async () => {
+            // An override seeded from "trout with an intact fin" must stay about
+            // the same fish — dropping the fin would silently apply it to all of
+            // them and wipe the distinction at this water.
+            regulationService.createRegulation.mockResolvedValue({ id: 400 });
+            renderPanel(locationWithRules(intact, clipped));
+
+            const overrides = screen.getAllByRole('button', { name: /Override for this water/ });
+            await act(async () => { overrides[0].click(); });
+            await click(/Save rule/);
+
+            const draft = regulationService.createRegulation.mock.calls[0][0];
+            expect(draft.adiposeFin).toBe('Intact');
+            expect(draft.isFullyProtected).toBe(true);
+            expect(draft.locationIds).toEqual([1]);
+        });
+
+        it('does not offer to change the fin state from a water', () => {
+            // Drawing a new distinction is a regional decision; this panel only
+            // overrides the rules that already reach the water.
+            renderPanel(locationWithRules(intact, clipped));
+
+            expect(screen.queryByLabelText('Applies to')).toBeNull();
+        });
+
+        it('updates the right variant in place when the water owns one', async () => {
+            regulationService.updateRegulation.mockResolvedValue({ id: 302 });
+            const ownClipped = {
+                ...clipped,
+                regulationId: 302,
+                locationIds: [1],
+                source: 'Location',
+            };
+            renderPanel(locationWithRules(intact, ownClipped));
+
+            await click(/^Edit rule/);
+            await click(/Save rule/);
+
+            expect(regulationService.updateRegulation).toHaveBeenCalledWith(302, expect.objectContaining({
+                adiposeFin: 'Clipped',
+            }));
+        });
+
+        it('reverts only the variant it was asked to', async () => {
+            regulationService.deleteRegulation.mockResolvedValue(true);
+            const ownClipped = {
+                ...clipped,
+                regulationId: 302,
+                locationIds: [1],
+                source: 'Location',
+                fallsBackTo: null,
+            };
+            renderPanel(locationWithRules(intact, ownClipped));
+
+            await click(/Remove rule/);
+            await click(/Yes, revert/);
+
+            expect(regulationService.deleteRegulation).toHaveBeenCalledWith(302);
+        });
+    });
 });

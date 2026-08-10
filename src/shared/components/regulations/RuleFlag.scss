@@ -16,6 +16,13 @@
         color: #fff;
     }
 
+    /* Same family as a closed season — both mean the fish stays in the water —
+       but the deeper red says permanent rather than "until a date". */
+    &.is-protected {
+        background-color: var(--clr-danger-text);
+        color: #fff;
+    }
+
     .rule-flag-note {
         font-weight: 300;
         opacity: 0.9;

@@ -34,7 +34,11 @@ function SpeciesRegulationsOverview({ speciesId }) {
 
     // The API already orders these national → regions by tier → waters, so
     // the tiers are split out rather than re-sorted.
-    const national = regulations.find(r => r.region?.type === REGION_TYPE.ROOT);
+    //
+    // A tier can hold several rules for one species — one per adipose fin state
+    // — so even the national tier is a list. Finding the first would hide the
+    // other half of a species whose variants are exactly what a reader came for.
+    const national = regulations.filter(r => r.region?.type === REGION_TYPE.ROOT);
     const regional = regulations.filter(r => r.region && r.region.type !== REGION_TYPE.ROOT);
     const local = regulations.filter(r => !r.region);
 
@@ -53,8 +57,10 @@ function SpeciesRegulationsOverview({ speciesId }) {
                 <h3 className="species-regs-tier-title">
                     <i className="fa-solid fa-flag"></i>National baseline
                 </h3>
-                {national
-                    ? <ScopeRuleCard title="All of Finland" rule={national} />
+                {national.length > 0
+                    ? national.map(rule => (
+                        <ScopeRuleCard key={rule.id} title="All of Finland" rule={rule} />
+                    ))
                     : (
                         <p className="species-regs-empty">
                             No national rule — only the regional and local rules below apply.

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import RuleFlag from '@/shared/components/regulations/RuleFlag';
+import RuleAlerts from '@/shared/components/regulations/RuleAlerts';
 import RuleFacts from '@/shared/components/regulations/RuleFacts';
 import RuleNotes from '@/shared/components/regulations/RuleNotes';
 import RegulationForm from '@/shared/components/regulations/RegulationForm';
 import {
-    getActiveProtectedPeriod,
-    formatPeriodEnd,
+    getAdiposeFinLabel,
+    getAdiposeFinHint,
     hasRestrictions,
 } from '@/shared/utils/regulationUtils';
 
@@ -44,7 +44,8 @@ function RegionRuleRow({
     today = new Date(),
 }) {
     const [isConfirmingRemove, setIsConfirmingRemove] = useState(false);
-    const activePeriod = getActiveProtectedPeriod(rule, today);
+    const finLabel = getAdiposeFinLabel(rule.adiposeFin);
+    const finHint = getAdiposeFinHint(rule.adiposeFin);
 
     return (
         <li className={`reg-row${isEditing ? ' is-editing' : ''}`}>
@@ -53,6 +54,14 @@ function RegionRuleRow({
                     <i className="fa-solid fa-fish"></i>
                     {speciesName}
                 </span>
+                {/* A species can hold several rules here, one per fin state, so the
+                    name alone no longer identifies which rule this row is. */}
+                {finLabel && (
+                    <span className="reg-row-fin">
+                        {finLabel}
+                        {finHint && <span className="reg-row-fin-hint">{finHint}</span>}
+                    </span>
+                )}
             </div>
 
             {isEditing ? (
@@ -65,14 +74,7 @@ function RegionRuleRow({
                 />
             ) : (
                 <>
-                    {activePeriod && (
-                        <RuleFlag
-                            icon="fa-ban"
-                            variant="closed"
-                            label="Protected now"
-                            note={`until ${formatPeriodEnd(activePeriod)}`}
-                        />
-                    )}
+                    <RuleAlerts rule={rule} today={today} />
 
                     {hasRestrictions(rule)
                         ? <RuleFacts rule={rule} today={today} />

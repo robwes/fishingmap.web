@@ -27,32 +27,40 @@ const summerClosure = { startMonth: 6, startDay: 1, endMonth: 8, endDay: 31 };
 const rule = (overrides = {}) => ({
     speciesId: 1,
     source: 'National',
+    adiposeFin: null,
     minimumSizeCm: null,
     maximumSizeCm: null,
     bagLimit: null,
     bagLimitBasis: null,
     isCatchAndReleaseOnly: false,
+    isFullyProtected: false,
     mustReportCatch: false,
     additionalRules: null,
     protectedPeriods: [],
     ...overrides,
 });
 
+let container;
+
 /**
  * Renders a row inside a router, since the species name links to its page.
- * @param {Object|undefined} speciesRule - The rule to render, or undefined.
+ * @param {...Object} rules - The rules to render; none means an unregulated species.
+ * @returns {Element} The row element.
  */
-const renderRow = (speciesRule) => {
-    const { container } = render(
+const renderRow = (...rules) => {
+    ({ container } = render(
         <MemoryRouter>
             <ul>
-                <SpeciesRuleRow species={pike} rule={speciesRule} today={summerDay} />
+                <SpeciesRuleRow species={pike} rules={rules} today={summerDay} />
             </ul>
         </MemoryRouter>
-    );
+    ));
 
     return container.querySelector('.species-rule-row');
 };
+
+/** The fin-state blocks, in render order. */
+const variants = () => [...container.querySelectorAll('.species-rule-variant')];
 
 describe('SpeciesRuleRow', () => {
     it('links the species name to its details page', () => {
@@ -73,7 +81,7 @@ describe('SpeciesRuleRow', () => {
     });
 
     it('says so plainly when a species carries no rule at all', () => {
-        const row = renderRow(undefined);
+        const row = renderRow();
 
         expect(screen.getByText('No size or bag limits')).toBeTruthy();
         expect(row.className).toContain('is-unregulated');
@@ -144,5 +152,81 @@ describe('SpeciesRuleRow', () => {
 
         expect(screen.getByText('No live bait.')).toBeTruthy();
         expect(screen.queryByRole('button', { name: /Read full rule/ })).toBeNull();
+    });
+
+    it('says a fully protected species may not be taken', () => {
+        // Distinct from catch and release, which permits fishing for it.
+        const row = renderRow(rule({ isFullyProtected: true }));
+
+        expect(screen.getByText('Fully protected')).toBeTruthy();
+        expect(screen.getByText('may not be taken')).toBeTruthy();
+        expect(screen.queryByText('Catch and release only')).toBeNull();
+        // Not "No size or bag limits": full protection is very much a restriction.
+        expect(screen.queryByText('No size or bag limits')).toBeNull();
+        expect(row.className).toContain('is-closed');
+    });
+
+    describe('adipose fin variants', () => {
+        const intact = rule({ adiposeFin: 'Intact', isFullyProtected: true });
+        const clipped = rule({ adiposeFin: 'Clipped', minimumSizeCm: 50 });
+
+        it('renders one labelled block per fin state under a single species', () => {
+            renderRow(intact, clipped);
+
+            // One species heading, not two rows.
+            expect(screen.getAllByRole('link', { name: /Pike/ })).toHaveLength(1);
+            expect(variants()).toHaveLength(2);
+            expect(screen.getByText('Adipose fin intact')).toBeTruthy();
+            expect(screen.getByText('Adipose fin clipped')).toBeTruthy();
+        });
+
+        it('glosses the fin state, since not every angler knows the term', () => {
+            renderRow(intact, clipped);
+
+            expect(screen.getByText('wild fish')).toBeTruthy();
+            expect(screen.getByText('hatchery-reared')).toBeTruthy();
+        });
+
+        it('states each variant’s own rule against its own label', () => {
+            renderRow(intact, clipped);
+
+            expect(variants()[0].textContent).toContain('Fully protected');
+            expect(variants()[1].textContent).toContain('Min 50 cm');
+        });
+
+        it('gives each variant its own state rather than tinting the whole row', () => {
+            const row = renderRow(intact, clipped);
+
+            // Only the protected half is closed; the other is a normal size limit.
+            expect(variants()[0].className).toContain('is-closed');
+            expect(variants()[1].className).not.toContain('is-closed');
+            expect(row.className).not.toContain('is-closed');
+        });
+
+        it('names the unqualified rule as covering the remaining fish', () => {
+            // An intact-only rule beside a rule for all fish: the second is what
+            // applies to clipped fish, so calling it "all" would contradict the first.
+            renderRow(intact, rule({ minimumSizeCm: 60 }));
+
+            expect(screen.getByText('All other fish')).toBeTruthy();
+        });
+
+        it('leaves a species with one unqualified rule looking exactly as before', () => {
+            renderRow(rule({ minimumSizeCm: 40 }));
+
+            expect(variants()).toHaveLength(0);
+            expect(screen.queryByText(/Adipose fin/)).toBeNull();
+        });
+
+        it('badges each variant with the tier it came from', () => {
+            renderRow(
+                rule({ adiposeFin: 'Intact', source: 'National', isFullyProtected: true }),
+                rule({ adiposeFin: 'Clipped', source: 'Location', minimumSizeCm: 45 })
+            );
+
+            expect(variants()[0].textContent).toContain('National');
+            expect(variants()[1].textContent).toContain('This water');
+            expect(variants()[1].className).toContain('is-override');
+        });
     });
 });

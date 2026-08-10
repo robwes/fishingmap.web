@@ -21,11 +21,16 @@ const toRegulationBody = (regulation) => {
         speciesId: regulation.speciesId,
         regionId: regulation.regionId ?? null,
         locationIds,
+        // Null means the rule applies whatever the fin looks like. That is a
+        // value, not an omission — sending anything else would narrow the rule
+        // to half its species.
+        adiposeFin: regulation.adiposeFin ?? null,
         minimumSizeCm: regulation.minimumSizeCm ?? null,
         maximumSizeCm: regulation.maximumSizeCm ?? null,
         bagLimit: regulation.bagLimit ?? null,
         bagLimitBasis: regulation.bagLimitBasis ?? null,
         isCatchAndReleaseOnly: regulation.isCatchAndReleaseOnly ?? false,
+        isFullyProtected: regulation.isFullyProtected ?? false,
         mustReportCatch: regulation.mustReportCatch ?? false,
         additionalRules: regulation.additionalRules ?? null,
         protectedPeriods: (regulation.protectedPeriods ?? []).map(period => ({

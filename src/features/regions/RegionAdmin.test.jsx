@@ -206,4 +206,107 @@ describe('RegionAdmin', () => {
 
         expect(screen.getByText(/No species rules on this region yet/)).toBeTruthy();
     });
+
+    describe('adipose fin variants', () => {
+        /** Selects a species in the "Add a rule for" picker. */
+        const addRuleFor = async (speciesId) => {
+            await act(async () => {
+                fireEvent.change(screen.getByLabelText('Add a rule for'), {
+                    target: { value: String(speciesId) },
+                });
+            });
+        };
+
+        it('keeps an already-ruled species addable, so a variant can be entered', async () => {
+            await renderPage();
+
+            // Finland already rules Pike. It stays in the picker because the
+            // fin-narrowed variants are still free.
+            const options = [...screen.getByLabelText('Add a rule for').options].map(o => o.textContent);
+            expect(options).toContain('Pike — another rule (1 here)');
+            expect(options).toContain('Perch');
+        });
+
+        it('defaults a second rule for a species to a free fin state', async () => {
+            regulationService.createRegulation.mockResolvedValue({ id: 950 });
+            await renderPage();
+
+            // Pike's unnarrowed rule is taken, so the next one starts on Intact
+            // rather than colliding with the rule that exists.
+            await addRuleFor(10);
+            await click(/Save rule/);
+
+            const [payload] = regulationService.createRegulation.mock.calls[0];
+            expect(payload.adiposeFin).toBe('Intact');
+            expect(payload.regionId).toBe(1);
+        });
+
+        it('starts an unruled species unnarrowed', async () => {
+            regulationService.createRegulation.mockResolvedValue({ id: 951 });
+            await renderPage();
+
+            await addRuleFor(20);
+            await click(/Save rule/);
+
+            expect(regulationService.createRegulation.mock.calls[0][0].adiposeFin).toBeNull();
+        });
+
+        it('refuses to save a rule onto a fin state that is already taken', async () => {
+            await renderPage();
+
+            await addRuleFor(10);
+            // Move the new rule back onto the pair the existing rule occupies.
+            await act(async () => {
+                fireEvent.change(screen.getByLabelText('Applies to'), { target: { value: '' } });
+            });
+            await click(/Save rule/);
+
+            expect(regulationService.createRegulation).not.toHaveBeenCalled();
+            expect(showToast).toHaveBeenCalledWith(
+                expect.stringMatching(/already has a rule for that fin state/), 'error');
+        });
+
+        it('edits one variant without opening the other', async () => {
+            const intact = { ...nationalPikeRule, id: 902, adiposeFin: 'Intact', minimumSizeCm: null };
+            const clipped = { ...nationalPikeRule, id: 903, adiposeFin: 'Clipped', minimumSizeCm: 50 };
+            regulationService.getRegulations.mockResolvedValue([intact, clipped]);
+            regulationService.updateRegulation.mockResolvedValue({ id: 902 });
+            await renderPage();
+
+            expect(screen.getByText('Adipose fin intact')).toBeTruthy();
+            expect(screen.getByText('Adipose fin clipped')).toBeTruthy();
+
+            // Two rules, so two Edit buttons — the first belongs to the intact rule.
+            const editButtons = screen.getAllByRole('button', { name: /Edit rule/ });
+            expect(editButtons).toHaveLength(2);
+            await act(async () => { editButtons[0].click(); });
+
+            expect(screen.getAllByRole('button', { name: /Save rule/ })).toHaveLength(1);
+
+            await click(/Save rule/);
+            expect(regulationService.updateRegulation).toHaveBeenCalledWith(902, expect.objectContaining({
+                adiposeFin: 'Intact',
+            }));
+        });
+
+        it('clears catch and release when a rule is marked fully protected', async () => {
+            regulationService.updateRegulation.mockResolvedValue({ id: 900 });
+            regulationService.getRegulations.mockResolvedValue([
+                { ...nationalPikeRule, isCatchAndReleaseOnly: true },
+            ]);
+            await renderPage();
+
+            await click(/Edit rule/);
+            await act(async () => {
+                screen.getByLabelText('Fully protected — may not be taken').click();
+            });
+            await click(/Save rule/);
+
+            // The two contradict each other: one says don't fish for it, the
+            // other says fishing for it is fine provided it goes back.
+            const [, payload] = regulationService.updateRegulation.mock.calls[0];
+            expect(payload.isFullyProtected).toBe(true);
+            expect(payload.isCatchAndReleaseOnly).toBe(false);
+        });
+    });
 });

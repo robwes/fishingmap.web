@@ -54,6 +54,35 @@ export const RULE_SOURCE = {
 export const RULE_SOURCE_REGION_PREFIX = 'Region: ';
 
 /**
+ * Which fish a rule covers, when it distinguishes them by adipose fin. Wild
+ * trout and salmon keep the fin; hatchery fish are clipped before release, and
+ * the decree treats the two as different fish — in Uusimaa an intact-finned
+ * trout is fully protected while a clipped one may be kept at 50 cm.
+ *
+ * A rule's `adiposeFin` is **null** when it doesn't care about the fin, which
+ * is every rule written before variants existed. Null is a real value here, not
+ * a missing one: it means "all of them", so it must never be defaulted away.
+ *
+ * Keep in sync with `AdiposeFin.cs`, which serializes by name as `RegionType`
+ * and `BagLimitBasis` do.
+ */
+export const ADIPOSE_FIN = {
+    INTACT: 'Intact',
+    CLIPPED: 'Clipped',
+};
+
+export const ADIPOSE_FIN_LABELS = {
+    [ADIPOSE_FIN.INTACT]: 'Adipose fin intact',
+    [ADIPOSE_FIN.CLIPPED]: 'Adipose fin clipped',
+};
+
+/** What the fin state means in practice, for anyone who doesn't know the term. */
+export const ADIPOSE_FIN_HINTS = {
+    [ADIPOSE_FIN.INTACT]: 'wild fish',
+    [ADIPOSE_FIN.CLIPPED]: 'hatchery-reared',
+};
+
+/**
  * What a bag limit is counted against. Deliberately not a duration — put-and-take
  * waters sell a permit covering a fixed number of fish, so `Permit` sits alongside
  * the time-based values. Keep in sync with `BagLimitBasis.cs`, which serializes by

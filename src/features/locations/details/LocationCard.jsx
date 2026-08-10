@@ -39,9 +39,11 @@ function LocationCard({ location }) {
     }
 
     /**
-     * Pairs each species with the rule that actually applies to it here.
-     * `speciesRules` holds one resolved rule per species, but only for species
-     * that have one — a water can list a fish with no regulation at all.
+     * Pairs each species with the rules that actually apply to it here.
+     * `speciesRules` holds the resolved rules, but only for species that have
+     * one — a water can list a fish with no regulation at all. A species can
+     * also have several, one per adipose fin state, so this filters rather than
+     * finding the first.
      */
     const getSpeciesRules = () => {
         const rules = location.speciesRules ?? [];
@@ -50,7 +52,7 @@ function LocationCard({ location }) {
             <SpeciesRuleRow
                 key={s.id}
                 species={s}
-                rule={rules.find(r => r.speciesId === s.id)}
+                rules={rules.filter(r => r.speciesId === s.id)}
             />
         ));
     }

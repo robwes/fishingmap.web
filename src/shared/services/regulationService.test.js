@@ -74,8 +74,34 @@ describe('regulationService.createRegulation', () => {
         expect(body.bagLimit).toBeNull();
         expect(body.bagLimitBasis).toBeNull();
         expect(body.isCatchAndReleaseOnly).toBe(false);
+        expect(body.isFullyProtected).toBe(false);
         expect(body.mustReportCatch).toBe(false);
         expect(body.protectedPeriods).toEqual([]);
+    });
+
+    it('sends a rule that does not distinguish fin states as null', async () => {
+        // Null means "all fish of this species", which is a value the backend
+        // resolves on — not an omission it can default away.
+        const fetchMock = mockFetch(fakeResponse({ ok: true, body: { id: 1 } }));
+
+        await regulationService.createRegulation({ speciesId: 1, regionId: 2 });
+
+        expect(sentBody(fetchMock)).toHaveProperty('adiposeFin', null);
+    });
+
+    it('sends the fin state and full protection when set', async () => {
+        const fetchMock = mockFetch(fakeResponse({ ok: true, body: { id: 1 } }));
+
+        await regulationService.createRegulation({
+            speciesId: 1,
+            regionId: 2,
+            adiposeFin: 'Intact',
+            isFullyProtected: true,
+        });
+
+        const body = sentBody(fetchMock);
+        expect(body.adiposeFin).toBe('Intact');
+        expect(body.isFullyProtected).toBe(true);
     });
 
     it('sends protected periods as bare month/day pairs', async () => {

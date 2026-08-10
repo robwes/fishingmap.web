@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useId } from 'react';
 import PeriodEditor from './PeriodEditor';
-import { BAG_LIMIT_BASIS_LABELS } from '@/shared/constants/regulations';
+import { BAG_LIMIT_BASIS_LABELS, ADIPOSE_FIN_LABELS, ADIPOSE_FIN_HINTS } from '@/shared/constants/regulations';
 import '@/shared/components/regulations/regulationFields.scss';
 import './RegulationForm.scss';
 
@@ -24,8 +24,16 @@ const toNumberOrNull = (value) => (value === '' || value == null ? null : Number
  * @param {Function} onSave - Called when the user saves.
  * @param {Function} onCancel - Called when the user cancels.
  * @param {boolean} [isSaving] - Disables the actions while a save is in flight.
+ * @param {boolean} [canSetAdiposeFin] - Whether the rule may be narrowed by fin state.
  */
-function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false }) {
+function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false, canSetAdiposeFin = true }) {
+    // The two fields carrying a hint associate their label by id instead of
+    // wrapping the control. A hint inside a <label> is read out as part of the
+    // control's name, so "Counted per" would announce as "Counted per Without
+    // this the limit shows as a bare number."
+    const fieldId = useId();
+    const finId = `${fieldId}-fin`;
+    const basisId = `${fieldId}-basis`;
 
     /**
      * Replaces one field on the draft.
@@ -36,8 +44,49 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
         onChange({ ...draft, [field]: value });
     };
 
+    /**
+     * Sets full protection, clearing catch-and-release with it. The two
+     * contradict each other: catch-and-release permits fishing for a species
+     * provided it goes back, while full protection means it may not be
+     * targeted at all. Saving both would publish a rule that cannot be obeyed.
+     * @param {boolean} isFullyProtected - The new value.
+     */
+    const updateFullProtection = (isFullyProtected) => {
+        onChange({
+            ...draft,
+            isFullyProtected,
+            isCatchAndReleaseOnly: isFullyProtected ? false : draft.isCatchAndReleaseOnly,
+        });
+    };
+
     return (
         <div className="reg-form">
+            {canSetAdiposeFin && (
+                <div className="reg-field">
+                    <label className="reg-field-label" htmlFor={finId}>Applies to</label>
+                    <select
+                        id={finId}
+                        className="reg-input"
+                        value={draft.adiposeFin ?? ''}
+                        onChange={(e) => update('adiposeFin', e.target.value || null)}>
+                        {/* The default, and what every rule meant before variants
+                            existed. Not "All" as a stored value — an unnarrowed rule
+                            carries null. */}
+                        <option value="">All fish of this species</option>
+                        {Object.entries(ADIPOSE_FIN_LABELS).map(([value, label]) => (
+                            <option key={value} value={value}>
+                                {label} ({ADIPOSE_FIN_HINTS[value]})
+                            </option>
+                        ))}
+                    </select>
+                    {draft.adiposeFin && (
+                        <span className="reg-field-hint">
+                            Fish of this species with the other fin state need a rule of their own.
+                        </span>
+                    )}
+                </div>
+            )}
+
             <div className="reg-field-grid">
                 <label className="reg-field">
                     <span className="reg-field-label">Minimum size (cm)</span>
@@ -77,9 +126,10 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
                     />
                 </label>
 
-                <label className="reg-field">
-                    <span className="reg-field-label">Counted per</span>
+                <div className="reg-field">
+                    <label className="reg-field-label" htmlFor={basisId}>Counted per</label>
                     <select
+                        id={basisId}
                         className="reg-input"
                         disabled={draft.bagLimit == null}
                         value={draft.bagLimitBasis ?? ''}
@@ -92,13 +142,22 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false })
                     {draft.bagLimit != null && !draft.bagLimitBasis && (
                         <span className="reg-field-hint">Without this the limit shows as a bare number.</span>
                     )}
-                </label>
+                </div>
             </div>
 
             <div className="reg-toggles">
                 <label className="reg-check">
                     <input
                         type="checkbox"
+                        checked={draft.isFullyProtected ?? false}
+                        onChange={(e) => updateFullProtection(e.target.checked)}
+                    />
+                    <span>Fully protected — may not be taken</span>
+                </label>
+                <label className="reg-check">
+                    <input
+                        type="checkbox"
+                        disabled={draft.isFullyProtected ?? false}
                         checked={draft.isCatchAndReleaseOnly}
                         onChange={(e) => update('isCatchAndReleaseOnly', e.target.checked)}
                     />

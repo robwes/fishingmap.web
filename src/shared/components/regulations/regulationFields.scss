@@ -28,6 +28,35 @@
     resize: vertical;
 }
 
+/* Which fish a rule row covers, next to the species name. Lives here rather
+   than beside either editor because both the region admin row and the location
+   editor row need it, and one look with two names is what this file exists to
+   avoid. */
+.reg-row-fin {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    padding: 0.2em 0.6em;
+    border-radius: 999px;
+    background-color: var(--clr-secondary);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.reg-row-fin-hint {
+    font-weight: 400;
+    color: var(--clr-secondary-text);
+
+    &::before {
+        content: '(';
+    }
+
+    &::after {
+        content: ')';
+    }
+}
+
 /* Chrome paints a native select's arrow against the border no matter how much
    padding-right the element has, so the arrow has to be ours to position. The
    app does this once already on .sort-select, with a sibling <i> element; here

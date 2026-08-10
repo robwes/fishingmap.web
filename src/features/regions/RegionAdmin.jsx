@@ -10,22 +10,34 @@ import { regulationService } from '@/shared/services/regulationService';
 import { speciesService } from '@/shared/services/speciesService';
 import { locationService } from '@/shared/services/locationService';
 import { useToast } from '@/shared/context/ToastContext';
-import { getRegionTypeLabel, buildRegionChain, resolveRegionRule } from '@/shared/utils/regulationUtils';
+import {
+    getRegionTypeLabel,
+    buildRegionChain,
+    resolveRegionRule,
+    getRuleKey,
+} from '@/shared/utils/regulationUtils';
+import { ADIPOSE_FIN } from '@/shared/constants/regulations';
 import '@/shared/components/regulations/regulationFields.scss';
 import './RegionAdmin.scss';
 
 /** An empty region-scoped rule for a species. */
-const emptyRule = (speciesId) => ({
+const emptyRule = (speciesId, adiposeFin = null) => ({
     speciesId,
+    adiposeFin,
     minimumSizeCm: null,
     maximumSizeCm: null,
     bagLimit: null,
     bagLimitBasis: null,
     isCatchAndReleaseOnly: false,
+    isFullyProtected: false,
     mustReportCatch: false,
     additionalRules: null,
     protectedPeriods: [],
 });
+
+// Every way a rule can be narrowed by fin state, the unnarrowed one first. A
+// species can hold one rule per entry and no more.
+const FIN_STATES = [null, ADIPOSE_FIN.INTACT, ADIPOSE_FIN.CLIPPED];
 
 /**
  * Regions and the rules attached to them.
@@ -44,7 +56,12 @@ function RegionAdmin() {
     const [locations, setLocations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
-    const [editingSpeciesId, setEditingSpeciesId] = useState(null);
+    // Which rule's form is open, as a (species, fin) key rather than a species
+    // id: a species can hold several rules here, and keying on the species
+    // alone would open every one of its forms at once.
+    const [editingKey, setEditingKey] = useState(null);
+    // The row being edited, or null when the open form is a new rule.
+    const [editingRuleId, setEditingRuleId] = useState(null);
     const [draft, setDraft] = useState(null);
     const [prefilledFrom, setPrefilledFrom] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -70,8 +87,24 @@ function RegionAdmin() {
 
     const selectedRegion = regions.find(r => r.id === selectedId) ?? null;
     const regionRules = regulations.filter(r => r.regionId === selectedId);
-    const unruledSpecies = species.filter(s => !regionRules.some(r => r.speciesId === s.id));
     const speciesName = (id) => species.find(s => s.id === id)?.name ?? 'Unknown species';
+
+    /**
+     * The fin states a species has no rule for at this region.
+     * @param {number} speciesId - The species.
+     * @returns {Array<string|null>} Free fin states, unnarrowed first.
+     */
+    const freeFinStates = (speciesId) => {
+        const taken = regionRules
+            .filter(r => r.speciesId === speciesId)
+            .map(r => r.adiposeFin ?? null);
+        return FIN_STATES.filter(fin => !taken.includes(fin));
+    };
+
+    // Species that can still take a rule here. A species already ruled stays in
+    // the list while it has a free fin state, because a second rule for the same
+    // species is how a variant gets entered.
+    const addableSpecies = species.filter(s => freeFinStates(s.id).length > 0);
 
     // Every water under this region, however deep — the blast radius of a rule
     // saved here.
@@ -105,34 +138,58 @@ function RegionAdmin() {
     const startEdit = (rule) => {
         setDraft({ ...rule });
         setPrefilledFrom(null);
-        setEditingSpeciesId(rule.speciesId);
+        setEditingRuleId(rule.id);
+        setEditingKey(getRuleKey(rule.speciesId, rule.adiposeFin));
     };
 
-    /** Opens the form for a species this region doesn't rule yet. */
+    /**
+     * Opens the form for a rule this region doesn't have yet.
+     *
+     * The fin state defaults to the first one still free, so adding a second
+     * rule for an already-ruled species lands on a variant rather than
+     * colliding with the rule that exists.
+     * @param {number} speciesId - The species being ruled.
+     */
     const startAdd = (speciesId) => {
+        const fin = freeFinStates(speciesId)[0] ?? null;
         const inherited = findAncestorRule(speciesId);
         setDraft(inherited
-            ? { ...emptyRule(speciesId), ...inherited.rule, id: undefined, speciesId }
-            : emptyRule(speciesId));
+            ? { ...emptyRule(speciesId, fin), ...inherited.rule, id: undefined, speciesId, adiposeFin: fin }
+            : emptyRule(speciesId, fin));
         setPrefilledFrom(inherited?.region.name ?? null);
-        setEditingSpeciesId(speciesId);
+        setEditingRuleId(null);
+        setEditingKey(getRuleKey(speciesId, fin));
     };
 
     const closeForm = () => {
-        setEditingSpeciesId(null);
+        setEditingKey(null);
+        setEditingRuleId(null);
         setDraft(null);
         setPrefilledFrom(null);
     };
 
     const saveDraft = async () => {
-        const existing = regionRules.find(r => r.speciesId === draft.speciesId);
+        // Adding, not editing: refuse to write over a rule that already covers
+        // the same species and fin state. The fin selector is free to move
+        // while the form is open, so "add" can land on an occupied pair.
+        const collision = regionRules.find(r =>
+            r.id !== editingRuleId
+            && r.speciesId === draft.speciesId
+            && (r.adiposeFin ?? null) === (draft.adiposeFin ?? null));
+        if (collision) {
+            showToast(
+                `${speciesName(draft.speciesId)} already has a rule for that fin state on ${selectedRegion.name}.`,
+                'error');
+            return;
+        }
+
         // Region-scoped: regionId set, locationIds empty. toRegulationBody
         // enforces the XOR, but be explicit about which side we're on.
         const payload = { ...draft, regionId: selectedId, locationIds: [] };
 
         setIsSaving(true);
-        const saved = existing
-            ? await regulationService.updateRegulation(existing.id, payload)
+        const saved = editingRuleId != null
+            ? await regulationService.updateRegulation(editingRuleId, payload)
             : await regulationService.createRegulation(payload);
 
         if (!saved) {
@@ -231,20 +288,19 @@ function RegionAdmin() {
                                     </div>
 
                                     <ul className="reg-list">
-                                        {regionRules.length === 0 && editingSpeciesId == null && (
+                                        {regionRules.length === 0 && editingKey == null && (
                                             <p className="species-regs-empty">
                                                 No species rules on this region yet — waters here inherit
                                                 from further up the tree.
                                             </p>
                                         )}
 
-                                        {editingSpeciesId != null
-                                            && !regionRules.some(r => r.speciesId === editingSpeciesId) && (
+                                        {editingKey != null && editingRuleId == null && (
                                             <li className="reg-row is-editing">
                                                 <div className="reg-row-head">
                                                     <span className="species-rule-name">
                                                         <i className="fa-solid fa-fish"></i>
-                                                        {speciesName(editingSpeciesId)}
+                                                        {speciesName(draft.speciesId)}
                                                     </span>
                                                     <span className="rule-source">New rule</span>
                                                 </div>
@@ -270,7 +326,7 @@ function RegionAdmin() {
                                                 rule={rule}
                                                 speciesName={speciesName(rule.speciesId)}
                                                 canEdit
-                                                isEditing={editingSpeciesId === rule.speciesId}
+                                                isEditing={editingRuleId === rule.id}
                                                 draft={draft}
                                                 onDraftChange={setDraft}
                                                 onEdit={() => startEdit(rule)}
@@ -282,7 +338,7 @@ function RegionAdmin() {
                                         ))}
                                     </ul>
 
-                                    {unruledSpecies.length > 0 && editingSpeciesId == null && (
+                                    {addableSpecies.length > 0 && editingKey == null && (
                                         <div className="region-add-rule">
                                             <label className="reg-field-label" htmlFor="region-add-species">
                                                 Add a rule for
@@ -293,9 +349,18 @@ function RegionAdmin() {
                                                 value=""
                                                 onChange={(e) => e.target.value && startAdd(Number(e.target.value))}>
                                                 <option value="">Select species…</option>
-                                                {unruledSpecies.map(s => (
-                                                    <option key={s.id} value={s.id}>{s.name}</option>
-                                                ))}
+                                                {addableSpecies.map(s => {
+                                                    const existing = regionRules.filter(r => r.speciesId === s.id).length;
+                                                    return (
+                                                        <option key={s.id} value={s.id}>
+                                                            {/* Says why a species already ruled here is
+                                                                still listed: the next rule is a variant. */}
+                                                            {existing > 0
+                                                                ? `${s.name} — another rule (${existing} here)`
+                                                                : s.name}
+                                                        </option>
+                                                    );
+                                                })}
                                             </select>
                                         </div>
                                     )}

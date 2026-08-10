@@ -130,4 +130,48 @@ describe('SpeciesRegulationsOverview', () => {
         expect(screen.getByText('Min 40 cm')).toBeTruthy();
         expect(screen.getByText('2 per day')).toBeTruthy();
     });
+
+    describe('adipose fin variants', () => {
+        const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
+        const intact = rule(905, {
+            region: finland,
+            adiposeFin: 'Intact',
+            isFullyProtected: true,
+        });
+        const clipped = rule(906, {
+            region: finland,
+            adiposeFin: 'Clipped',
+            minimumSizeCm: 50,
+        });
+
+        it('shows every national rule, not just the first', async () => {
+            // A tier can hold one rule per fin state. Finding the first would
+            // hide the other half of the species a reader came here for.
+            await renderOverview([intact, clipped]);
+
+            expect(cardTitles()).toEqual(['All of Finland', 'All of Finland']);
+        });
+
+        it('says which fish each rule covers', async () => {
+            await renderOverview([intact, clipped]);
+
+            expect(screen.getByText('Adipose fin intact')).toBeTruthy();
+            expect(screen.getByText('Adipose fin clipped')).toBeTruthy();
+            expect(screen.getByText('wild fish')).toBeTruthy();
+            expect(screen.getByText('hatchery-reared')).toBeTruthy();
+        });
+
+        it('states full protection rather than reading as unregulated', async () => {
+            await renderOverview([intact, clipped]);
+
+            expect(screen.getByText('Fully protected')).toBeTruthy();
+            expect(screen.queryByText('No size or bag limits')).toBeNull();
+        });
+
+        it('labels nothing when a rule does not distinguish fin states', async () => {
+            await renderOverview([nationalRule]);
+
+            expect(screen.queryByText(/Adipose fin/)).toBeNull();
+        });
+    });
 });

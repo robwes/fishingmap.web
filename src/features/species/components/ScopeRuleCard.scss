@@ -38,6 +38,40 @@
     white-space: nowrap;
 }
 
+/* Which fish the rule covers. Sits on its own line under the scope title
+   because it narrows a different thing than the title does — one says where,
+   this says which. */
+.scope-rule-fin {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    align-self: flex-start;
+    gap: 0.4em;
+    padding: 0.2em 0.6em;
+    border-radius: 999px;
+    background-color: var(--clr-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    i {
+        font-size: 0.85em;
+        opacity: 0.65;
+    }
+}
+
+.scope-rule-fin-hint {
+    font-weight: 400;
+    color: var(--clr-secondary-text);
+
+    &::before {
+        content: '(';
+    }
+
+    &::after {
+        content: ')';
+    }
+}
+
 .scope-rule-links {
     font-size: 0.8rem;
     line-height: 1.6;

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import RuleSourceBadge from './RuleSourceBadge';
-import RuleFlag from '@/shared/components/regulations/RuleFlag';
+import RuleAlerts from '@/shared/components/regulations/RuleAlerts';
 import RuleFacts from '@/shared/components/regulations/RuleFacts';
 import RuleNotes from '@/shared/components/regulations/RuleNotes';
 import RegulationForm from '@/shared/components/regulations/RegulationForm';
 import {
     getRuleSourceKind,
     getRuleSourceLabel,
-    getActiveProtectedPeriod,
-    formatPeriodEnd,
+    getAdiposeFinLabel,
+    getAdiposeFinHint,
     hasRestrictions,
 } from '@/shared/utils/regulationUtils';
 import './RegulationRow.scss';
@@ -62,9 +62,10 @@ function RegulationRow({
     const isLocal = getRuleSourceKind(rule?.source) === 'location';
     const otherWaters = (rule?.locationIds ?? []).filter(id => id !== locationId);
     const isSharedWithOtherWaters = isLocal && otherWaters.length > 0;
-    const activePeriod = getActiveProtectedPeriod(rule, today);
     const isRegulated = hasRestrictions(rule);
     const fallbackLabel = getRuleSourceLabel(rule?.fallsBackTo?.source);
+    const finLabel = getAdiposeFinLabel(rule?.adiposeFin);
+    const finHint = getAdiposeFinHint(rule?.adiposeFin);
 
     const classNames = ['reg-row'];
     if (isLocal) {
@@ -84,6 +85,14 @@ function RegulationRow({
                     <i className="fa-solid fa-fish"></i>
                     {species.name}
                 </span>
+                {/* A species can occupy several rows here, one per fin state, so
+                    the name alone no longer says which rule this is. */}
+                {finLabel && (
+                    <span className="reg-row-fin">
+                        {finLabel}
+                        {finHint && <span className="reg-row-fin-hint">{finHint}</span>}
+                    </span>
+                )}
                 {isRegulated
                     ? <RuleSourceBadge source={rule.source} />
                     : <span className="rule-source">Not regulated</span>}
@@ -96,17 +105,14 @@ function RegulationRow({
                     onSave={onSave}
                     onCancel={onCancel}
                     isSaving={isSaving}
+                    // The rows mirror the rules that reach this water. Drawing a
+                    // new fin distinction is a regional decision, so it is made
+                    // in region admin rather than one water at a time.
+                    canSetAdiposeFin={false}
                 />
             ) : (
                 <>
-                    {activePeriod && (
-                        <RuleFlag
-                            icon="fa-ban"
-                            variant="closed"
-                            label="Protected now"
-                            note={`until ${formatPeriodEnd(activePeriod)}`}
-                        />
-                    )}
+                    <RuleAlerts rule={rule} today={today} />
 
                     {isRegulated
                         ? <RuleFacts rule={rule} today={today} />
