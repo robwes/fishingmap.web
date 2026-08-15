@@ -19,6 +19,15 @@
         background-color: var(--clr-secondary);
     }
 
+    /* Nobody has recorded a decision for this species here. Deliberately not the
+       neutral grey of is-unregulated: that one states a checked fact, this one
+       states a gap, and they must not look like the same answer. */
+    &.is-unrecorded {
+        border-style: dashed;
+        border-left-style: dashed;
+        background-color: transparent;
+    }
+
     /* A closed season is the one state that changes what an angler does today. */
     &.is-closed {
         background-color: var(--clr-danger-light);
@@ -126,4 +135,17 @@ a.species-rule-name:hover {
 .rule-none {
     font-size: 0.85rem;
     color: var(--clr-secondary-text);
+}
+
+.rule-unrecorded {
+    display: flex;
+    gap: 0.6em;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--clr-secondary-text);
+
+    i {
+        margin-top: 0.2em;
+        opacity: 0.7;
+    }
 }

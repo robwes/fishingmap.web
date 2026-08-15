@@ -76,4 +76,27 @@ export const regulationService = {
     deleteRegulation: async (id) => {
         return await apiClient.requestOk(`${baseUrl}/${id}`, { method: "DELETE" });
     },
+
+    /**
+     * Records whether a water inherits its region's rules for one species.
+     *
+     * `false` does not remove a rule — it puts the species back to having no decision
+     * recorded at this water, which is a different state from following and from having a
+     * custom rule. The backend refuses to start following while a location-scoped rule
+     * exists, so switch to following by deleting that rule first.
+     * @param {number} locationId - The water.
+     * @param {number} speciesId - The species being decided.
+     * @param {boolean} follows - Whether to inherit.
+     * @returns {Promise<boolean>} True when the write succeeded.
+     */
+    setFollowsRegion: async (locationId, speciesId, follows) => {
+        return await apiClient.requestOk(
+            `${baseUrl}/location/${locationId}/species/${speciesId}/follows-region`,
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ follows }),
+            }
+        );
+    },
 };

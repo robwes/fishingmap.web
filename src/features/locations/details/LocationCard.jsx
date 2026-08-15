@@ -5,7 +5,7 @@ import SpeciesRuleRow from '@/features/locations/components/SpeciesRuleRow';
 import RegionChainNote from '@/features/locations/components/RegionChainNote';
 import LocationPermitItem from './LocationPermitItem';
 import useRegions from '@/shared/hooks/useRegions';
-import { buildRegionChain } from '@/shared/utils/regulationUtils';
+import { buildRegionChain, getSpeciesRuleState } from '@/shared/utils/regulationUtils';
 import CollapsibleArticlePrimary from '@/features/locations/components/CollapsibleArticlePrimary';
 import lake from '@/assets/images/lake.png';
 import { fileService } from '@/shared/services/fileService';
@@ -47,14 +47,22 @@ function LocationCard({ location }) {
      */
     const getSpeciesRules = () => {
         const rules = location.speciesRules ?? [];
+        const follows = location.followsRegionSpeciesIds ?? [];
 
-        return location.species.map(s => (
-            <SpeciesRuleRow
-                key={s.id}
-                species={s}
-                rules={rules.filter(r => r.speciesId === s.id)}
-            />
-        ));
+        return location.species.map(s => {
+            const speciesRules = rules.filter(r => r.speciesId === s.id);
+            return (
+                <SpeciesRuleRow
+                    key={s.id}
+                    species={s}
+                    rules={speciesRules}
+                    // Without this a species nobody has decided on is indistinguishable
+                    // from one that genuinely has no limits.
+                    state={getSpeciesRuleState(s.id, speciesRules, follows)}
+                    regionName={location.region?.name}
+                />
+            );
+        });
     }
 
     const getPermits = () => {

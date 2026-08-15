@@ -12,7 +12,38 @@ import {
     getRuleKey,
     hasRestrictions,
 } from '@/shared/utils/regulationUtils';
+import { RULE_STATE } from '@/shared/constants/regulations';
 import './SpeciesRuleRow.scss';
+
+/**
+ * What to say when a species has no rule to show. The two cases must not read alike:
+ * a water that inherits from a region setting nothing is a checked, empty answer, while
+ * a water nobody has recorded a decision for is not an answer at all — and phrasing the
+ * second as "no limits" would tell anglers a protected fish is fair game.
+ * @param {string} state - One of RULE_STATE.
+ * @param {string} [regionName] - The water's own region, when it has one.
+ */
+function NoRuleNote({ state, regionName }) {
+    if (state === RULE_STATE.FOLLOWS) {
+        return (
+            <p className="rule-none">
+                {regionName
+                    ? <>Follows {regionName} — no rule set there or above.</>
+                    : <>Follows the national rules — none set for this species.</>}
+            </p>
+        )
+    }
+
+    return (
+        <p className="rule-unrecorded">
+            <i className="fa-solid fa-circle-question"></i>
+            <span>
+                No rule recorded for this water. National and regional rules still
+                apply — check before you fish.
+            </span>
+        </p>
+    )
+}
 
 /**
  * State modifiers for one rule block.
@@ -70,18 +101,32 @@ function RuleBody({ rule, today }) {
  * block and the row looks exactly as it always did.
  * @param {Object} species - The species, with at least id and name.
  * @param {Array<Object>} [rules] - The resolved rules for this species, if any.
+ * @param {string} [state] - One of RULE_STATE; decides what an absence of rules means.
+ * @param {string} [regionName] - The water's own region, for the inherits-nothing note.
  * @param {Date} [today] - Reference date, injectable for tests.
  */
-function SpeciesRuleRow({ species, rules = [], today = new Date() }) {
+function SpeciesRuleRow({
+    species,
+    rules = [],
+    state = RULE_STATE.UNDECIDED,
+    regionName,
+    today = new Date(),
+}) {
     const hasVariants = rules.length > 1;
-    // An unregulated species still gets a row, saying so.
     const single = hasVariants ? null : rules[0];
+    // No rule is not the same as a rule with nothing in it. An empty rule is an answer
+    // somebody recorded; no rule means the question hasn't been answered here.
+    const hasAnyRule = rules.length > 0;
 
     const classNames = ['species-rule-row'];
     if (hasVariants) {
         classNames.push('has-variants');
-    } else {
+    } else if (hasAnyRule) {
         classNames.push(...stateClasses(single, today));
+    } else if (state === RULE_STATE.UNDECIDED) {
+        classNames.push('is-unrecorded');
+    } else {
+        classNames.push('is-unregulated');
     }
 
     return (
@@ -94,7 +139,9 @@ function SpeciesRuleRow({ species, rules = [], today = new Date() }) {
                 {!hasVariants && hasRestrictions(single) && <RuleSourceBadge source={single.source} />}
             </div>
 
-            {!hasVariants && <RuleBody rule={single} today={today} />}
+            {!hasAnyRule && <NoRuleNote state={state} regionName={regionName} />}
+
+            {hasAnyRule && !hasVariants && <RuleBody rule={single} today={today} />}
 
             {hasVariants && rules.map(rule => {
                 const label = getAdiposeFinLabel(rule.adiposeFin);

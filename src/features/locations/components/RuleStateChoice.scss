@@ -1,0 +1,59 @@
+.rule-state-choice {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    padding: 0.25em;
+    border-radius: 999px;
+    background-color: var(--clr-secondary);
+}
+
+.rule-state-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    white-space: nowrap;
+    padding: 0.4em 0.85em;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: none;
+    color: var(--clr-secondary-text);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    i {
+        font-size: 0.85em;
+    }
+
+    &:hover:not(:disabled) {
+        background-color: #fff;
+        color: var(--clr-body);
+    }
+
+    /* The current state stays visible while disabled — it is a label as much as a
+       control, so the usual dimming would hide the answer being given. */
+    &.is-current {
+        background-color: #fff;
+        border-color: var(--clr-primary);
+        color: var(--clr-primary-text);
+        cursor: default;
+        opacity: 1;
+    }
+
+    &:disabled:not(.is-current) {
+        opacity: 0.5;
+        cursor: default;
+    }
+}
+
+@media (max-width: 600px) {
+    .rule-state-choice {
+        width: 100%;
+    }
+
+    .rule-state-option {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+}

@@ -11,9 +11,11 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock('@/shared/services/regulationService', () => ({
     regulationService: {
+        getRegulations: vi.fn(),
         createRegulation: vi.fn(),
         updateRegulation: vi.fn(),
         deleteRegulation: vi.fn(),
+        setFollowsRegion: vi.fn(),
     },
 }));
 
@@ -21,9 +23,16 @@ vi.mock('@/shared/services/locationService', () => ({
     locationService: { getLocation: vi.fn() },
 }));
 
-// The panel builds the region chain from the full region list.
+// The panel builds the region chain from the full region list, and seeds a custom rule for
+// an undecided species from what that chain would give it.
 vi.mock('@/shared/services/regionService', () => ({
-    regionService: { getRegions: vi.fn(async () => []) },
+    regionService: {
+        getRegions: vi.fn(async () => [
+            { id: 1, name: 'Finland', type: 'Root', parentRegionId: null },
+            { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 },
+            { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 },
+        ]),
+    },
 }));
 
 const showToast = vi.fn();
@@ -38,12 +47,18 @@ afterEach(() => {
 
 beforeEach(() => {
     locationService.getLocation.mockResolvedValue({ id: 1, species: [], speciesRules: [] });
+    regulationService.getRegulations.mockResolvedValue([]);
+    regulationService.setFollowsRegion.mockResolvedValue(true);
 });
 
 const pike = { id: 10, name: 'Pike' };
 
 /**
  * Builds a location carrying one species and the given resolved rule.
+ *
+ * An inherited rule only reaches a water that follows its region, so the follow list is
+ * derived from the rule's source rather than passed separately — a fixture where the two
+ * disagree could not come back from the API.
  * @param {Object|null} rule - The rule for the species, or null for none.
  * @returns {Object} A location shaped like GET /api/locations/{id}.
  */
@@ -53,6 +68,7 @@ const locationWith = (rule) => ({
     region: { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 },
     species: [pike],
     speciesRules: rule ? [rule] : [],
+    followsRegionSpeciesIds: rule && rule.source !== 'Location' ? [rule.speciesId] : [],
 });
 
 const inheritedRule = {
@@ -106,12 +122,19 @@ const click = async (name) => {
 };
 
 describe('EditRegulationsPanel', () => {
-    it('offers an override rather than an edit for an inherited rule', () => {
+    it('offers a custom rule rather than an edit for an inherited rule', () => {
         // Editing the region's rule here would change every water under it.
         renderPanel(locationWith(inheritedRule));
 
-        expect(screen.getByRole('button', { name: /Override for this water/ })).toBeTruthy();
+        expect(screen.getByRole('button', { name: /Custom rule/ })).toBeTruthy();
         expect(screen.queryByRole('button', { name: /^Edit rule/ })).toBeNull();
+    });
+
+    it('shows which of the three states a species is in', () => {
+        renderPanel(locationWith(inheritedRule));
+
+        expect(screen.getByRole('button', { name: /Follow region/ }).getAttribute('aria-pressed')).toBe('true');
+        expect(screen.getByRole('button', { name: /Not set/ }).getAttribute('aria-pressed')).toBe('false');
     });
 
     it('locks a rule shared with other waters and says how many', () => {
@@ -122,23 +145,19 @@ describe('EditRegulationsPanel', () => {
         expect(screen.queryByRole('button', { name: /Revert/ })).toBeNull();
     });
 
-    it('names what a revert would fall back to', () => {
+    it('names what leaving a custom rule would fall back to', async () => {
         renderPanel(locationWith(ownRule));
 
-        expect(screen.getByRole('button', { name: /Revert to inherited rule/ })).toBeTruthy();
-    });
+        await click(/Follow region/);
 
-    it('offers removal instead of revert when nothing would take over', () => {
-        renderPanel(locationWith({ ...ownRule, fallsBackTo: null }));
-
-        expect(screen.getByRole('button', { name: /Remove rule/ })).toBeTruthy();
+        expect(screen.getByText(/fall back to the Uusimaa ELY rule/)).toBeTruthy();
     });
 
     it('hides every action from a user who cannot write regulations', () => {
         renderPanel(locationWith(ownRule), false);
 
         expect(screen.queryByRole('button', { name: /Edit rule/ })).toBeNull();
-        expect(screen.queryByRole('button', { name: /Revert/ })).toBeNull();
+        expect(screen.queryByRole('button', { name: /Follow region/ })).toBeNull();
         // The rule itself still reads — only the actions are withheld.
         expect(screen.getByText('Min 50 cm')).toBeTruthy();
     });
@@ -147,7 +166,7 @@ describe('EditRegulationsPanel', () => {
         regulationService.createRegulation.mockResolvedValue({ id: 200 });
         renderPanel(locationWith(inheritedRule));
 
-        await click(/Override for this water/);
+        await click(/Custom rule/);
         await click(/Save rule/);
 
         expect(regulationService.createRegulation).toHaveBeenCalledTimes(1);
@@ -175,30 +194,46 @@ describe('EditRegulationsPanel', () => {
         regulationService.createRegulation.mockResolvedValue(null);
         renderPanel(locationWith(inheritedRule));
 
-        await click(/Override for this water/);
+        await click(/Custom rule/);
         await click(/Save rule/);
 
         expect(showToast).toHaveBeenCalledWith('The rule could not be saved.', 'error');
         expect(locationService.getLocation).not.toHaveBeenCalled();
     });
 
-    it('deletes the local rule on a confirmed revert', async () => {
+    it('deletes the local rule before the water can follow its region again', async () => {
+        // Ordering is not incidental: the backend refuses to start following while the
+        // water still has its own rule for that species.
         regulationService.deleteRegulation.mockResolvedValue(true);
         renderPanel(locationWith(ownRule));
 
-        await click(/Revert to inherited rule/);
-        await click(/Yes, revert/);
+        await click(/Follow region/);
+        await click(/Yes, delete it/);
 
         expect(regulationService.deleteRegulation).toHaveBeenCalledWith(101);
+        expect(regulationService.setFollowsRegion).toHaveBeenCalledWith(1, 10, true);
     });
 
-    it('does not delete anything when the revert is dismissed', async () => {
+    it('does not delete anything when leaving a custom rule is dismissed', async () => {
         renderPanel(locationWith(ownRule));
 
-        await click(/Revert to inherited rule/);
-        await click(/Keep/);
+        await click(/Follow region/);
+        await click(/Keep the rule/);
 
         expect(regulationService.deleteRegulation).not.toHaveBeenCalled();
+        expect(regulationService.setFollowsRegion).not.toHaveBeenCalled();
+    });
+
+    it('does not start following when deleting the custom rule failed', async () => {
+        // Otherwise the backend rejects the follow and the UI reports a half-done change.
+        regulationService.deleteRegulation.mockResolvedValue(false);
+        renderPanel(locationWith(ownRule));
+
+        await click(/Follow region/);
+        await click(/Yes, delete it/);
+
+        expect(regulationService.setFollowsRegion).not.toHaveBeenCalled();
+        expect(showToast).toHaveBeenCalledWith('The rule could not be removed.', 'error');
     });
 
     it('says so when the water lists no species yet', () => {
@@ -218,23 +253,25 @@ describe('EditRegulationsPanel', () => {
         const clipped = { ...inheritedRule, regulationId: 301, adiposeFin: 'Clipped', minimumSizeCm: 50 };
 
         /** A location whose one species resolves to several rules. */
-        const locationWithRules = (...rules) => ({ ...locationWith(null), speciesRules: rules });
+        const locationWithRules = (...rules) => ({
+            ...locationWith(null),
+            speciesRules: rules,
+            followsRegionSpeciesIds: rules.some(r => r.source !== 'Location') ? [10] : [],
+        });
 
         it('gives each fin state its own row', () => {
             renderPanel(locationWithRules(intact, clipped));
 
             expect(screen.getByText('Adipose fin intact')).toBeTruthy();
             expect(screen.getByText('Adipose fin clipped')).toBeTruthy();
-            expect(screen.getAllByRole('button', { name: /Override for this water/ })).toHaveLength(2);
         });
 
-        it('overrides one variant without opening the other', async () => {
+        it('offers the state choice once for the species, not once per variant', () => {
+            // The decision is about the species. Two controls would let a water follow for
+            // one fin state and not the other, which the model does not represent.
             renderPanel(locationWithRules(intact, clipped));
 
-            const overrides = screen.getAllByRole('button', { name: /Override for this water/ });
-            await act(async () => { overrides[1].click(); });
-
-            expect(screen.getAllByRole('button', { name: /Save rule/ })).toHaveLength(1);
+            expect(screen.getAllByRole('button', { name: /Follow region/ })).toHaveLength(1);
         });
 
         it('keeps the fin state when overriding, rather than widening the rule', async () => {
@@ -244,8 +281,7 @@ describe('EditRegulationsPanel', () => {
             regulationService.createRegulation.mockResolvedValue({ id: 400 });
             renderPanel(locationWithRules(intact, clipped));
 
-            const overrides = screen.getAllByRole('button', { name: /Override for this water/ });
-            await act(async () => { overrides[0].click(); });
+            await click(/Custom rule/);
             await click(/Save rule/);
 
             const draft = regulationService.createRegulation.mock.calls[0][0];
@@ -280,21 +316,82 @@ describe('EditRegulationsPanel', () => {
             }));
         });
 
-        it('reverts only the variant it was asked to', async () => {
+        it('removes every custom rule for the species when it stops being custom', async () => {
+            // The state is per species, so leaving Custom cannot leave one variant's rule
+            // behind — the species would then be half custom and half something else.
             regulationService.deleteRegulation.mockResolvedValue(true);
-            const ownClipped = {
+            const own = (id, fin) => ({
                 ...clipped,
-                regulationId: 302,
+                regulationId: id,
+                adiposeFin: fin,
                 locationIds: [1],
                 source: 'Location',
                 fallsBackTo: null,
-            };
-            renderPanel(locationWithRules(intact, ownClipped));
+            });
+            renderPanel(locationWithRules(own(302, 'Clipped'), own(303, 'Intact')));
 
-            await click(/Remove rule/);
-            await click(/Yes, revert/);
+            await click(/Not set/);
+            await click(/Yes, delete it/);
 
             expect(regulationService.deleteRegulation).toHaveBeenCalledWith(302);
+            expect(regulationService.deleteRegulation).toHaveBeenCalledWith(303);
+        });
+    });
+
+    describe('opt-in inheritance', () => {
+        /** A location whose species has no decision recorded at all. */
+        const undecided = { ...locationWith(null), speciesRules: [], followsRegionSpeciesIds: [] };
+
+        it('warns that an undecided species publishes nothing, without implying it is unrestricted', () => {
+            renderPanel(undecided);
+
+            expect(screen.getByText(/Nothing is published for this species here/)).toBeTruthy();
+            expect(screen.getByText(/National and regional rules still apply/)).toBeTruthy();
+        });
+
+        it('starts a species following its region on request', async () => {
+            renderPanel(undecided);
+
+            await click(/Follow region/);
+
+            expect(regulationService.setFollowsRegion).toHaveBeenCalledWith(1, 10, true);
+            // Nothing to delete — going from undecided destroys nothing, so no confirmation.
+            expect(regulationService.deleteRegulation).not.toHaveBeenCalled();
+        });
+
+        it('stops a following species without deleting anything', async () => {
+            renderPanel(locationWith(inheritedRule));
+
+            await click(/Not set/);
+
+            expect(regulationService.setFollowsRegion).toHaveBeenCalledWith(1, 10, false);
+            expect(regulationService.deleteRegulation).not.toHaveBeenCalled();
+        });
+
+        it('seeds a custom rule for an undecided species from what it would inherit', async () => {
+            // Nothing resolves for an undecided species, so the seed has to come from the
+            // region cascade computed here — otherwise the form opens blank.
+            regulationService.getRegulations.mockResolvedValue([
+                { id: 77, speciesId: 10, regionId: 5, minimumSizeCm: 35, protectedPeriods: [] },
+            ]);
+            regulationService.createRegulation.mockResolvedValue({ id: 500 });
+            renderPanel(undecided);
+            // The seed needs both the region list and the regulations to have arrived.
+            await act(async () => {});
+
+            await click(/Custom rule/);
+            await click(/Save rule/);
+
+            expect(regulationService.createRegulation.mock.calls[0][0].minimumSizeCm).toBe(35);
+        });
+
+        it('reports a failed state change rather than showing it as done', async () => {
+            regulationService.setFollowsRegion.mockResolvedValue(false);
+            renderPanel(undecided);
+
+            await click(/Follow region/);
+
+            expect(showToast).toHaveBeenCalledWith('The change could not be saved.', 'error');
         });
     });
 });

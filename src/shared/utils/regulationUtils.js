@@ -2,6 +2,7 @@ import {
     REGION_TYPE_LABELS,
     RULE_SOURCE,
     RULE_SOURCE_REGION_PREFIX,
+    RULE_STATE,
     BAG_LIMIT_BASIS_LABELS,
     ADIPOSE_FIN_LABELS,
     ADIPOSE_FIN_HINTS,
@@ -77,6 +78,33 @@ export const getRegionTypeLabel = (type) => {
     // Own-property check: `type` comes off the wire, and a plain index would
     // happily resolve inherited keys like 'constructor' to something truthy.
     return Object.hasOwn(REGION_TYPE_LABELS, type) ? REGION_TYPE_LABELS[type] : null;
+};
+
+/**
+ * What has been decided about one species at one water.
+ *
+ * Reads the two halves the location endpoint returns: a rule sourced from the water itself
+ * means a custom rule, an id in `followsRegionSpeciesIds` means it inherits, and neither
+ * means nobody has decided. The last one cannot be inferred from an empty rule list alone —
+ * a species that follows a region setting no rule also has none — which is exactly the
+ * confusion this function exists to prevent.
+ * @param {number} speciesId - The species.
+ * @param {Array<Object>} [rules] - The water's resolved rules for that species.
+ * @param {Array<number>} [followsRegionSpeciesIds] - Species the water inherits rules for.
+ * @returns {string} One of RULE_STATE.
+ */
+export const getSpeciesRuleState = (speciesId, rules = [], followsRegionSpeciesIds = []) => {
+    // Custom wins the check, though the backend keeps the two exclusive: a rule written for
+    // this water is a decision already made, whatever else is recorded.
+    if (rules.some(rule => getRuleSourceKind(rule?.source) === 'location')) {
+        return RULE_STATE.CUSTOM;
+    }
+
+    if (followsRegionSpeciesIds.includes(speciesId)) {
+        return RULE_STATE.FOLLOWS;
+    }
+
+    return RULE_STATE.UNDECIDED;
 };
 
 /**

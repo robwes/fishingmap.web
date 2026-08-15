@@ -21,6 +21,7 @@ import {
     getAdiposeFinLabel,
     getAdiposeFinHint,
     getRuleKey,
+    getSpeciesRuleState,
 } from './regulationUtils';
 
 const winterClosure = { startMonth: 12, startDay: 1, endMonth: 1, endDay: 31 };
@@ -509,6 +510,44 @@ describe('getAdiposeFinHint', () => {
 
     it('has nothing to gloss when the rule does not distinguish', () => {
         expect(getAdiposeFinHint(null)).toBeNull();
+    });
+});
+
+describe('getSpeciesRuleState', () => {
+    const inherited = { speciesId: 10, source: 'Region: Uusimaa ELY' };
+    const own = { speciesId: 10, source: 'Location' };
+
+    it('is custom when the water has its own rule', () => {
+        expect(getSpeciesRuleState(10, [own], [])).toBe('custom');
+    });
+
+    it('is follows when the species is on the follow list', () => {
+        expect(getSpeciesRuleState(10, [inherited], [10])).toBe('follows');
+    });
+
+    it('is follows even when the region turns out to set no rule', () => {
+        // The case that cannot be read off the rule list: following and having nothing
+        // to inherit produces no rule at all, exactly like never having decided.
+        expect(getSpeciesRuleState(10, [], [10])).toBe('follows');
+    });
+
+    it('is undecided when nothing has been recorded', () => {
+        expect(getSpeciesRuleState(10, [], [])).toBe('undecided');
+    });
+
+    it('is undecided for a species whose follow row belongs to another species', () => {
+        expect(getSpeciesRuleState(10, [], [20])).toBe('undecided');
+    });
+
+    it('reads custom from any variant, not only the first', () => {
+        const intact = { speciesId: 10, source: 'Region: Uusimaa ELY', adiposeFin: 'Intact' };
+        const clippedOwn = { speciesId: 10, source: 'Location', adiposeFin: 'Clipped' };
+
+        expect(getSpeciesRuleState(10, [intact, clippedOwn], [])).toBe('custom');
+    });
+
+    it('survives being called with nothing', () => {
+        expect(getSpeciesRuleState(10)).toBe('undecided');
     });
 });
 

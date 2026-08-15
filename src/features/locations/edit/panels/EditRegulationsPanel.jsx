@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import RegulationRow from '@/features/locations/components/RegulationRow';
 import RegionChainNote from '@/features/locations/components/RegionChainNote';
@@ -6,7 +6,13 @@ import { regulationService } from '@/shared/services/regulationService';
 import { locationService } from '@/shared/services/locationService';
 import { useToast } from '@/shared/context/ToastContext';
 import useRegions from '@/shared/hooks/useRegions';
-import { buildRegionChain, getRuleKey } from '@/shared/utils/regulationUtils';
+import {
+    buildRegionChain,
+    getRuleKey,
+    getSpeciesRuleState,
+    resolveRegionRule,
+} from '@/shared/utils/regulationUtils';
+import { RULE_STATE } from '@/shared/constants/regulations';
 import './EditRegulationsPanel.scss';
 
 /**
@@ -59,10 +65,28 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
     const [editingKey, setEditingKey] = useState(null);
     const [draft, setDraft] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
+    // Every regulation, so a species with nothing decided can still be seeded from what it
+    // *would* inherit. The resolved rules can't supply that: they only contain species the
+    // water already follows.
+    const [regulations, setRegulations] = useState([]);
     const showToast = useToast();
     const { regions } = useRegions();
 
+    useEffect(() => {
+        (async () => setRegulations(await regulationService.getRegulations()))();
+    }, []);
+
     const rules = location.speciesRules ?? [];
+    const follows = location.followsRegionSpeciesIds ?? [];
+    const regionChain = buildRegionChain(regions, location.region?.id);
+
+    /**
+     * What the water does about one species: nothing, inherit, or its own rule.
+     * @param {number} speciesId - The species.
+     * @returns {string} One of RULE_STATE.
+     */
+    const stateFor = (speciesId) =>
+        getSpeciesRuleState(speciesId, rules.filter(r => r.speciesId === speciesId), follows);
 
     /**
      * One row per resolved rule, plus a row for species that have none, so an
@@ -96,12 +120,70 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
 
     /**
      * Opens the form for one rule, seeded from what applies today.
+     *
+     * When nothing applies yet — the species is undecided, so no rule was resolved for it —
+     * the seed comes from the region cascade computed here instead, so writing a custom rule
+     * still starts from what the water would have inherited rather than from a blank form.
      * @param {Object} species - The species being overridden.
      * @param {Object} [rule] - The rule that currently applies, if any.
      */
     const startEdit = (species, rule) => {
-        setDraft(buildDraft(species.id, location.id, rule));
+        const seed = rule ?? resolveRegionRule(regulations, regionChain, species.id)?.rule;
+        setDraft(buildDraft(species.id, location.id, seed));
         setEditingKey(getRuleKey(species.id, rule?.adiposeFin));
+    };
+
+    /**
+     * Moves a species between the three states, doing whatever that transition destroys or
+     * creates. The row confirms before anything is deleted.
+     *
+     * Order matters going to Follows: the backend refuses to start following while the water
+     * has its own rule, so the rule is deleted first. That is deliberate — it keeps the two
+     * states exclusive without letting a toggle silently discard authored work.
+     * @param {Object} species - The species being decided.
+     * @param {string} next - The chosen RULE_STATE.
+     */
+    const changeState = async (species, next) => {
+        const current = stateFor(species.id);
+        if (current === next) {
+            return;
+        }
+
+        if (next === RULE_STATE.CUSTOM) {
+            startEdit(species, rules.find(r => r.speciesId === species.id));
+            return;
+        }
+
+        setIsSaving(true);
+
+        if (current === RULE_STATE.CUSTOM) {
+            const own = rules.filter(r =>
+                r.speciesId === species.id && (r.locationIds ?? []).includes(location.id));
+            for (const rule of own) {
+                if (!await regulationService.deleteRegulation(rule.regulationId)) {
+                    setIsSaving(false);
+                    showToast('The rule could not be removed.', 'error');
+                    return;
+                }
+            }
+        }
+
+        const written = await regulationService.setFollowsRegion(
+            location.id, species.id, next === RULE_STATE.FOLLOWS);
+        if (!written) {
+            setIsSaving(false);
+            showToast('The change could not be saved.', 'error');
+            return;
+        }
+
+        const refreshed = await refreshLocation();
+        setIsSaving(false);
+        showToast(
+            refreshed
+                ? `${species.name} now ${next === RULE_STATE.FOLLOWS ? 'follows the region' : 'has no rule recorded'} here.`
+                : 'Saved, but the page could not be refreshed.',
+            refreshed ? 'success' : 'error'
+        );
     };
 
     const closeForm = () => {
@@ -140,36 +222,10 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
         );
     };
 
-    /**
-     * Deletes this water's own rule, letting whatever it shadowed apply again.
-     * @param {Object} [rule] - The resolved rule to remove.
-     */
-    const revertRule = async (rule) => {
-        if (rule?.regulationId == null) {
-            return;
-        }
-
-        setIsSaving(true);
-        const deleted = await regulationService.deleteRegulation(rule.regulationId);
-
-        if (!deleted) {
-            setIsSaving(false);
-            showToast('The rule could not be removed.', 'error');
-            return;
-        }
-
-        const refreshed = await refreshLocation();
-        setIsSaving(false);
-        showToast(
-            refreshed ? 'Rule removed from this water.' : 'Rule removed, but the page could not be refreshed.',
-            refreshed ? 'success' : 'error'
-        );
-    };
-
     return (
         <div className="reg-panel">
             <div className="reg-panel-intro">
-                <RegionChainNote regions={buildRegionChain(regions, location.region?.id)} />
+                <RegionChainNote regions={regionChain} />
                 <p className="reg-panel-note">
                     <i className="fa-solid fa-circle-info"></i>
                     Regional and national rules are maintained centrally. Here you can make this
@@ -184,13 +240,17 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
                 </p>
             ) : (
                 <ul className="reg-list">
-                    {buildRows().map(({ species, rule }) => {
+                    {buildRows().map(({ species, rule }, index, rows) => {
                         const key = getRuleKey(species.id, rule?.adiposeFin);
                         return (
                             <RegulationRow
                                 key={key}
                                 species={species}
                                 rule={rule}
+                                state={stateFor(species.id)}
+                                // The state is a fact about the species, not about one of its
+                                // fin variants, so only the first row of a species offers it.
+                                showStateChoice={rows.findIndex(r => r.species.id === species.id) === index}
                                 locationId={location.id}
                                 canEdit={canEdit}
                                 isEditing={editingKey === key}
@@ -199,7 +259,7 @@ function EditRegulationsPanel({ location, canEdit, onLocationUpdated }) {
                                 onEdit={() => startEdit(species, rule)}
                                 onSave={saveDraft}
                                 onCancel={closeForm}
-                                onRevert={() => revertRule(rule)}
+                                onStateChange={(next) => changeState(species, next)}
                                 isSaving={isSaving}
                             />
                         );

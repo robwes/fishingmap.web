@@ -54,6 +54,22 @@ export const RULE_SOURCE = {
 export const RULE_SOURCE_REGION_PREFIX = 'Region: ';
 
 /**
+ * What an administrator has decided about one species at one water.
+ *
+ * Inheritance is opt-in: a water does **not** take its region's rules just by sitting in a
+ * region. `UNDECIDED` is a real state, not an error — it means nobody has looked yet, and
+ * it must never be presented as "no restrictions", because national and regional rules
+ * still apply to the water whether or not anyone has recorded them here.
+ *
+ * See decision 11 in robwes/fishingmap.web#13.
+ */
+export const RULE_STATE = {
+    CUSTOM: 'custom',
+    FOLLOWS: 'follows',
+    UNDECIDED: 'undecided',
+};
+
+/**
  * Which fish a rule covers, when it distinguishes them by adipose fin. Wild
  * trout and salmon keep the fin; hatchery fish are clipped before release, and
  * the decree treats the two as different fish — in Uusimaa an intact-finned

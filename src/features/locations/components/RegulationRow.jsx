@@ -4,6 +4,7 @@ import RuleAlerts from '@/shared/components/regulations/RuleAlerts';
 import RuleFacts from '@/shared/components/regulations/RuleFacts';
 import RuleNotes from '@/shared/components/regulations/RuleNotes';
 import RegulationForm from '@/shared/components/regulations/RegulationForm';
+import RuleStateChoice from './RuleStateChoice';
 import {
     getRuleSourceKind,
     getRuleSourceLabel,
@@ -11,6 +12,7 @@ import {
     getAdiposeFinHint,
     hasRestrictions,
 } from '@/shared/utils/regulationUtils';
+import { RULE_STATE } from '@/shared/constants/regulations';
 import './RegulationRow.scss';
 
 /**
@@ -28,8 +30,14 @@ import './RegulationRow.scss';
  *   many-to-many, so saving here would silently rewrite the rule at those other
  *   waters. Rendered read-only with a note saying so.
  *
+ * A fourth possibility sits underneath all three: nothing decided at all. Inheritance is
+ * opt-in, so a species reaches this row with no rule and no decision, and the state choice
+ * at the top is how one gets made.
+ *
  * @param {Object} species - The species, with id and name.
  * @param {Object} [rule] - The resolved rule for this species at this water.
+ * @param {string} [state] - One of RULE_STATE.
+ * @param {boolean} [showStateChoice] - Whether this row owns the species-level state control.
  * @param {number} locationId - The water being edited.
  * @param {boolean} canEdit - Whether the current user may write regulations.
  * @param {boolean} isEditing - Whether this row's form is open.
@@ -38,13 +46,16 @@ import './RegulationRow.scss';
  * @param {Function} onEdit - Opens this row's form.
  * @param {Function} onSave - Saves the draft.
  * @param {Function} onCancel - Closes the form without saving.
- * @param {Function} onRevert - Deletes the local rule.
+ * @param {Function} [onStateChange] - Called with the chosen RULE_STATE. Leaving Custom
+ *   deletes this water's rule, so that transition is confirmed here first.
  * @param {boolean} [isSaving] - Whether a save or revert is in flight.
  * @param {Date} [today] - Reference date, injectable for tests.
  */
 function RegulationRow({
     species,
     rule,
+    state = RULE_STATE.UNDECIDED,
+    showStateChoice = true,
     locationId,
     canEdit,
     isEditing,
@@ -53,11 +64,13 @@ function RegulationRow({
     onEdit,
     onSave,
     onCancel,
-    onRevert,
+    onStateChange,
     isSaving = false,
     today = new Date(),
 }) {
-    const [isConfirmingRevert, setIsConfirmingRevert] = useState(false);
+    // The state the user picked but hasn't confirmed. Only set when leaving Custom, which
+    // deletes an authored rule — the other transitions destroy nothing and go straight through.
+    const [pendingState, setPendingState] = useState(null);
 
     const isLocal = getRuleSourceKind(rule?.source) === 'location';
     const otherWaters = (rule?.locationIds ?? []).filter(id => id !== locationId);
@@ -66,6 +79,19 @@ function RegulationRow({
     const fallbackLabel = getRuleSourceLabel(rule?.fallsBackTo?.source);
     const finLabel = getAdiposeFinLabel(rule?.adiposeFin);
     const finHint = getAdiposeFinHint(rule?.adiposeFin);
+
+    /**
+     * Applies a state change, asking first when it would throw away this water's own rule.
+     * @param {string} next - The chosen RULE_STATE.
+     */
+    const requestStateChange = (next) => {
+        if (state === RULE_STATE.CUSTOM && next !== RULE_STATE.CUSTOM) {
+            setPendingState(next);
+            return;
+        }
+
+        onStateChange(next);
+    };
 
     const classNames = ['reg-row'];
     if (isLocal) {
@@ -93,10 +119,57 @@ function RegulationRow({
                         {finHint && <span className="reg-row-fin-hint">{finHint}</span>}
                     </span>
                 )}
-                {isRegulated
-                    ? <RuleSourceBadge source={rule.source} />
-                    : <span className="rule-source">Not regulated</span>}
+                {rule
+                    ? (isRegulated
+                        ? <RuleSourceBadge source={rule.source} />
+                        : <span className="rule-source">No limits set</span>)
+                    : <span className="rule-source">{state === RULE_STATE.FOLLOWS ? 'Nothing inherited' : 'Not set'}</span>}
             </div>
+
+            {showStateChoice && canEdit && !isEditing && (
+                <>
+                    <RuleStateChoice
+                        value={state}
+                        disabled={isSaving || pendingState != null}
+                        onChange={requestStateChange}
+                        customHint={isSharedWithOtherWaters
+                            ? 'This rule is shared with other waters — edit it where it is managed.'
+                            : undefined}
+                    />
+                    {pendingState && (
+                        <span className="reg-confirm">
+                            <span>
+                                {pendingState === RULE_STATE.FOLLOWS
+                                    ? `Delete this water's own rule and ${fallbackLabel ? `fall back to the ${fallbackLabel} rule` : 'follow its region'}?`
+                                    : 'Delete this water’s own rule and leave the species undecided?'}
+                            </span>
+                            <button
+                                type="button"
+                                className="reg-action is-danger"
+                                disabled={isSaving}
+                                onClick={() => { const next = pendingState; setPendingState(null); onStateChange(next); }}>
+                                Yes, delete it
+                            </button>
+                            <button
+                                type="button"
+                                className="reg-action is-quiet"
+                                onClick={() => setPendingState(null)}>
+                                Keep the rule
+                            </button>
+                        </span>
+                    )}
+                </>
+            )}
+
+            {state === RULE_STATE.UNDECIDED && !isEditing && (
+                <p className="reg-unrecorded-note">
+                    <i className="fa-solid fa-triangle-exclamation"></i>
+                    <span>
+                        Nothing is published for this species here. National and regional
+                        rules still apply to this water — choose whether it follows them.
+                    </span>
+                </p>
+            )}
 
             {isEditing ? (
                 <RegulationForm
@@ -131,50 +204,14 @@ function RegulationRow({
                         </p>
                     )}
 
-                    {canEdit && !isSharedWithOtherWaters && (
+                    {/* Only editing lives here now. Every transition between the three
+                        states goes through RuleStateChoice above, so there is one place
+                        that answers "what does this water do about this species". */}
+                    {canEdit && isLocal && !isSharedWithOtherWaters && (
                         <div className="reg-row-actions">
-                            {isLocal ? (
-                                <>
-                                    <button type="button" className="reg-action" disabled={isSaving} onClick={onEdit}>
-                                        <i className="fa-solid fa-pen"></i>Edit rule
-                                    </button>
-                                    {isConfirmingRevert ? (
-                                        <span className="reg-confirm">
-                                            <span>
-                                                {fallbackLabel
-                                                    ? `Fall back to the ${fallbackLabel} rule?`
-                                                    : 'Remove this rule entirely?'}
-                                            </span>
-                                            <button
-                                                type="button"
-                                                className="reg-action is-danger"
-                                                disabled={isSaving}
-                                                onClick={() => { setIsConfirmingRevert(false); onRevert(); }}>
-                                                Yes, revert
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="reg-action is-quiet"
-                                                onClick={() => setIsConfirmingRevert(false)}>
-                                                Keep
-                                            </button>
-                                        </span>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            className="reg-action is-quiet"
-                                            disabled={isSaving}
-                                            onClick={() => setIsConfirmingRevert(true)}>
-                                            <i className="fa-solid fa-rotate-left"></i>
-                                            {fallbackLabel ? 'Revert to inherited rule' : 'Remove rule'}
-                                        </button>
-                                    )}
-                                </>
-                            ) : (
-                                <button type="button" className="reg-action" disabled={isSaving} onClick={onEdit}>
-                                    <i className="fa-solid fa-location-dot"></i>Override for this water
-                                </button>
-                            )}
+                            <button type="button" className="reg-action" disabled={isSaving} onClick={onEdit}>
+                                <i className="fa-solid fa-pen"></i>Edit rule
+                            </button>
                         </div>
                     )}
                 </>

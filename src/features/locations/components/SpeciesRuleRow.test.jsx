@@ -80,11 +80,55 @@ describe('SpeciesRuleRow', () => {
         expect(screen.getByText('Report catch')).toBeTruthy();
     });
 
-    it('says so plainly when a species carries no rule at all', () => {
+    it('never reads as unrestricted when nobody has recorded a decision', () => {
+        // The dangerous case. Absence of a rule is absence of an answer, not an
+        // answer of "no limits" — national rules still apply to the water.
         const row = renderRow();
 
+        expect(screen.queryByText('No size or bag limits')).toBeNull();
+        expect(screen.getByText(/No rule recorded for this water/)).toBeTruthy();
+        expect(screen.getByText(/National and regional rules still apply/)).toBeTruthy();
+        expect(row.className).toContain('is-unrecorded');
+        expect(row.className).not.toContain('is-unregulated');
+    });
+
+    it('says a following species inherits nothing, which is a checked answer', () => {
+        const { container } = render(
+            <MemoryRouter>
+                <ul>
+                    <SpeciesRuleRow
+                        species={pike}
+                        rules={[]}
+                        state="follows"
+                        regionName="Espoo lakes"
+                        today={summerDay}
+                    />
+                </ul>
+            </MemoryRouter>
+        );
+
+        expect(screen.getByText(/Follows Espoo lakes — no rule set there or above/)).toBeTruthy();
+        expect(screen.queryByText(/No rule recorded/)).toBeNull();
+        expect(container.querySelector('.species-rule-row').className).not.toContain('is-unrecorded');
+    });
+
+    it('falls back to naming the national rules when the water has no region', () => {
+        render(
+            <MemoryRouter>
+                <ul>
+                    <SpeciesRuleRow species={pike} rules={[]} state="follows" today={summerDay} />
+                </ul>
+            </MemoryRouter>
+        );
+
+        expect(screen.getByText(/Follows the national rules/)).toBeTruthy();
+    });
+
+    it('still says "no size or bag limits" for a rule that genuinely sets none', () => {
+        // An empty rule is an answer somebody recorded, unlike the two states above.
+        renderRow(rule());
+
         expect(screen.getByText('No size or bag limits')).toBeTruthy();
-        expect(row.className).toContain('is-unregulated');
     });
 
     it('treats a rule with every field empty as unregulated', () => {

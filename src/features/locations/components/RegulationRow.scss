@@ -98,6 +98,24 @@
     color: var(--clr-secondary-text);
 }
 
+/* A species nobody has decided on. Louder than reg-locked-note because it is not a
+   constraint being explained, it is a gap in what the water publishes. */
+.reg-unrecorded-note {
+    display: flex;
+    gap: 0.6em;
+    padding: 0.5em 0.7em;
+    border-radius: var(--radius-input);
+    background-color: var(--clr-secondary);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--clr-secondary-text);
+
+    i {
+        margin-top: 0.25em;
+        color: var(--clr-danger);
+    }
+}
+
 .reg-locked-note {
     display: flex;
     gap: 0.6em;
