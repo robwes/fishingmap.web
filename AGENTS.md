@@ -111,6 +111,25 @@ New list filters should extend this pattern, not reintroduce per-page `patchPara
 
 Formik + Yup for add/edit flows. `AddLocation` is a four-step wizard (`src/features/locations/add/steps/`), edit pages use per-section panels; `PermitForm` (`src/features/permits/components/`) is shared by the permit add/edit pages. The old shared `LocationForm`/`SpeciesForm` components were removed in July 2026 — don't resurrect them from git history.
 
+### Empty states: say what the database holds, never what the world contains
+
+This app publishes fishing law. An empty query result means **nobody has entered that yet** — it never means the rule doesn't exist, and writing copy that says otherwise tells an angler a protected fish is fair game.
+
+The mistake is easy to make because the false sentence is the more natural English. It has been made four times so far:
+
+| Wrong | Right |
+|---|---|
+| No size or bag limits | No rule recorded for this water. National and regional rules still apply — check before you fish. |
+| No region sets its own rule — the national baseline applies everywhere | No regional rules recorded for this species |
+| No national rule — only the regional rules below apply | No national rule recorded for this species |
+| Not part of a region — national rules apply | Not part of a region — it can only inherit the national rules |
+
+Three rules that follow from it:
+
+- **Describe the record, not the law.** "recorded", "set here", "entered" — not "there is no", "applies", "only X applies".
+- **Distinguish an empty answer from a missing one.** A rule someone saved with no limits *is* an answer and may say "No size or bag limits". A species nobody has touched is not, and must say so. `getSpeciesRuleState` exists because the two are indistinguishable from the rule list alone.
+- **A screen that shows a subset must say so.** Species details omits per-water rules entirely, so it carries a standing caveat; without one, a page reads as the complete answer.
+
 ### Styling
 
 SCSS modules per component, imported alongside the JSX. Vite is configured to use the modern Sass compiler API (`api: 'modern-compiler'` in `vite.config.js`). Global styles in `src/index.scss`.
