@@ -25,11 +25,14 @@ import './SpeciesRuleRow.scss';
  */
 function NoRuleNote({ state, regionName }) {
     if (state === RULE_STATE.FOLLOWS) {
+        // "None recorded", not "none exists". This water is set to inherit and nothing has
+        // been entered up the chain, which is a gap in our data rather than a statement
+        // that the species is unregulated.
         return (
             <p className="rule-none">
                 {regionName
-                    ? <>Follows {regionName} — no rule set there or above.</>
-                    : <>Follows the national rules — none set for this species.</>}
+                    ? <>Follows {regionName} — no rule recorded there or above.</>
+                    : <>Follows the national rules — none recorded for this species.</>}
             </p>
         )
     }

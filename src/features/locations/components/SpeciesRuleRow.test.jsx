@@ -107,7 +107,9 @@ describe('SpeciesRuleRow', () => {
             </MemoryRouter>
         );
 
-        expect(screen.getByText(/Follows Espoo lakes — no rule set there or above/)).toBeTruthy();
+        // "Recorded", not "set" or "exists": nothing entered up the chain is a gap in our
+        // data, not a statement that the species is unregulated.
+        expect(screen.getByText(/Follows Espoo lakes — no rule recorded there or above/)).toBeTruthy();
         expect(screen.queryByText(/No rule recorded/)).toBeNull();
         expect(container.querySelector('.species-rule-row').className).not.toContain('is-unrecorded');
     });

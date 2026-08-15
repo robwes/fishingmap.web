@@ -82,15 +82,25 @@ describe('SpeciesRegulationsOverview', () => {
     it('says what is missing rather than leaving a tier blank', async () => {
         await renderOverview([elyRule]);
 
-        expect(screen.getByText(/No national rule/)).toBeTruthy();
+        expect(screen.getByText(/No national rule recorded/)).toBeTruthy();
     });
 
     it('handles a species with no rules anywhere', async () => {
         await renderOverview([]);
 
         expect(cardTitles()).toEqual([]);
-        expect(screen.getByText(/No national rule/)).toBeTruthy();
-        expect(screen.getByText(/No region sets its own rule/)).toBeTruthy();
+        expect(screen.getByText(/No national rule recorded/)).toBeTruthy();
+        expect(screen.getByText(/No regional rules recorded/)).toBeTruthy();
+    });
+
+    it('describes an empty tier as missing data, not as an absent law', async () => {
+        // An empty table means nobody has entered the rule, which is not the same as the
+        // rule not existing — and the second reading is the dangerous one.
+        await renderOverview([]);
+
+        expect(screen.queryByText(/the national baseline applies everywhere/)).toBeNull();
+        expect(screen.queryByText(/only the regional rules/i)).toBeNull();
+        expect(screen.getByText(/Only the rules recorded here are shown/)).toBeTruthy();
     });
 
     it('renders the restrictions on each rule', async () => {
@@ -112,7 +122,7 @@ describe('SpeciesRegulationsOverview', () => {
         it('says individual waters can differ, so the page does not read as complete', async () => {
             await renderOverview([nationalRule]);
 
-            expect(screen.getByText(/Individual waters can set their own rules/)).toBeTruthy();
+            expect(screen.getByText(/individual waters can set their own/)).toBeTruthy();
             expect(screen.getByText(/Check the page for the water you are fishing/)).toBeTruthy();
         });
 

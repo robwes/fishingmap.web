@@ -20,7 +20,7 @@ function RegionChainNote({ regions }) {
         return (
             <p className="region-chain is-empty">
                 <i className="fa-solid fa-circle-info"></i>
-                Not part of a region — national rules apply.
+                Not part of a region — it can only inherit the national rules.
             </p>
         )
     }
@@ -28,7 +28,9 @@ function RegionChainNote({ regions }) {
     return (
         <p className="region-chain">
             <i className="fa-solid fa-sitemap"></i>
-            <span className="region-chain-label">Rules inherited from</span>
+            {/* "Can inherit", not "inherits": inheritance is opt-in per species, so a chain
+                here says what is available to follow, not what this water has taken. */}
+            <span className="region-chain-label">Can inherit from</span>
             {chain.map((region, index) => (
                 <span key={region.id} className="region-chain-step">
                     {index > 0 && <i className="fa-solid fa-chevron-right region-chain-sep"></i>}

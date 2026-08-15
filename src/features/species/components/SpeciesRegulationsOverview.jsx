@@ -61,8 +61,12 @@ function SpeciesRegulationsOverview({ speciesId }) {
                         <ScopeRuleCard key={rule.id} title="All of Finland" rule={rule} />
                     ))
                     : (
+                        // States what we hold, not what the law says. "Only the regional
+                        // rules apply" would be a claim about Finnish law inferred from an
+                        // empty table, and a national rule we simply haven't entered yet
+                        // still binds the angler reading this.
                         <p className="species-regs-empty">
-                            No national rule — only the regional rules below apply.
+                            No national rule recorded for this species.
                         </p>
                     )}
             </div>
@@ -82,18 +86,21 @@ function SpeciesRegulationsOverview({ speciesId }) {
                     ))
                     : (
                         <p className="species-regs-empty">
-                            No region sets its own rule — the national baseline applies everywhere.
+                            No regional rules recorded for this species.
                         </p>
                     )}
             </div>
 
-            {/* Says what this page leaves out. Without it the page reads as the complete
-                answer, and an individual water can be stricter than anything above. */}
+            {/* Carries the general limitation once, so each tier above can state a plain
+                fact about our records instead of hedging three times. Without it the page
+                reads as the complete answer: an individual water can be stricter than
+                anything shown, and an empty tier means nothing has been entered — not that
+                no such rule exists. */}
             <p className="species-regs-caveat">
                 <i className="fa-solid fa-circle-info"></i>
                 <span>
-                    Individual waters can set their own rules, and some do. Check the page for the
-                    water you are fishing before you go.
+                    Only the rules recorded here are shown, and individual waters can set their
+                    own. Check the page for the water you are fishing before you go.
                 </span>
             </p>
         </section>
