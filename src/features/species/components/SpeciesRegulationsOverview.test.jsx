@@ -9,7 +9,7 @@ import { regulationService } from '@/shared/services/regulationService';
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock('@/shared/services/regulationService', () => ({
-    regulationService: { getRegulationsForSpecies: vi.fn() },
+    regulationService: { getRegionRulesForSpecies: vi.fn() },
 }));
 
 afterEach(() => {
@@ -17,40 +17,29 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-/** A regulation with every restriction unset. */
+const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
+const uusimaa = { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 };
+
+/** A region-scoped regulation with every restriction unset. */
 const rule = (id, overrides = {}) => ({
     id,
     speciesId: 10,
-    region: null,
-    locations: [],
+    region: finland,
+    adiposeFin: null,
     minimumSizeCm: null,
     maximumSizeCm: null,
     bagLimit: null,
     bagLimitBasis: null,
     isCatchAndReleaseOnly: false,
+    isFullyProtected: false,
     mustReportCatch: false,
     additionalRules: null,
     protectedPeriods: [],
     ...overrides,
 });
 
-const nationalRule = rule(900, {
-    region: { id: 1, name: 'Finland', type: 'Root', parentRegionId: null },
-    minimumSizeCm: 40,
-});
-const elyRule = rule(901, {
-    region: { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 },
-    minimumSizeCm: 60,
-});
-const oneWaterRule = rule(902, {
-    locations: [{ id: 7, name: 'Kalajärvi' }],
-    isCatchAndReleaseOnly: true,
-});
-const sharedWaterRule = rule(903, {
-    locations: [{ id: 7, name: 'Kalajärvi' }, { id: 8, name: 'Bodom' }],
-    bagLimit: 2,
-    bagLimitBasis: 'Day',
-});
+const nationalRule = rule(900, { minimumSizeCm: 40 });
+const elyRule = rule(901, { region: uusimaa, minimumSizeCm: 60 });
 
 let container;
 
@@ -59,7 +48,7 @@ let container;
  * @param {Array<Object>} regulations - What the endpoint returns.
  */
 const renderOverview = async (regulations) => {
-    regulationService.getRegulationsForSpecies.mockResolvedValue(regulations);
+    regulationService.getRegionRulesForSpecies.mockResolvedValue(regulations);
     await act(async () => {
         ({ container } = render(
             <MemoryRouter><SpeciesRegulationsOverview speciesId={10} /></MemoryRouter>
@@ -73,46 +62,27 @@ const cardTitles = () =>
 
 describe('SpeciesRegulationsOverview', () => {
     beforeEach(() => {
-        regulationService.getRegulationsForSpecies.mockResolvedValue([]);
+        regulationService.getRegionRulesForSpecies.mockResolvedValue([]);
     });
 
-    it('splits the rules into national, regional and per-water tiers', async () => {
-        await renderOverview([nationalRule, elyRule, oneWaterRule]);
+    it('splits the rules into national and regional tiers', async () => {
+        await renderOverview([nationalRule, elyRule]);
 
-        expect(cardTitles()).toEqual(['All of Finland', 'Uusimaa ELY', 'Kalajärvi']);
+        expect(cardTitles()).toEqual(['All of Finland', 'Uusimaa ELY']);
     });
 
     it('keeps the order the API returned rather than re-sorting', async () => {
-        // The endpoint already orders national -> regions by tier -> waters.
-        const otherEly = rule(904, {
-            region: { id: 3, name: 'Ahvenanmaa ELY', type: 'Ely', parentRegionId: 1 },
-        });
+        // The endpoint already orders national -> regions by tier.
+        const otherEly = rule(904, { region: { id: 3, name: 'Ahvenanmaa ELY', type: 'Ely', parentRegionId: 1 } });
         await renderOverview([nationalRule, elyRule, otherEly]);
 
         expect(cardTitles()).toEqual(['All of Finland', 'Uusimaa ELY', 'Ahvenanmaa ELY']);
-    });
-
-    it('labels a rule covering several waters by their count', async () => {
-        await renderOverview([sharedWaterRule]);
-
-        expect(cardTitles()).toEqual(['2 waters']);
-        expect(screen.getByText('Shared rule')).toBeTruthy();
-    });
-
-    it('links the waters a local rule applies to', async () => {
-        await renderOverview([sharedWaterRule]);
-
-        expect(screen.getByRole('link', { name: 'Kalajärvi' })).toHaveProperty(
-            'href', expect.stringContaining('/locations/7')
-        );
-        expect(screen.getByRole('link', { name: 'Bodom' })).toBeTruthy();
     });
 
     it('says what is missing rather than leaving a tier blank', async () => {
         await renderOverview([elyRule]);
 
         expect(screen.getByText(/No national rule/)).toBeTruthy();
-        expect(screen.getByText(/No water sets its own rule/)).toBeTruthy();
     });
 
     it('handles a species with no rules anywhere', async () => {
@@ -121,32 +91,45 @@ describe('SpeciesRegulationsOverview', () => {
         expect(cardTitles()).toEqual([]);
         expect(screen.getByText(/No national rule/)).toBeTruthy();
         expect(screen.getByText(/No region sets its own rule/)).toBeTruthy();
-        expect(screen.getByText(/No water sets its own rule/)).toBeTruthy();
     });
 
     it('renders the restrictions on each rule', async () => {
-        await renderOverview([nationalRule, sharedWaterRule]);
+        await renderOverview([nationalRule, elyRule]);
 
         expect(screen.getByText('Min 40 cm')).toBeTruthy();
-        expect(screen.getByText('2 per day')).toBeTruthy();
+        expect(screen.getByText('Min 60 cm')).toBeTruthy();
+    });
+
+    describe('scope of the page', () => {
+        it('asks only for the region-scoped rules', async () => {
+            // Per-water exceptions are one entry per water that diverges. Fetching them to
+            // draw a page that never shows them would grow with the site for nothing.
+            await renderOverview([nationalRule]);
+
+            expect(regulationService.getRegionRulesForSpecies).toHaveBeenCalledWith(10);
+        });
+
+        it('says individual waters can differ, so the page does not read as complete', async () => {
+            await renderOverview([nationalRule]);
+
+            expect(screen.getByText(/Individual waters can set their own rules/)).toBeTruthy();
+            expect(screen.getByText(/Check the page for the water you are fishing/)).toBeTruthy();
+        });
+
+        it('links no waters — that view belongs to an admin screen', async () => {
+            await renderOverview([nationalRule, elyRule]);
+
+            expect(container.querySelectorAll('a')).toHaveLength(0);
+        });
     });
 
     describe('adipose fin variants', () => {
-        const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
-        const intact = rule(905, {
-            region: finland,
-            adiposeFin: 'Intact',
-            isFullyProtected: true,
-        });
-        const clipped = rule(906, {
-            region: finland,
-            adiposeFin: 'Clipped',
-            minimumSizeCm: 50,
-        });
+        const intact = rule(905, { adiposeFin: 'Intact', isFullyProtected: true });
+        const clipped = rule(906, { adiposeFin: 'Clipped', minimumSizeCm: 50 });
 
         it('shows every national rule, not just the first', async () => {
-            // A tier can hold one rule per fin state. Finding the first would
-            // hide the other half of the species a reader came here for.
+            // A tier can hold one rule per fin state. Finding the first would hide the
+            // other half of the species a reader came here for.
             await renderOverview([intact, clipped]);
 
             expect(cardTitles()).toEqual(['All of Finland', 'All of Finland']);

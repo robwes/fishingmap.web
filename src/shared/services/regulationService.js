@@ -60,9 +60,15 @@ export const regulationService = {
         return await apiClient.getJson(`${baseUrl}/location/${locationId}`, []);
     },
 
-    /** Every rule for a species, scoped by region or location **name**. */
-    getRegulationsForSpecies: async (speciesId) => {
-        return await apiClient.getJson(`${baseUrl}/species/${speciesId}`, []);
+    /**
+     * The **region-scoped** rules for a species, carrying region names rather than ids.
+     *
+     * Not every rule: the per-water exceptions are one entry per water that diverges, which
+     * grows with the site and answers a maintainer's question rather than an angler's. They
+     * are not returned at all, so this stays bounded by the region tree.
+     */
+    getRegionRulesForSpecies: async (speciesId) => {
+        return await apiClient.getJson(`${baseUrl}/species/${speciesId}/regions`, []);
     },
 
     createRegulation: async (regulation) => {

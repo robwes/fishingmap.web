@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import RuleAlerts from '@/shared/components/regulations/RuleAlerts';
 import RuleFacts from '@/shared/components/regulations/RuleFacts';
 import RuleNotes from '@/shared/components/regulations/RuleNotes';
@@ -12,18 +11,15 @@ import {
 import './ScopeRuleCard.scss';
 
 /**
- * One regulation on the species page, labelled by what it applies to.
+ * One region's regulation on the species page, labelled by the region it covers.
  *
- * No source badge: on this page the scope *is* the title, so a badge would
- * repeat it. Waters are linked because "which lakes does this affect?" is the
- * natural next question from here.
- * @param {string} title - What the rule covers — a region or water name.
+ * No source badge: on this page the scope *is* the title, so a badge would repeat it.
+ * @param {string} title - What the rule covers — the region's name.
  * @param {string} [meta] - Secondary label, e.g. the region's tier.
  * @param {Object} rule - The regulation.
- * @param {Array<Object>} [locations] - Waters to link, for location-scoped rules.
  * @param {Date} [today] - Reference date, injectable for tests.
  */
-function ScopeRuleCard({ title, meta, rule, locations, today = new Date() }) {
+function ScopeRuleCard({ title, meta, rule, today = new Date() }) {
     const isClosed = rule.isFullyProtected || getActiveProtectedPeriod(rule, today);
     const finLabel = getAdiposeFinLabel(rule.adiposeFin);
     const finHint = getAdiposeFinHint(rule.adiposeFin);
@@ -52,19 +48,6 @@ function ScopeRuleCard({ title, meta, rule, locations, today = new Date() }) {
                 : <p className="rule-none">No size or bag limits</p>}
 
             <RuleNotes text={rule.additionalRules} />
-
-            {locations?.length > 0 && (
-                <p className="scope-rule-links">
-                    {locations.map((location, index) => (
-                        <React.Fragment key={location.id}>
-                            {index > 0 && ', '}
-                            <Link className="scope-rule-link" to={`/locations/${location.id}`}>
-                                {location.name}
-                            </Link>
-                        </React.Fragment>
-                    ))}
-                </p>
-            )}
         </div>
     )
 }

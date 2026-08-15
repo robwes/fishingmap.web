@@ -39,3 +39,21 @@
     font-size: 0.85rem;
     color: var(--clr-secondary-text);
 }
+
+/* What this page leaves out. Quiet, but it must not be skippable: a water can be
+   stricter than anything shown above. */
+.species-regs-caveat {
+    display: flex;
+    gap: 0.6em;
+    padding: 0.7em 0.9em;
+    border-radius: var(--radius-input);
+    background-color: var(--clr-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--clr-secondary-text);
+
+    i {
+        margin-top: 0.2em;
+        opacity: 0.7;
+    }
+}

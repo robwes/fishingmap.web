@@ -144,7 +144,17 @@ describe('regulationService reads', () => {
     it('falls back to an empty list for the species endpoint', async () => {
         mockFetch(fakeResponse({ ok: false, status: 404 }));
 
-        expect(await regulationService.getRegulationsForSpecies(1)).toEqual([]);
+        expect(await regulationService.getRegionRulesForSpecies(1)).toEqual([]);
+    });
+
+    it('asks the region-scoped path for a species', async () => {
+        // The bare species path is reserved for the admin view of per-water exceptions,
+        // which needs paging this one does not.
+        const fetchMock = mockFetch(fakeResponse({ ok: true, body: [] }));
+
+        await regulationService.getRegionRulesForSpecies(7);
+
+        expect(fetchMock.mock.calls[0][0]).toContain('/api/regulations/species/7/regions');
     });
 
     it('requests the resolved rules for a location', async () => {

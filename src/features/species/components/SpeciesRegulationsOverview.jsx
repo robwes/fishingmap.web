@@ -6,12 +6,15 @@ import { REGION_TYPE } from '@/shared/constants/regulations';
 import './SpeciesRegulationsOverview.scss';
 
 /**
- * Every rule for one species, across the whole country.
+ * The rules for one species across the country.
  *
- * Read-only on purpose: "what are the pike rules?" is a real angler question
- * worth answering in one place, but editing from here would mean hunting
- * through every water's rules from a species page. Rules are edited where
- * they are scoped — region admin, or the location editor.
+ * An angler's page, not a maintainer's. It answers "what are the pike rules?" and stops
+ * there: the per-water exceptions are deliberately absent, because they are one entry per
+ * water that diverges — unbounded as the site grows, and not what someone reading about a
+ * fish came for. They belong on an admin screen, and the backend doesn't return them here.
+ *
+ * Read-only for the same reason it is angler-facing: rules are edited where they are scoped,
+ * in region admin or the location editor.
  * @param {number} speciesId - The species being shown.
  */
 function SpeciesRegulationsOverview({ speciesId }) {
@@ -22,7 +25,7 @@ function SpeciesRegulationsOverview({ speciesId }) {
         let isActive = true;
 
         (async () => {
-            const result = await regulationService.getRegulationsForSpecies(speciesId);
+            const result = await regulationService.getRegionRulesForSpecies(speciesId);
             if (isActive) {
                 setRegulations(result);
                 setIsLoading(false);
@@ -32,15 +35,11 @@ function SpeciesRegulationsOverview({ speciesId }) {
         return () => { isActive = false; };
     }, [speciesId]);
 
-    // The API already orders these national → regions by tier → waters, so
-    // the tiers are split out rather than re-sorted.
-    //
-    // A tier can hold several rules for one species — one per adipose fin state
-    // — so even the national tier is a list. Finding the first would hide the
-    // other half of a species whose variants are exactly what a reader came for.
+    // The API already orders these national → regions by tier, so the tiers are split out
+    // rather than re-sorted. A tier can hold several rules for one species — one per adipose
+    // fin state — so even the national tier is a list.
     const national = regulations.filter(r => r.region?.type === REGION_TYPE.ROOT);
     const regional = regulations.filter(r => r.region && r.region.type !== REGION_TYPE.ROOT);
-    const local = regulations.filter(r => !r.region);
 
     if (isLoading) {
         return null;
@@ -63,7 +62,7 @@ function SpeciesRegulationsOverview({ speciesId }) {
                     ))
                     : (
                         <p className="species-regs-empty">
-                            No national rule — only the regional and local rules below apply.
+                            No national rule — only the regional rules below apply.
                         </p>
                     )}
             </div>
@@ -88,29 +87,15 @@ function SpeciesRegulationsOverview({ speciesId }) {
                     )}
             </div>
 
-            <div className="species-regs-tier">
-                <h3 className="species-regs-tier-title">
-                    <i className="fa-solid fa-location-dot"></i>Individual waters
-                </h3>
-                {local.length > 0
-                    ? local.map(rule => {
-                        const waters = rule.locations ?? [];
-                        return (
-                            <ScopeRuleCard
-                                key={rule.id}
-                                title={waters.length === 1 ? waters[0].name : `${waters.length} waters`}
-                                meta={waters.length === 1 ? 'Own rule' : 'Shared rule'}
-                                rule={rule}
-                                locations={waters}
-                            />
-                        );
-                    })
-                    : (
-                        <p className="species-regs-empty">
-                            No water sets its own rule for this species.
-                        </p>
-                    )}
-            </div>
+            {/* Says what this page leaves out. Without it the page reads as the complete
+                answer, and an individual water can be stricter than anything above. */}
+            <p className="species-regs-caveat">
+                <i className="fa-solid fa-circle-info"></i>
+                <span>
+                    Individual waters can set their own rules, and some do. Check the page for the
+                    water you are fishing before you go.
+                </span>
+            </p>
         </section>
     )
 }

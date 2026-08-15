@@ -72,18 +72,3 @@
     }
 }
 
-.scope-rule-links {
-    font-size: 0.8rem;
-    line-height: 1.6;
-    color: var(--clr-secondary-text);
-}
-
-.scope-rule-link {
-    color: var(--clr-primary);
-    font-weight: 500;
-
-    &:hover {
-        color: var(--clr-primary-dark);
-        text-decoration: underline;
-    }
-}
