@@ -36,7 +36,7 @@ vi.mock('@/shared/context/ToastContext', () => ({
 
 const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
 const uusimaa = { id: 2, name: 'Uusimaa', type: 'StateRegion', parentRegionId: 1 };
-const espoo = { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 };
+const espoo = { id: 5, name: 'Espoo lakes', type: 'FisheriesRegion', parentRegionId: 2 };
 
 const nationalPikeRule = {
     id: 900, speciesId: 10, regionId: 1, locationIds: [],
@@ -83,7 +83,7 @@ const click = async (name) => {
 
 /**
  * Selects a region in the tree. Tree buttons carry their tier label too, so
- * the accessible name is "Espoo lakes Management area" — match on a fragment.
+ * the accessible name is "Espoo lakes Fisheries region" — match on a fragment.
  * @param {string} name - The region's name.
  */
 const selectRegion = async (name) => {
@@ -181,7 +181,7 @@ describe('RegionAdmin', () => {
         });
     });
 
-    it('offers no child tier below a management area', async () => {
+    it('offers no child tier below a fisheries region', async () => {
         await renderPage();
 
         await selectRegion('Espoo lakes');

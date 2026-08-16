@@ -13,7 +13,7 @@ vi.mock('@/shared/services/locationService', () => ({
 
 const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
 const uusimaa = { id: 2, name: 'Uusimaa', type: 'StateRegion', parentRegionId: 1 };
-const espoo = { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 };
+const espoo = { id: 5, name: 'Espoo lakes', type: 'FisheriesRegion', parentRegionId: 2 };
 const regions = [finland, uusimaa, espoo];
 
 const regulations = [

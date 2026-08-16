@@ -31,7 +31,7 @@ describe('getRegionTypeLabel', () => {
     it('maps the region type names to display labels', () => {
         expect(getRegionTypeLabel('Root')).toBe('National');
         expect(getRegionTypeLabel('StateRegion')).toBe('Regional authority');
-        expect(getRegionTypeLabel('ManagementArea')).toBe('Management area');
+        expect(getRegionTypeLabel('FisheriesRegion')).toBe('Fisheries region');
     });
 
     it('returns null for an unrecognised name rather than guessing', () => {

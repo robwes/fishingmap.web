@@ -71,7 +71,7 @@ const isValidPeriod = isValidProtectedPeriod;
  * Maps the `region.type` name from the API to a display label. An unknown
  * value returns null rather than guessing, so a new tier added to the backend
  * enum shows up as a missing label instead of a wrong one.
- * @param {string} type - Region type name ('Root' | 'StateRegion' | 'ManagementArea').
+ * @param {string} type - Region type name ('Root' | 'StateRegion' | 'FisheriesRegion').
  * @returns {string|null} Label, or null for an unrecognised value.
  */
 export const getRegionTypeLabel = (type) => {

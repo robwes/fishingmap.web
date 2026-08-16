@@ -30,7 +30,7 @@ vi.mock('@/shared/services/regionService', () => ({
         getRegions: vi.fn(async () => [
             { id: 1, name: 'Finland', type: 'Root', parentRegionId: null },
             { id: 2, name: 'Uusimaa', type: 'StateRegion', parentRegionId: 1 },
-            { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 },
+            { id: 5, name: 'Espoo lakes', type: 'FisheriesRegion', parentRegionId: 2 },
         ]),
     },
 }));
@@ -65,7 +65,7 @@ const pike = { id: 10, name: 'Pike' };
 const locationWith = (rule) => ({
     id: 1,
     name: 'Kalajärvi',
-    region: { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 },
+    region: { id: 5, name: 'Espoo lakes', type: 'FisheriesRegion', parentRegionId: 2 },
     species: [pike],
     speciesRules: rule ? [rule] : [],
     followsRegionSpeciesIds: rule && rule.source !== 'Location' ? [rule.speciesId] : [],

@@ -21,7 +21,7 @@ export const REGION_TYPE = {
     // The state's regional authority for fisheries: the Economic Development Centres since
     // 2026, the ELY centres before them.
     STATE_REGION: 'StateRegion',
-    MANAGEMENT_AREA: 'ManagementArea',
+    FISHERIES_REGION: 'FisheriesRegion',
 };
 
 // Display strings, deliberately generic for the same reason the type names are: a tier label
@@ -29,20 +29,20 @@ export const REGION_TYPE = {
 export const REGION_TYPE_LABELS = {
     [REGION_TYPE.ROOT]: 'National',
     [REGION_TYPE.STATE_REGION]: 'Regional authority',
-    [REGION_TYPE.MANAGEMENT_AREA]: 'Management area',
+    [REGION_TYPE.FISHERIES_REGION]: 'Fisheries region',
 };
 
 /**
  * The tier a new child region gets, one step below its parent.
  *
  * A lookup rather than arithmetic: `type` is the enum's name now, so
- * `parent.type + 1` is meaningless. A management area has nothing below it,
+ * `parent.type + 1` is meaningless. A fisheries region has nothing below it,
  * which is why it is absent rather than mapped to itself — callers use that
  * to hide the "add a region under this" affordance.
  */
 export const REGION_CHILD_TYPE = {
     [REGION_TYPE.ROOT]: REGION_TYPE.STATE_REGION,
-    [REGION_TYPE.STATE_REGION]: REGION_TYPE.MANAGEMENT_AREA,
+    [REGION_TYPE.STATE_REGION]: REGION_TYPE.FISHERIES_REGION,
 };
 
 /**

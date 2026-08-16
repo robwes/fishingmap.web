@@ -6,7 +6,7 @@ import './RegionTree.scss';
 const TIER_ICONS = {
     [REGION_TYPE.ROOT]: 'fa-flag',
     [REGION_TYPE.STATE_REGION]: 'fa-sitemap',
-    [REGION_TYPE.MANAGEMENT_AREA]: 'fa-water',
+    [REGION_TYPE.FISHERIES_REGION]: 'fa-water',
 };
 
 /**

@@ -13,7 +13,7 @@ import './LocationRegionField.scss';
 const REGION_TIERS = [
     { type: REGION_TYPE.ROOT, label: 'National' },
     { type: REGION_TYPE.STATE_REGION, label: 'Regional authorities' },
-    { type: REGION_TYPE.MANAGEMENT_AREA, label: 'Management areas' },
+    { type: REGION_TYPE.FISHERIES_REGION, label: 'Fisheries regions' },
 ];
 
 /**
