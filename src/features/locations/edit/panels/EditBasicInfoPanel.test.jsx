@@ -12,7 +12,7 @@ vi.mock('@/shared/services/locationService', () => ({
 }));
 
 const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
-const uusimaa = { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 };
+const uusimaa = { id: 2, name: 'Uusimaa', type: 'StateRegion', parentRegionId: 1 };
 const espoo = { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 };
 const regions = [finland, uusimaa, espoo];
 
@@ -85,7 +85,7 @@ describe('EditBasicInfoPanel region picker', () => {
 
         expect(screen.getByLabelText('Region').value).toBe('5');
         expect(textOf('.region-chain')).toContain('Finland');
-        expect(textOf('.region-chain')).toContain('Uusimaa ELY');
+        expect(textOf('.region-chain')).toContain('Uusimaa');
         expect(textOf('.region-chain')).toContain('Espoo lakes');
     });
 
@@ -103,7 +103,7 @@ describe('EditBasicInfoPanel region picker', () => {
         expect(textOf('.region-impact-head')).toMatch(/changes 1 species rule at this water/);
         expect(textOf('.region-impact-list')).toContain('Pike');
         expect(textOf('.region-impact-list')).toContain('Finland');
-        expect(textOf('.region-impact-list')).toContain('Uusimaa ELY');
+        expect(textOf('.region-impact-list')).toContain('Uusimaa');
     });
 
     it('says plainly when a region change rewrites nothing', async () => {

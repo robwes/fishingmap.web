@@ -35,7 +35,7 @@ vi.mock('@/shared/context/ToastContext', () => ({
 }));
 
 const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
-const uusimaa = { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 };
+const uusimaa = { id: 2, name: 'Uusimaa', type: 'StateRegion', parentRegionId: 1 };
 const espoo = { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 };
 
 const nationalPikeRule = {
@@ -113,10 +113,10 @@ describe('RegionAdmin', () => {
     it('shows only the selected region’s own rules', async () => {
         await renderPage();
 
-        // Finland rules Pike; the ELY's Perch rule belongs to another region.
+        // Finland rules Pike; the regional authority's Perch rule belongs to another region.
         expect(ruledSpecies()).toEqual(['Pike']);
 
-        await selectRegion('Uusimaa ELY');
+        await selectRegion('Uusimaa');
 
         expect(ruledSpecies()).toEqual(['Perch']);
     });
@@ -124,7 +124,7 @@ describe('RegionAdmin', () => {
     it('counts every water in the region and below, not just direct members', async () => {
         await renderPage();
 
-        // Finland covers Kalajärvi (via Espoo lakes) and Bodom (via the ELY),
+        // Finland covers Kalajärvi (via Espoo lakes) and Bodom (via the regional authority),
         // but not Nuuksio, which belongs to no region.
         expect(screen.getByText(/apply to 2 waters in this region and below/)).toBeTruthy();
 
@@ -169,14 +169,14 @@ describe('RegionAdmin', () => {
 
         await click(/Add region under Finland/);
         await act(async () => {
-            fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Lapland ELY' } });
+            fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Lapland' } });
         });
         await click(/^Add$/);
 
-        // Tier comes from a name lookup: National's child is Ely, never type + 1.
+        // Tier comes from a name lookup: Root's child is StateRegion, never type + 1.
         expect(regionService.createRegion).toHaveBeenCalledWith({
-            name: 'Lapland ELY',
-            type: 'Ely',
+            name: 'Lapland',
+            type: 'StateRegion',
             parentRegionId: 1,
         });
     });

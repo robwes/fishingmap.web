@@ -7,18 +7,28 @@
  * that contract. These values are the C# member names verbatim; the labels
  * below are the display strings, which deliberately differ.
  */
+/**
+ * These name a tier's **position** in the hierarchy, never the body that currently occupies
+ * it. Both exceptions have already gone stale: "National" assumed the top is a country, and
+ * "Ely" named an organisation Finland reorganised out of existence on 1 January 2026, when
+ * the 15 ELY centres became 10 Economic Development Centres. Whoever holds a tier is data —
+ * it belongs in the region row's `name`, where a rebrand is an edit rather than a wire change.
+ */
 export const REGION_TYPE = {
-    // Root, not National: the top of the hierarchy needn't be a country. The
-    // rule *source* label still reads "National" — see RULE_SOURCE below; that
-    // is a display string, not this tier's name.
+    // The rule *source* label still reads "National" — see RULE_SOURCE below; that is a
+    // display string, not this tier's name.
     ROOT: 'Root',
-    ELY: 'Ely',
+    // The state's regional authority for fisheries: the Economic Development Centres since
+    // 2026, the ELY centres before them.
+    STATE_REGION: 'StateRegion',
     MANAGEMENT_AREA: 'ManagementArea',
 };
 
+// Display strings, deliberately generic for the same reason the type names are: a tier label
+// that names today's body has to be changed every time the body is reorganised.
 export const REGION_TYPE_LABELS = {
     [REGION_TYPE.ROOT]: 'National',
-    [REGION_TYPE.ELY]: 'ELY region',
+    [REGION_TYPE.STATE_REGION]: 'Regional authority',
     [REGION_TYPE.MANAGEMENT_AREA]: 'Management area',
 };
 
@@ -31,8 +41,8 @@ export const REGION_TYPE_LABELS = {
  * to hide the "add a region under this" affordance.
  */
 export const REGION_CHILD_TYPE = {
-    [REGION_TYPE.ROOT]: REGION_TYPE.ELY,
-    [REGION_TYPE.ELY]: REGION_TYPE.MANAGEMENT_AREA,
+    [REGION_TYPE.ROOT]: REGION_TYPE.STATE_REGION,
+    [REGION_TYPE.STATE_REGION]: REGION_TYPE.MANAGEMENT_AREA,
 };
 
 /**

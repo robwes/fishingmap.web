@@ -29,7 +29,7 @@ vi.mock('@/shared/services/regionService', () => ({
     regionService: {
         getRegions: vi.fn(async () => [
             { id: 1, name: 'Finland', type: 'Root', parentRegionId: null },
-            { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 },
+            { id: 2, name: 'Uusimaa', type: 'StateRegion', parentRegionId: 1 },
             { id: 5, name: 'Espoo lakes', type: 'ManagementArea', parentRegionId: 2 },
         ]),
     },
@@ -75,7 +75,7 @@ const inheritedRule = {
     speciesId: 10,
     regulationId: 99,
     locationIds: [],
-    source: 'Region: Uusimaa ELY',
+    source: 'Region: Uusimaa',
     minimumSizeCm: 40,
     bagLimit: null,
     bagLimitBasis: null,
@@ -92,7 +92,7 @@ const ownRule = {
     locationIds: [1],
     source: 'Location',
     minimumSizeCm: 50,
-    fallsBackTo: { ...inheritedRule, source: 'Region: Uusimaa ELY', fallsBackTo: null },
+    fallsBackTo: { ...inheritedRule, source: 'Region: Uusimaa', fallsBackTo: null },
 };
 
 const sharedRule = { ...ownRule, regulationId: 105, locationIds: [1, 7, 9] };
@@ -150,7 +150,7 @@ describe('EditRegulationsPanel', () => {
 
         await click(/Follow region/);
 
-        expect(screen.getByText(/fall back to the Uusimaa ELY rule/)).toBeTruthy();
+        expect(screen.getByText(/fall back to the Uusimaa rule/)).toBeTruthy();
     });
 
     it('hides every action from a user who cannot write regulations', () => {

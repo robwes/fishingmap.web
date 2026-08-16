@@ -6,7 +6,7 @@ import './RegionChainNote.scss';
  * Where this water sits in the region hierarchy, shown once under the species
  * list rather than repeated on every row.
  *
- * Takes the chain root-first (Finland → Uusimaa ELY → Espoo lakes). Location
+ * Takes the chain root-first (Finland → Uusimaa → Espoo lakes). Location
  * details can currently only pass the water's own region: `location.region` is
  * a single object carrying `parentRegionId` but not the parent itself, so the
  * ancestors aren't available without fetching every region. Passing one region

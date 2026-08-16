@@ -71,7 +71,7 @@ const isValidPeriod = isValidProtectedPeriod;
  * Maps the `region.type` name from the API to a display label. An unknown
  * value returns null rather than guessing, so a new tier added to the backend
  * enum shows up as a missing label instead of a wrong one.
- * @param {string} type - Region type name ('National' | 'Ely' | 'ManagementArea').
+ * @param {string} type - Region type name ('Root' | 'StateRegion' | 'ManagementArea').
  * @returns {string|null} Label, or null for an unrecognised value.
  */
 export const getRegionTypeLabel = (type) => {
@@ -148,7 +148,7 @@ export const getRuleKey = (speciesId, adiposeFin = null) => {
 
 /**
  * Walks a region's ancestry and returns the chain root-first — Finland →
- * Uusimaa ELY → Espoo lakes. The API hands out one region at a time with a
+ * Uusimaa → Espoo lakes. The API hands out one region at a time with a
  * `parentRegionId` and no parent object, so the chain has to be assembled
  * from the full region list.
  *

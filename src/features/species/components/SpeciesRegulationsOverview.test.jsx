@@ -18,7 +18,7 @@ afterEach(() => {
 });
 
 const finland = { id: 1, name: 'Finland', type: 'Root', parentRegionId: null };
-const uusimaa = { id: 2, name: 'Uusimaa ELY', type: 'Ely', parentRegionId: 1 };
+const uusimaa = { id: 2, name: 'Uusimaa', type: 'StateRegion', parentRegionId: 1 };
 
 /** A region-scoped regulation with every restriction unset. */
 const rule = (id, overrides = {}) => ({
@@ -68,15 +68,15 @@ describe('SpeciesRegulationsOverview', () => {
     it('splits the rules into national and regional tiers', async () => {
         await renderOverview([nationalRule, elyRule]);
 
-        expect(cardTitles()).toEqual(['All of Finland', 'Uusimaa ELY']);
+        expect(cardTitles()).toEqual(['All of Finland', 'Uusimaa']);
     });
 
     it('keeps the order the API returned rather than re-sorting', async () => {
         // The endpoint already orders national -> regions by tier.
-        const otherEly = rule(904, { region: { id: 3, name: 'Ahvenanmaa ELY', type: 'Ely', parentRegionId: 1 } });
-        await renderOverview([nationalRule, elyRule, otherEly]);
+        const otherRegional = rule(904, { region: { id: 3, name: 'Ahvenanmaa', type: 'StateRegion', parentRegionId: 1 } });
+        await renderOverview([nationalRule, elyRule, otherRegional]);
 
-        expect(cardTitles()).toEqual(['All of Finland', 'Uusimaa ELY', 'Ahvenanmaa ELY']);
+        expect(cardTitles()).toEqual(['All of Finland', 'Uusimaa', 'Ahvenanmaa']);
     });
 
     it('says what is missing rather than leaving a tier blank', async () => {

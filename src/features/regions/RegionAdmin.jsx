@@ -43,7 +43,7 @@ const FIN_STATES = [null, ADIPOSE_FIN.INTACT, ADIPOSE_FIN.CLIPPED];
  * Regions and the rules attached to them.
  *
  * Organised as "one region, all its species" rather than by species, because
- * regulation updates arrive region-shaped in the real world: an ELY publishes
+ * regulation updates arrive region-shaped in the real world: a regional authority publishes
  * one decision covering many species at once.
  *
  * Editing here is the counterpart to the location editor — this screen owns

@@ -173,9 +173,9 @@ describe('SpeciesRuleRow', () => {
     });
 
     it('names the region an inherited rule came from', () => {
-        const row = renderRow(rule({ source: 'Region: Uusimaa ELY', minimumSizeCm: 50 }));
+        const row = renderRow(rule({ source: 'Region: Uusimaa', minimumSizeCm: 50 }));
 
-        expect(screen.getByText('Uusimaa ELY')).toBeTruthy();
+        expect(screen.getByText('Uusimaa')).toBeTruthy();
         expect(row.className).not.toContain('is-override');
     });
 

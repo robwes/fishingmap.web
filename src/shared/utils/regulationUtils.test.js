@@ -30,7 +30,7 @@ const springClosure = { startMonth: 4, startDay: 1, endMonth: 5, endDay: 31 };
 describe('getRegionTypeLabel', () => {
     it('maps the region type names to display labels', () => {
         expect(getRegionTypeLabel('Root')).toBe('National');
-        expect(getRegionTypeLabel('Ely')).toBe('ELY region');
+        expect(getRegionTypeLabel('StateRegion')).toBe('Regional authority');
         expect(getRegionTypeLabel('ManagementArea')).toBe('Management area');
     });
 
@@ -61,13 +61,13 @@ describe('getRegionTypeLabel', () => {
 describe('buildRegionChain', () => {
     const regions = [
         { id: 1, name: 'Finland', parentRegionId: null },
-        { id: 2, name: 'Uusimaa ELY', parentRegionId: 1 },
+        { id: 2, name: 'Uusimaa', parentRegionId: 1 },
         { id: 5, name: 'Espoo lakes', parentRegionId: 2 },
     ];
 
     it('builds the chain root-first', () => {
         expect(buildRegionChain(regions, 5).map(r => r.name))
-            .toEqual(['Finland', 'Uusimaa ELY', 'Espoo lakes']);
+            .toEqual(['Finland', 'Uusimaa', 'Espoo lakes']);
     });
 
     it('returns a single step for a root region', () => {
@@ -99,8 +99,8 @@ describe('buildRegionChain', () => {
 
 describe('getRegionChangeImpact', () => {
     const finland = { id: 1, name: 'Finland', parentRegionId: null };
-    const uusimaa = { id: 2, name: 'Uusimaa ELY', parentRegionId: 1 };
-    const lapland = { id: 3, name: 'Lapland ELY', parentRegionId: 1 };
+    const uusimaa = { id: 2, name: 'Uusimaa', parentRegionId: 1 };
+    const lapland = { id: 3, name: 'Lapland', parentRegionId: 1 };
 
     const species = [{ id: 10, name: 'Pike' }, { id: 20, name: 'Perch' }];
     const regulations = [
@@ -116,7 +116,7 @@ describe('getRegionChangeImpact', () => {
     it('names the species whose rule changes, and where it moves', () => {
         const result = impact([finland], [finland, uusimaa]);
 
-        expect(result).toEqual([{ id: 10, name: 'Pike', from: 'Finland', to: 'Uusimaa ELY' }]);
+        expect(result).toEqual([{ id: 10, name: 'Pike', from: 'Finland', to: 'Uusimaa' }]);
     });
 
     it('leaves out species whose rule is the same either way', () => {
@@ -128,11 +128,11 @@ describe('getRegionChangeImpact', () => {
 
     it('reports gaining and losing a rule', () => {
         expect(impact([finland, uusimaa], [finland, lapland]))
-            .toEqual([{ id: 10, name: 'Pike', from: 'Uusimaa ELY', to: 'Finland' }]);
+            .toEqual([{ id: 10, name: 'Pike', from: 'Uusimaa', to: 'Finland' }]);
 
         expect(impact([finland, uusimaa], []))
             .toEqual([
-                { id: 10, name: 'Pike', from: 'Uusimaa ELY', to: null },
+                { id: 10, name: 'Pike', from: 'Uusimaa', to: null },
                 { id: 20, name: 'Perch', from: 'Finland', to: null },
             ]);
     });
@@ -151,7 +151,7 @@ describe('getRegionChangeImpact', () => {
 describe('resolveRegionRule', () => {
     const chain = [
         { id: 1, name: 'Finland' },
-        { id: 2, name: 'Uusimaa ELY' },
+        { id: 2, name: 'Uusimaa' },
     ];
     const regulations = [
         { id: 900, speciesId: 10, regionId: 1 },
@@ -179,7 +179,7 @@ describe('isInheritedRule', () => {
 
     it('treats national and region rules as inherited', () => {
         expect(isInheritedRule('National')).toBe(true);
-        expect(isInheritedRule('Region: Uusimaa ELY')).toBe(true);
+        expect(isInheritedRule('Region: Uusimaa')).toBe(true);
     });
 
     it('returns false for a missing source', () => {
@@ -191,7 +191,7 @@ describe('isInheritedRule', () => {
 describe('getRuleSourceKind', () => {
     it('classifies the three real tiers', () => {
         expect(getRuleSourceKind('Location')).toBe('location');
-        expect(getRuleSourceKind('Region: Uusimaa ELY')).toBe('region');
+        expect(getRuleSourceKind('Region: Uusimaa')).toBe('region');
         expect(getRuleSourceKind('National')).toBe('national');
     });
 
@@ -208,7 +208,7 @@ describe('getRuleSourceKind', () => {
 
 describe('getRuleSourceLabel', () => {
     it('extracts the region name from a region source', () => {
-        expect(getRuleSourceLabel('Region: Uusimaa ELY')).toBe('Uusimaa ELY');
+        expect(getRuleSourceLabel('Region: Uusimaa')).toBe('Uusimaa');
     });
 
     it('labels the other known sources', () => {
@@ -514,7 +514,7 @@ describe('getAdiposeFinHint', () => {
 });
 
 describe('getSpeciesRuleState', () => {
-    const inherited = { speciesId: 10, source: 'Region: Uusimaa ELY' };
+    const inherited = { speciesId: 10, source: 'Region: Uusimaa' };
     const own = { speciesId: 10, source: 'Location' };
 
     it('is custom when the water has its own rule', () => {
@@ -540,7 +540,7 @@ describe('getSpeciesRuleState', () => {
     });
 
     it('reads custom from any variant, not only the first', () => {
-        const intact = { speciesId: 10, source: 'Region: Uusimaa ELY', adiposeFin: 'Intact' };
+        const intact = { speciesId: 10, source: 'Region: Uusimaa', adiposeFin: 'Intact' };
         const clippedOwn = { speciesId: 10, source: 'Location', adiposeFin: 'Clipped' };
 
         expect(getSpeciesRuleState(10, [intact, clippedOwn], [])).toBe('custom');
