@@ -200,6 +200,45 @@ describe('SpeciesRuleRow', () => {
         expect(screen.queryByRole('button', { name: /Read full rule/ })).toBeNull();
     });
 
+    describe('closures scoped to a kind of water', () => {
+        // Mid-June, inside this river-only closure.
+        const riverClosure = {
+            startMonth: 6, startDay: 1, endMonth: 8, endDay: 31,
+            appliesToWaterType: 'RiversAndStreams',
+        };
+
+        it('warns without claiming this water is closed', () => {
+            // A location is not one water type — a bay is also a river mouth — so the
+            // certainty of "Protected now" would be a claim we cannot make.
+            const row = renderRow(rule({ protectedPeriods: [riverClosure] }));
+
+            expect(screen.getByText('Closed season may apply')).toBeTruthy();
+            expect(screen.getByText(/1 Jun – 31 Aug in rivers and streams/)).toBeTruthy();
+            expect(screen.queryByText('Protected now')).toBeNull();
+            expect(row.className).not.toContain('is-closed');
+        });
+
+        it('shows it rather than hiding it, because the errors are not symmetric', () => {
+            // Hiding it puts someone on a closed river; showing it costs a day's fishing.
+            renderRow(rule({ protectedPeriods: [riverClosure] }));
+
+            expect(screen.getByText('Closed season may apply')).toBeTruthy();
+        });
+
+        it('still asserts an unqualified closure with certainty', () => {
+            const row = renderRow(rule({ protectedPeriods: [summerClosure] }));
+
+            expect(screen.getByText('Protected now')).toBeTruthy();
+            expect(row.className).toContain('is-closed');
+        });
+
+        it('carries the qualifier into a dormant closure chip too', () => {
+            renderRow(rule({ minimumSizeCm: 50, protectedPeriods: [{ ...winterClosure, appliesToWaterType: 'RiversAndStreams' }] }));
+
+            expect(screen.getByText(/Protected 1 Dec – 31 Jan in rivers and streams/)).toBeTruthy();
+        });
+    });
+
     it('says a fully protected species may not be taken', () => {
         // Distinct from catch and release, which permits fishing for it.
         const row = renderRow(rule({ isFullyProtected: true }));

@@ -22,6 +22,9 @@ import {
     getAdiposeFinHint,
     getRuleKey,
     getSpeciesRuleState,
+    getWaterTypeLabel,
+    isWaterQualifiedPeriod,
+    getActiveWaterQualifiedPeriods,
 } from './regulationUtils';
 
 const winterClosure = { startMonth: 12, startDay: 1, endMonth: 1, endDay: 31 };
@@ -566,5 +569,69 @@ describe('getRuleKey', () => {
 
     it('separates the same fin state on different species', () => {
         expect(getRuleKey(10, 'Intact')).not.toBe(getRuleKey(11, 'Intact'));
+    });
+});
+
+describe('water-qualified protected periods', () => {
+    const riverClosure = {
+        startMonth: 9, startDay: 1, endMonth: 11, endDay: 30,
+        appliesToWaterType: 'RiversAndStreams',
+    };
+    const plainClosure = { startMonth: 9, startDay: 1, endMonth: 11, endDay: 30 };
+    const autumnDay = new Date(2026, 9, 15);   // 15 October — inside both closures
+
+    it('puts the qualifier in the formatted period, not beside it', () => {
+        // A closure shown without "in rivers and streams" reads as covering the whole water.
+        expect(formatProtectedPeriod(riverClosure))
+            .toBe('1 Sep – 30 Nov in rivers and streams');
+        expect(formatProtectedPeriod(plainClosure)).toBe('1 Sep – 30 Nov');
+    });
+
+    it('never reports a qualified closure as definitely in force', () => {
+        // The dangerous direction is the other way, but asserting "this water is closed"
+        // about a water we have not classified is a claim we cannot make.
+        const rule = { protectedPeriods: [riverClosure] };
+
+        expect(getActiveProtectedPeriod(rule, autumnDay)).toBeNull();
+        expect(isCurrentlyProtected(rule, autumnDay)).toBe(false);
+    });
+
+    it('still reports an unqualified closure as in force', () => {
+        const rule = { protectedPeriods: [plainClosure] };
+
+        expect(getActiveProtectedPeriod(rule, autumnDay)).toEqual(plainClosure);
+        expect(isCurrentlyProtected(rule, autumnDay)).toBe(true);
+    });
+
+    it('surfaces a qualified closure separately so it can still be shown', () => {
+        // Not shown at all would be the harmful failure: someone fishing a closed river.
+        const rule = { protectedPeriods: [riverClosure] };
+
+        expect(getActiveWaterQualifiedPeriods(rule, autumnDay)).toEqual([riverClosure]);
+    });
+
+    it('leaves a qualified closure out when the date is outside it', () => {
+        const rule = { protectedPeriods: [riverClosure] };
+
+        expect(getActiveWaterQualifiedPeriods(rule, new Date(2026, 5, 15))).toEqual([]);
+    });
+
+    it('separates the two kinds when a rule carries both', () => {
+        // Fin-clipped trout: a river-only autumn closure alongside an everywhere closure.
+        const rule = { protectedPeriods: [riverClosure, plainClosure] };
+
+        expect(getActiveProtectedPeriod(rule, autumnDay)).toEqual(plainClosure);
+        expect(getActiveWaterQualifiedPeriods(rule, autumnDay)).toEqual([riverClosure]);
+    });
+
+    it('treats an unknown qualifier as unqualified rather than guessing', () => {
+        const rule = { protectedPeriods: [{ ...plainClosure, appliesToWaterType: 'Estuary' }] };
+
+        expect(getWaterTypeLabel('Estuary')).toBeNull();
+        expect(isWaterQualifiedPeriod(rule.protectedPeriods[0])).toBe(false);
+    });
+
+    it('counts a qualified closure as a restriction', () => {
+        expect(hasRestrictions({ protectedPeriods: [riverClosure] })).toBe(true);
     });
 });

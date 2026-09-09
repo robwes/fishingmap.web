@@ -4,6 +4,7 @@ import {
     RULE_SOURCE_REGION_PREFIX,
     RULE_STATE,
     BAG_LIMIT_BASIS_LABELS,
+    WATER_TYPE_LABELS,
     ADIPOSE_FIN_LABELS,
     ADIPOSE_FIN_HINTS,
     MONTH_NAMES,
@@ -390,8 +391,31 @@ export const formatProtectedPeriod = (period) => {
 
     const start = `${period.startDay} ${MONTH_NAMES[period.startMonth - 1]}`;
     const end = `${period.endDay} ${MONTH_NAMES[period.endMonth - 1]}`;
+    const where = getWaterTypeLabel(period.appliesToWaterType);
 
-    return `${start} – ${end}`;
+    // The qualifier is part of the sentence, not a decoration. A closure shown without its
+    // "in rivers and streams" reads as covering the whole water.
+    return where ? `${start} – ${end} ${where}` : `${start} – ${end}`;
+};
+
+/**
+ * Where a closure applies, as a phrase that follows the dates. Null means it applies wherever
+ * the rule does, which needs no phrase.
+ * @param {string|null} waterType - One of WATER_TYPE, or null.
+ * @returns {string|null} Suffix phrase, or null when unqualified.
+ */
+export const getWaterTypeLabel = (waterType) => {
+    // Own-property check, as getRegionTypeLabel has: the value comes off the wire.
+    return Object.hasOwn(WATER_TYPE_LABELS, waterType) ? WATER_TYPE_LABELS[waterType] : null;
+};
+
+/**
+ * Whether a closure is qualified by water type, and so cannot be evaluated for a given water.
+ * @param {Object} period - A protected period.
+ * @returns {boolean} True when the period names the kind of water it applies to.
+ */
+export const isWaterQualifiedPeriod = (period) => {
+    return getWaterTypeLabel(period?.appliesToWaterType) !== null;
 };
 
 /**
@@ -448,7 +472,32 @@ export const getActiveProtectedPeriod = (rule, date = new Date()) => {
         return null;
     }
 
-    return rule.protectedPeriods.find(period => isDateInProtectedPeriod(period, date)) ?? null;
+    // Unqualified periods only. A closure that names the kind of water it applies to cannot
+    // be evaluated here — a water is not one water type — so it must never drive a flag that
+    // asserts "this water is closed today". Callers get those from
+    // getActiveWaterQualifiedPeriods and report them as conditional.
+    return rule.protectedPeriods.find(period =>
+        !isWaterQualifiedPeriod(period) && isDateInProtectedPeriod(period, date)) ?? null;
+};
+
+/**
+ * Closures that cover today but only in a named kind of water. These are reported, never
+ * resolved: the reader is standing there and can see whether they are on a river.
+ *
+ * Shown even though they may not apply, because the two errors are not symmetric — an
+ * unnecessary warning costs someone a day's fishing, a missing one puts them on a closed
+ * river.
+ * @param {Object} rule - A resolved species rule.
+ * @param {Date} [date] - The date to test, defaulting to now.
+ * @returns {Array<Object>} Qualified periods covering the date.
+ */
+export const getActiveWaterQualifiedPeriods = (rule, date = new Date()) => {
+    if (!rule || !Array.isArray(rule.protectedPeriods)) {
+        return [];
+    }
+
+    return rule.protectedPeriods.filter(period =>
+        isWaterQualifiedPeriod(period) && isDateInProtectedPeriod(period, date));
 };
 
 /**

@@ -109,6 +109,37 @@ export const ADIPOSE_FIN_HINTS = {
 };
 
 /**
+ * Where a closure applies, in the decree's own words. A protected period's
+ * `appliesToWaterType` is **null** when it applies everywhere the rule reaches, which is the
+ * common case.
+ *
+ * This qualifies a rule, never a location. A water is not one of these — a bay is also a
+ * river mouth, and a lake location can contain the stream feeding it — so nothing is
+ * classified and **nothing is resolved against it**. The qualifier is shown to the reader,
+ * who is standing there and can see which kind of water they are on.
+ *
+ * Because it is never evaluated, these values deliberately overlap rather than partitioning
+ * anything: "inland" contains rivers, "rivers and streams" spans inland and coastal. They are
+ * the phrases the law uses, and reproducing those faithfully is the point.
+ *
+ * Keep in sync with `WaterType.cs`. See robwes/fishingmap.web#16.
+ */
+export const WATER_TYPE = {
+    RIVERS_AND_STREAMS: 'RiversAndStreams',
+    SEA: 'Sea',
+    INLAND: 'Inland',
+    ISOLATED_STREAM_OR_POND: 'IsolatedStreamOrPond',
+};
+
+// Written to read as a suffix — "Protected 1 Sep – 30 Nov in rivers and streams".
+export const WATER_TYPE_LABELS = {
+    [WATER_TYPE.RIVERS_AND_STREAMS]: 'in rivers and streams',
+    [WATER_TYPE.SEA]: 'in sea areas',
+    [WATER_TYPE.INLAND]: 'in inland waters',
+    [WATER_TYPE.ISOLATED_STREAM_OR_POND]: 'in streams and ponds with no migratory connection',
+};
+
+/**
  * What a bag limit is counted against. Deliberately not a duration — put-and-take
  * waters sell a permit covering a fixed number of fish, so `Permit` sits alongside
  * the time-based values. Keep in sync with `BagLimitBasis.cs`, which serializes by

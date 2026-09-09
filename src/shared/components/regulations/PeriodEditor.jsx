@@ -1,5 +1,5 @@
 import React from 'react';
-import { MONTH_NAMES } from '@/shared/constants/regulations';
+import { MONTH_NAMES, WATER_TYPE_LABELS } from '@/shared/constants/regulations';
 import { getDaysInMonth } from '@/shared/utils/regulationUtils';
 import '@/shared/components/regulations/regulationFields.scss';
 import './PeriodEditor.scss';
@@ -45,6 +45,15 @@ function PeriodEditor({ periods, onChange }) {
                 [`${end}Day`]: Math.min(Math.max(day, 1), lastDay),
             };
         }));
+    };
+
+    /**
+     * Merges fields into one period, for changes that need no clamping.
+     * @param {number} index - Index of the period being edited.
+     * @param {Object} change - Fields to set.
+     */
+    const updatePeriod = (index, change) => {
+        onChange(periods.map((period, i) => (i === index ? { ...period, ...change } : period)));
     };
 
     return (
@@ -104,6 +113,20 @@ function PeriodEditor({ periods, onChange }) {
                                 ))}
                             </select>
                         </div>
+
+                        {/* Where the closure bites, when the source says. Kept per period
+                            rather than per rule: one entry in the decree commonly pairs an
+                            unqualified size limit with a river-only closed season. */}
+                        <select
+                            className="reg-input reg-period-waters"
+                            aria-label="Applies in"
+                            value={period.appliesToWaterType ?? ''}
+                            onChange={(e) => updatePeriod(index, { appliesToWaterType: e.target.value || null })}>
+                            <option value="">Everywhere this rule applies</option>
+                            {Object.entries(WATER_TYPE_LABELS).map(([value, label]) => (
+                                <option key={value} value={value}>{label}</option>
+                            ))}
+                        </select>
 
                         {wraps && (
                             <span className="reg-period-wrap-note" title="This period runs across the year end">

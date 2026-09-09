@@ -28,3 +28,10 @@
         opacity: 0.9;
     }
 }
+
+/* A closure the decree scopes to a kind of water. We can't tell whether this water is one
+   of them, so it warns without asserting — amber rather than the red that means "certain". */
+.rule-flag.is-conditional {
+    background-color: #fdf3d7;
+    color: #7a5a08;
+}

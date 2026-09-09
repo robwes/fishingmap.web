@@ -38,6 +38,9 @@ const toRegulationBody = (regulation) => {
             startDay: period.startDay,
             endMonth: period.endMonth,
             endDay: period.endDay,
+            // Null means the closure applies wherever the rule does. Dropping the qualifier
+            // would silently widen a river closure to every lake the rule reaches.
+            appliesToWaterType: period.appliesToWaterType ?? null,
         })),
     };
 };

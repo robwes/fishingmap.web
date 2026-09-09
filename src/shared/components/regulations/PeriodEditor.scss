@@ -64,3 +64,10 @@
         }
     }
 }
+
+/* The water qualifier takes the full row under the dates: its options are sentences, not
+   labels, and squeezing them beside two month pickers truncates the one that matters. */
+.reg-period-waters {
+    flex: 1 1 100%;
+    font-size: 0.85rem;
+}

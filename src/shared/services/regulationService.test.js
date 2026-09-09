@@ -104,7 +104,7 @@ describe('regulationService.createRegulation', () => {
         expect(body.isFullyProtected).toBe(true);
     });
 
-    it('sends protected periods as bare month/day pairs', async () => {
+    it('sends protected periods as month/day pairs plus their water qualifier', async () => {
         const fetchMock = mockFetch(fakeResponse({ ok: true, body: { id: 1 } }));
 
         await regulationService.createRegulation({
@@ -113,9 +113,25 @@ describe('regulationService.createRegulation', () => {
             protectedPeriods: [{ startMonth: 12, startDay: 1, endMonth: 1, endDay: 31, id: 99, extra: 'x' }],
         });
 
+        // Null, not absent: an unqualified closure applies wherever the rule does.
         expect(sentBody(fetchMock).protectedPeriods).toEqual([
-            { startMonth: 12, startDay: 1, endMonth: 1, endDay: 31 }
+            { startMonth: 12, startDay: 1, endMonth: 1, endDay: 31, appliesToWaterType: null }
         ]);
+    });
+
+    it('keeps a closure scoped to one kind of water', async () => {
+        // Dropping the qualifier would widen a river closure to every lake the rule reaches.
+        const fetchMock = mockFetch(fakeResponse({ ok: true, body: { id: 1 } }));
+
+        await regulationService.createRegulation({
+            speciesId: 1,
+            regionId: 1,
+            protectedPeriods: [
+                { startMonth: 9, startDay: 1, endMonth: 11, endDay: 30, appliesToWaterType: 'RiversAndStreams' },
+            ],
+        });
+
+        expect(sentBody(fetchMock).protectedPeriods[0].appliesToWaterType).toBe('RiversAndStreams');
     });
 
     it('returns null and swallows the error when the request fails', async () => {
