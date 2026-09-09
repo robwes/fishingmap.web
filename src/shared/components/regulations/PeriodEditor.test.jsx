@@ -88,3 +88,68 @@ describe('PeriodEditor', () => {
         expect(screen.getByText(/fishing is open all year/)).toBeTruthy();
     });
 });
+
+describe('water qualifier', () => {
+    const autumn = { startMonth: 9, startDay: 1, endMonth: 11, endDay: 30 };
+
+    it('labels the picker and names the unqualified case explicitly', () => {
+        // Without a label the select is unexplained, and "everywhere" has to read as a
+        // choice rather than as a placeholder.
+        renderEditor(autumn);
+
+        const select = screen.getByLabelText('Closure applies in');
+        expect(select.value).toBe('');
+        expect([...select.options].map(option => option.textContent)).toEqual([
+            'All waters this rule covers',
+            'Rivers and streams',
+            'Sea areas',
+            'Inland waters',
+            'Streams and ponds with no migratory connection',
+        ]);
+    });
+
+    it('sets the qualifier on the period being edited', () => {
+        const onChange = renderEditor(autumn);
+
+        fireEvent.change(screen.getByLabelText('Closure applies in'), {
+            target: { value: 'RiversAndStreams' },
+        });
+
+        expect(changedPeriod(onChange).appliesToWaterType).toBe('RiversAndStreams');
+    });
+
+    it('leaves the other periods alone', () => {
+        // One rule can hold a river-only autumn closure and an everywhere winter one.
+        const onChange = vi.fn();
+        render(<PeriodEditor periods={[autumn, springClosure]} onChange={onChange} />);
+
+        fireEvent.change(screen.getAllByLabelText('Closure applies in')[0], {
+            target: { value: 'RiversAndStreams' },
+        });
+
+        const [first, second] = onChange.mock.calls[0][0];
+        expect(first.appliesToWaterType).toBe('RiversAndStreams');
+        expect(second.appliesToWaterType).toBeUndefined();
+    });
+
+    it('clears the qualifier back to unqualified', () => {
+        // Null is a value here — the closure applies wherever the rule does.
+        const onChange = renderEditor({ ...autumn, appliesToWaterType: 'RiversAndStreams' });
+
+        fireEvent.change(screen.getByLabelText('Closure applies in'), { target: { value: '' } });
+
+        expect(changedPeriod(onChange).appliesToWaterType).toBeNull();
+    });
+
+    it('warns that a qualified closure is reported rather than filtered', () => {
+        renderEditor({ ...autumn, appliesToWaterType: 'RiversAndStreams' });
+
+        expect(screen.getByText(/closed season may apply/)).toBeTruthy();
+    });
+
+    it('says nothing extra when the closure is unqualified', () => {
+        renderEditor(autumn);
+
+        expect(screen.queryByText(/closed season may apply/)).toBeNull();
+    });
+});

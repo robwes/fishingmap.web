@@ -140,6 +140,26 @@ export const WATER_TYPE_LABELS = {
 };
 
 /**
+ * The same values written to stand alone in a picker, under a "Closure applies in" label.
+ *
+ * A second map rather than stripping "in " off the one above: these sit in different
+ * grammatical positions, and deriving one from the other would silently mangle any future
+ * value that isn't phrased as an "in …" suffix.
+ */
+export const WATER_TYPE_OPTION_LABELS = {
+    [WATER_TYPE.RIVERS_AND_STREAMS]: 'Rivers and streams',
+    [WATER_TYPE.SEA]: 'Sea areas',
+    [WATER_TYPE.INLAND]: 'Inland waters',
+    [WATER_TYPE.ISOLATED_STREAM_OR_POND]: 'Streams and ponds with no migratory connection',
+};
+
+/**
+ * What the unqualified case is called in that picker. Says "this rule" rather than "all
+ * waters", because the closure reaches exactly as far as the rule does — no further.
+ */
+export const WATER_TYPE_ANY_LABEL = 'All waters this rule covers';
+
+/**
  * What a bag limit is counted against. Deliberately not a duration — put-and-take
  * waters sell a permit covering a fixed number of fish, so `Permit` sits alongside
  * the time-based values. Keep in sync with `BagLimitBasis.cs`, which serializes by

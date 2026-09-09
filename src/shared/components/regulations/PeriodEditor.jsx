@@ -1,5 +1,9 @@
-import React from 'react';
-import { MONTH_NAMES, WATER_TYPE_LABELS } from '@/shared/constants/regulations';
+import React, { useId } from 'react';
+import {
+    MONTH_NAMES,
+    WATER_TYPE_OPTION_LABELS,
+    WATER_TYPE_ANY_LABEL,
+} from '@/shared/constants/regulations';
 import { getDaysInMonth } from '@/shared/utils/regulationUtils';
 import '@/shared/components/regulations/regulationFields.scss';
 import './PeriodEditor.scss';
@@ -17,6 +21,8 @@ const DEFAULT_PERIOD = { startMonth: 5, startDay: 1, endMonth: 6, endDay: 30 };
  * @param {Function} onChange - Called with the next periods array.
  */
 function PeriodEditor({ periods, onChange }) {
+    // Each period's water select needs its own id so its label associates with it.
+    const fieldId = useId();
 
     /**
      * Replaces one end of one period, keeping the day inside the month.
@@ -117,16 +123,29 @@ function PeriodEditor({ periods, onChange }) {
                         {/* Where the closure bites, when the source says. Kept per period
                             rather than per rule: one entry in the decree commonly pairs an
                             unqualified size limit with a river-only closed season. */}
-                        <select
-                            className="reg-input reg-period-waters"
-                            aria-label="Applies in"
-                            value={period.appliesToWaterType ?? ''}
-                            onChange={(e) => updatePeriod(index, { appliesToWaterType: e.target.value || null })}>
-                            <option value="">Everywhere this rule applies</option>
-                            {Object.entries(WATER_TYPE_LABELS).map(([value, label]) => (
-                                <option key={value} value={value}>{label}</option>
-                            ))}
-                        </select>
+                        <div className="reg-period-waters">
+                            <label className="reg-field-label" htmlFor={`${fieldId}-waters-${index}`}>
+                                Closure applies in
+                            </label>
+                            <select
+                                id={`${fieldId}-waters-${index}`}
+                                className="reg-input"
+                                value={period.appliesToWaterType ?? ''}
+                                onChange={(e) => updatePeriod(index, { appliesToWaterType: e.target.value || null })}>
+                                <option value="">{WATER_TYPE_ANY_LABEL}</option>
+                                {Object.entries(WATER_TYPE_OPTION_LABELS).map(([value, label]) => (
+                                    <option key={value} value={value}>{label}</option>
+                                ))}
+                            </select>
+                            {period.appliesToWaterType && (
+                                // Worth saying out loud: choosing a water type changes how the
+                                // closure is shown, because we cannot tell which waters match.
+                                <span className="reg-field-hint">
+                                    Shown as &ldquo;closed season may apply&rdquo; — a water can be
+                                    more than one kind, so anglers are told rather than filtered.
+                                </span>
+                            )}
+                        </div>
 
                         {wraps && (
                             <span className="reg-period-wrap-note" title="This period runs across the year end">
