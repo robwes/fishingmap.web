@@ -120,9 +120,25 @@ function PeriodEditor({ periods, onChange }) {
                             </select>
                         </div>
 
-                        {/* Where the closure bites, when the source says. Kept per period
-                            rather than per rule: one entry in the decree commonly pairs an
-                            unqualified size limit with a river-only closed season. */}
+                        {wraps && (
+                            <span className="reg-period-wrap-note" title="This period runs across the year end">
+                                runs into next year
+                            </span>
+                        )}
+
+                        <button
+                            type="button"
+                            className="reg-icon-button"
+                            aria-label="Remove protected period"
+                            onClick={() => onChange(periods.filter((_, i) => i !== index))}>
+                            <i className="fa-solid fa-trash"></i>
+                        </button>
+
+                        {/* Last in the row, and full width, so it wraps onto its own line and
+                            leaves the dates and Remove together above it. Where the closure
+                            bites, when the source says — kept per period rather than per rule,
+                            because one entry in the decree commonly pairs an unqualified size
+                            limit with a river-only closed season. */}
                         <div className="reg-period-waters">
                             <label className="reg-field-label" htmlFor={`${fieldId}-waters-${index}`}>
                                 Closure applies in
@@ -146,20 +162,6 @@ function PeriodEditor({ periods, onChange }) {
                                 </span>
                             )}
                         </div>
-
-                        {wraps && (
-                            <span className="reg-period-wrap-note" title="This period runs across the year end">
-                                runs into next year
-                            </span>
-                        )}
-
-                        <button
-                            type="button"
-                            className="reg-icon-button"
-                            aria-label="Remove protected period"
-                            onClick={() => onChange(periods.filter((_, i) => i !== index))}>
-                            <i className="fa-solid fa-trash"></i>
-                        </button>
                     </div>
                 );
             })}

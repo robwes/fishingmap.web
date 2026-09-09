@@ -4,8 +4,13 @@
     align-items: flex-start;
     gap: 0.5em;
 
+    /* Stretch past the parent's flex-start, which is there to keep the "Add protected
+       period" button at its content width. Without this a row is only as wide as the
+       controls in it, so the waters select below — sized at 100% of the row — grows and
+       shrinks with whichever option happens to be chosen. */
     .reg-period-row {
         display: flex;
+        align-self: stretch;
         align-items: center;
         flex-wrap: wrap;
         gap: 0.4em;

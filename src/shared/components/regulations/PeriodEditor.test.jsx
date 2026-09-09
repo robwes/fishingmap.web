@@ -141,6 +141,23 @@ describe('water qualifier', () => {
         expect(changedPeriod(onChange).appliesToWaterType).toBeNull();
     });
 
+    it('puts the qualifier last in the row so it wraps onto its own line', () => {
+        // Layout here is DOM order plus one full-width child: the dates and Remove share the
+        // first line, and the select takes the second. Reordering these silently changes the
+        // layout, and no unit test can see width.
+        const { container } = render(<PeriodEditor periods={[autumn]} onChange={vi.fn()} />);
+        const row = container.querySelector('.reg-period-row');
+        const classOf = (child) => child.className;
+
+        expect([...row.children].map(classOf)).toEqual([
+            'reg-period-pair',
+            'fa-solid fa-arrow-right reg-period-arrow',
+            'reg-period-pair',
+            'reg-icon-button',
+            'reg-period-waters',
+        ]);
+    });
+
     it('warns that a qualified closure is reported rather than filtered', () => {
         renderEditor({ ...autumn, appliesToWaterType: 'RiversAndStreams' });
 
