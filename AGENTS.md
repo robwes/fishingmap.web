@@ -2,6 +2,11 @@
 
 Single source of project guidance for AI coding agents working in this repository. Claude Code imports this file via `CLAUDE.md`; Codex and other agents read it directly. **Edit this file, not CLAUDE.md.**
 
+## Shared project skills
+
+- **run-fishingmap-web** — build, test, run, and visually check the frontend. Read `.claude/skills/run-fishingmap-web/SKILL.md` for the maintained instructions and browser driver. Claude discovers that folder directly; `.agents/skills/run-fishingmap-web/SKILL.md` is the Codex entry point and links to the same instructions. Keep workflow changes in the maintained file, not in both entry points.
+- Backend workflows live in the sibling repository: `.claude/skills/run-fishingmap-server/SKILL.md` and `.claude/skills/deploy-migrations/SKILL.md`. Read that repository's `AGENTS.md` before working there. These files are references, not automatically installed frontend skills.
+
 ## Active work
 
 Multi-session features are tracked as GitHub issues in `robwes/fishingmap.web` labelled **`feature-plan`**. Each one records the decisions already made, the options already rejected, per-surface status, and the remaining plan — including work that lands in `fishingmap.server` or the Claude Design prototype.
@@ -92,7 +97,7 @@ One file per backend resource (`locationService`, `speciesService`, `permitServi
 
 ### Map (`src/features/map/` + `src/shared/components/map/`)
 
-Built on `@vis.gl/react-google-maps`. The `<APIProvider>` wraps everything inside `App.jsx` so every page can use `useMap()`.
+Built on `@vis.gl/react-google-maps`. The `<APIProvider>` wraps the routes inside `App.jsx` so every routed page can use `useMap()`.
 
 - `FishingMap.jsx` is the main view. It composes `Map` and `PositionMarker` (shared, also used by location details), plus the map-feature-private `LocationClusterer` (uses `@googlemaps/markerclusterer`) and `Circle` (radius search). The location-geometry editing subsystem (`LocationGeometryInput/Editor/Toolbar`, `NavigationPositionMarker`, `useData`) is private to `src/features/locations/components/`.
 - `geoUtils.js` (in `src/shared/utils/`) wraps `@turf/turf` for bbox computation, MultiPolygon ↔ FeatureCollection conversion, and centroid calculation for arbitrary geometries. Non-component files (services, utils, hooks) use the `.js` extension; `.jsx` is reserved for files containing JSX.
@@ -113,7 +118,7 @@ Formik + Yup for add/edit flows. `AddLocation` is a four-step wizard (`src/featu
 
 ### Styling
 
-SCSS modules per component, imported alongside the JSX. Vite is configured to use the modern Sass compiler API (`api: 'modern-compiler'` in `vite.config.js`). Global styles in `src/index.scss`.
+Component SCSS files, imported alongside the JSX (ordinary global class names, not CSS Modules). Vite is configured to use the modern Sass compiler API (`api: 'modern-compiler'` in `vite.config.js`). Global styles in `src/index.scss`.
 
 Default to **`rem` for `font-size`** and **`em` for `padding`/`margin`/`gap`**, so spacing scales with local font-size while font-size stays anchored to the root (see `src/index.scss`'s `.mt-1`–`.mt-6` scale). `px` is fine when a value is genuinely fixed (hairline borders, icon sizing) — this is a default, not a hard rule.
 
@@ -135,6 +140,12 @@ Prefer the repo's existing component (`Input`, `CollapsibleArticlePrimary`, …)
 - `if` blocks always use braces with the body on a new line — never a single-line inline `if (x) doThing();`.
 - Add a JSDoc comment above non-trivial named functions and const-assigned arrow functions (handlers, helpers, async operations) describing what they do and their `@param`s. Skip trivial one-liners where the name already says everything.
 - Prefer splitting UI into smaller, focused components whenever a piece of markup is reusable or makes the parent noticeably easier to read. Co-locate the new component with its parent (same folder, or the feature's `components/` folder if used by several pages of that feature); only move it to `src/shared/components/` once it is used by more than one feature.
+
+## Analytics
+
+GA4 measurement ID: `G-YPGFQ4JQB2`. `src/app/cookies/CookieConsent.jsx` provides the shared cookie popup and footer settings control; `analytics.js` loads the Google tag only after consent, in production builds on `fishingmap.fi` or `www.fishingmap.fi`. Local development and preview hosts do not send analytics. Category choices are versioned and stored under `cookiePreferences` in localStorage by `src/app/cookies/cookiePreferences.js`; rejection disables collection and withdrawal clears GA cookies. Advertising consent stays denied. When adding optional cookie categories, extend this same popup with category controls and bump `PREFERENCES_VERSION` so visitors choose again; an old acceptance must not enable a new purpose automatically.
+
+Page views use GA4 Enhanced measurement: in the web stream, keep **Page views → Page changes based on browser history events** enabled. Do not add a second tag to `index.html` or manual React route page-view events, which would double-count visits. After deployment, verify acceptance, rejection, and navigation using Tag Assistant / GA4 Realtime. The repository cannot verify the property's remote configuration.
 
 ## Deployment
 

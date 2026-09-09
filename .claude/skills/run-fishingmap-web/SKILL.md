@@ -10,24 +10,26 @@ server and pointing a headless Chromium at it via
 `chromium-cli` available, so the driver is a small playwright-core script —
 see Gotchas).
 
-All paths below are relative to the repo root.
+This is the maintained workflow shared by Claude and Codex. Codex discovers
+the forwarding entry point in `.agents/skills/run-fishingmap-web/SKILL.md`.
+All command paths below are relative to the repo root.
 
 ## Prerequisites
 
-Windows + Git Bash, Node 24 / npm 11 (whatever ships `npm start`/`npm test`
-already works — no extra system packages needed). The driver needs
+Windows + PowerShell or Git Bash. Use the project's supported Node version
+(CI uses Node 20; the original local recipe used Node 24 / npm 11). The driver needs
 `playwright-core` plus a cached Chromium binary, neither of which is a
 project dependency:
 
 ```bash
-npm install --no-save playwright-core   # leaves package.json/lock untouched
+npm install --no-save --package-lock=false playwright-core
 npx --yes playwright-core install chromium   # no-op if already cached
 ```
 
 ## Setup
 
 Requires `.env.development.local` with four vars (already present in this
-repo; see `CLAUDE.md` for what each does):
+repo; see `AGENTS.md` for what each does):
 
 ```
 VITE_BASE_URL=https://localhost:7299
@@ -51,7 +53,7 @@ The backend is the sibling repo `C:/Users/rober/source/repos/fishingmap.server`
 ```bash
 # already running? (self-signed dev cert → -k required)
 curl -sk -o /dev/null -w "%{http_code}" --max-time 3 https://localhost:7299/api/locations
-# 200 → up; 000 → start it (run_in_background, not &):
+# 200 → up; 000 → start it in a persistent terminal/session:
 dotnet run --project C:/Users/rober/source/repos/fishingmap.server/FishingMap.API
 # ready when /api/locations answers 200 (~5-10 s)
 ```
@@ -69,6 +71,36 @@ No separate build step needed to run the app in dev mode. `npm run build`
 for the agent path below.
 
 ## Run (agent path)
+
+Use your agent's persistent command session for long-running servers and keep
+the session ID so you can stop only the process you started. In Codex this
+is the session returned by `exec_command`; in Claude use its background
+command support. Do not assume a shell background process survives tool exit.
+
+### PowerShell
+
+Use `curl.exe` explicitly (Windows PowerShell aliases `curl` to a different
+command). Probe before starting a server; reuse an existing healthy server:
+
+```powershell
+curl.exe -sf --max-time 3 http://localhost:3000/
+curl.exe -sk -o NUL -w "%{http_code}" --max-time 3 https://localhost:7299/api/locations
+```
+
+If the frontend is down, run `npm.cmd start -- --open false` in a persistent
+session. If the backend is down, use the `dotnet run` command above in its
+own persistent session. Poll the same probes until ready. Stop sessions you
+started with Ctrl-C. If using PowerShell `Start-Process` instead, use
+`-WindowStyle Hidden` and retain the process identity for cleanup.
+
+PowerShell does not need the MSYS environment variables used below. Choose
+an output path inside the workspace or the session's writable temp folder:
+
+```powershell
+node .claude/skills/run-fishingmap-web/driver.mjs /species "$env:TEMP/species.png"
+```
+
+### Git Bash
 
 `npm start` is **strict on port 3000** — it fails if the port is occupied
 rather than picking another. Check first; only start one if nothing answers:
@@ -118,7 +150,7 @@ Prints `TITLE`, final `URL`, any `CONSOLE-ERROR`/`PAGE-ERROR` lines, and the
 screenshot path. Exits 1 only on navigation failure — console errors don't
 fail the run, read the printed lines yourself.
 
-Verified examples (all run this session against the live local backend):
+Examples verified against the live local backend in July 2026:
 
 ```bash
 # Species list — no geo needed
@@ -161,7 +193,7 @@ npm test -- --run
 ```
 
 Runs the Vitest suite — `*.test.js` files colocated under `src/` (e.g.
-`src/services/apiClient.test.js`, `src/utils/geoUtils.test.js`). Passing as
+`src/shared/services/apiClient.test.js`, `src/shared/utils/geoUtils.test.js`). Passing as
 of July 2026. With zero test files Vitest exits 1, so never delete the last
 test file without replacing it.
 
@@ -170,9 +202,9 @@ test file without replacing it.
 ## Gotchas
 
 - **No `chromium-cli` on this Windows/Git Bash box.** The driver uses
-  `playwright-core` directly instead. Install it with `--no-save` (verified
-  via `git status --porcelain package.json package-lock.json` staying empty
-  before/after) so it never touches the committed lockfile — it's agent
+  `playwright-core` directly instead. Install it with `--no-save`
+  and `--package-lock=false`; verify `git diff -- package.json package-lock.json`
+  before/after so project dependencies stay unchanged — it's agent
   tooling, not a project dependency.
 - **Git Bash mangles leading-slash arguments.** `node driver.mjs /species ...`
   gets rewritten to `node driver.mjs C:/Program Files/Git/species ...` by
@@ -200,7 +232,7 @@ test file without replacing it.
 - **`npm install <anything>` prunes `--no-save` packages.** Installing a new
   dependency removes the unsaved `playwright-core`; the driver then fails
   with `ERR_MODULE_NOT_FOUND`. Re-run
-  `npm install --no-save playwright-core` after any dependency change.
+  `npm install --no-save --package-lock=false playwright-core` after any dependency change.
 - **Google Maps pages never reach `networkidle`** in headless (raster tile
   streaming), so the driver logs `NAVIGATION-ERROR: Timeout` on `/map` and
   detail pages with maps. The page has actually loaded — the screenshot and
