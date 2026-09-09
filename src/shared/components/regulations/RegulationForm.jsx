@@ -1,5 +1,6 @@
 import React, { useId } from 'react';
 import PeriodEditor from './PeriodEditor';
+import ButtonSuccess from '@/shared/components/buttons/ButtonSuccess';
 import { BAG_LIMIT_BASIS_LABELS, ADIPOSE_FIN_LABELS, ADIPOSE_FIN_HINTS } from '@/shared/constants/regulations';
 import '@/shared/components/regulations/regulationFields.scss';
 import './RegulationForm.scss';
@@ -191,9 +192,11 @@ function RegulationForm({ draft, onChange, onSave, onCancel, isSaving = false, c
             </label>
 
             <div className="reg-form-actions">
-                <button type="button" className="button button-primary" disabled={isSaving} onClick={onSave}>
+                {/* ButtonSuccess, like every other save in the app — the edit panels, the
+                    media manager, the permit and species forms. This form was the outlier. */}
+                <ButtonSuccess type="button" disabled={isSaving} onClick={onSave}>
                     {isSaving ? 'Saving…' : 'Save rule'}
-                </button>
+                </ButtonSuccess>
                 <button type="button" className="reg-action is-quiet" disabled={isSaving} onClick={onCancel}>
                     Cancel
                 </button>

@@ -164,9 +164,12 @@ function PeriodEditor({ periods, onChange }) {
                 );
             })}
 
+            {/* Not `is-quiet`: that variant strips the border and background, which is right
+                for Cancel but left this reading as body text rather than the only way to add
+                a period. */}
             <button
                 type="button"
-                className="reg-action is-quiet"
+                className="reg-action"
                 onClick={() => onChange([...periods, { ...DEFAULT_PERIOD }])}>
                 <i className="fa-solid fa-plus"></i>Add protected period
             </button>
